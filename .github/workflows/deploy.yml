@@ -37,16 +37,22 @@ jobs:
           echo "Verifying Service Account Permissions"
           echo "==================================================="
           
-          # Get the service account email from the credentials
-          SA_EMAIL=$(gcloud config get-value account 2>/dev/null)
+          # Extract service account email from the credentials
+          SA_EMAIL=$(echo '${{ secrets.GCP_SA_KEY }}' | jq -r '.client_email')
           echo "Service Account: ${SA_EMAIL}"
           echo ""
+          
+          # Verify we got the email
+          if [ -z "${SA_EMAIL}" ] || [ "${SA_EMAIL}" = "null" ]; then
+            echo "❌ ERROR: Could not extract service account email from credentials"
+            exit 1
+          fi
           
           # Check IAM policy for the service account
           echo "Checking IAM roles..."
           ROLES=$(gcloud projects get-iam-policy ${PROJECT_ID} \
             --flatten="bindings[].members" \
-            --filter="bindings.members:${SA_EMAIL}" \
+            --filter="bindings.members:serviceAccount:${SA_EMAIL}" \
             --format="value(bindings.role)")
           
           echo "Current roles:"
