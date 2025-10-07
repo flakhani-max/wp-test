@@ -111,17 +111,40 @@ echo "CLOUDSQL_SOCKET_PATH=${CLOUDSQL_SOCKET_PATH:-not set}"
 echo "==================================================="
 
 i=0
-until wp db check --path="$DOCROOT" --allow-root 2>&1; do
+until [ "$i" -gt 30 ]; do
   i=$((i+1))
-  if [ "$i" -gt 30 ]; then
-    echo "Database not reachable after 60s. Check WORDPRESS_DB_* environment variables."
+  
+  # Use mysql client with explicit socket path if Cloud SQL is configured
+  if [ -n "${CLOUDSQL_SOCKET_PATH:-}" ] && [ -S "${CLOUDSQL_SOCKET_PATH}" ]; then
+    if mysql --socket="${CLOUDSQL_SOCKET_PATH}" \
+            --user="${WORDPRESS_DB_USER}" \
+            --password="${WORDPRESS_DB_PASSWORD}" \
+            "${WORDPRESS_DB_NAME}" \
+            -e "SELECT 1;" >/dev/null 2>&1; then
+      echo "✓ Database connection successful via Cloud SQL socket!"
+      break
+    fi
+  else
+    # Fallback to wp db check for non-Cloud SQL setups
+    if wp db check --path="$DOCROOT" --allow-root 2>&1; then
+      echo "✓ Database connection successful!"
+      break
+    fi
+  fi
+  
+  if [ "$i" -ge 30 ]; then
+    echo "❌ Database not reachable after 60s."
+    echo "Cloud SQL socket: ${CLOUDSQL_SOCKET_PATH:-not set}"
+    if [ -n "${CLOUDSQL_SOCKET_PATH:-}" ]; then
+      echo "Socket exists: $([ -S "${CLOUDSQL_SOCKET_PATH}" ] && echo 'YES' || echo 'NO')"
+      ls -la /cloudsql/ 2>&1 || echo "/cloudsql directory not found"
+    fi
     exit 1
   fi
+  
   echo "Waiting for DB... (attempt $i/30)"
   sleep 2
 done
-
-echo "✓ Database connection successful!"
 
 # ---------------------------------------------
 # WordPress Installation
