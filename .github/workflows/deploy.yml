@@ -184,6 +184,7 @@ jobs:
           ENV_VARS="${ENV_VARS},WP_ADMIN_USER=${WP_ADMIN_USER}"
           ENV_VARS="${ENV_VARS},WP_ADMIN_PASS=${WP_ADMIN_PASS}"
           ENV_VARS="${ENV_VARS},WP_ADMIN_EMAIL=${WP_ADMIN_EMAIL}"
+          ENV_VARS="${ENV_VARS},CLOUD_SQL_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME}"
           
           # Add optional variables if set
           if [ -n "${WP_URL}" ]; then
