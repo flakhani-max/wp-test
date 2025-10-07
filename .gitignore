@@ -1,0 +1,30 @@
+# Docker
+docker-compose.override.yml
+
+# WordPress
+wp-content/uploads/
+wp-content/cache/
+wp-content/backup-db/
+wp-content/advanced-cache.php
+wp-content/wp-cache-config.php
+wp-content/upgrade/
+
+# Database
+*.sql
+*.sql.gz
+
+# Environment files
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+

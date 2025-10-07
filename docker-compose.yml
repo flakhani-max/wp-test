@@ -1,0 +1,36 @@
+services:
+  wordpress:
+    build: .
+    entrypoint: ["/usr/local/bin/custom-entrypoint.sh"]
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WP_URL: http://localhost:8080
+      WP_TITLE: Hello World WordPress
+      WP_ADMIN_USER: admin
+      WP_ADMIN_PASS: admin123
+      WP_ADMIN_EMAIL: admin@example.com
+    volumes:
+      - ./wp-content/themes/hello-world:/var/www/html/wp-content/themes/hello-world
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:10.11
+    restart: always
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
+

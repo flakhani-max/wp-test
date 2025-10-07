@@ -1,0 +1,74 @@
+name: Deploy to Google Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: us-central1
+  SERVICE_NAME: wordpress-hello-world
+
+jobs:
+  deploy:
+    name: Deploy to Cloud Run
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          export_default_credentials: true
+
+      - name: Configure Docker for GCR
+        run: |
+          gcloud auth configure-docker
+
+      - name: Build Docker image
+        run: |
+          docker build -t gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA \
+                       -t gcr.io/$PROJECT_ID/$SERVICE_NAME:latest \
+                       -f Dockerfile .
+
+      - name: Push Docker image to GCR
+        run: |
+          docker push gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA
+          docker push gcr.io/$PROJECT_ID/$SERVICE_NAME:latest
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy $SERVICE_NAME \
+            --image gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA \
+            --region $REGION \
+            --platform managed \
+            --allow-unauthenticated \
+            --set-env-vars "WORDPRESS_DB_HOST=${{ secrets.WORDPRESS_DB_HOST }},WORDPRESS_DB_USER=${{ secrets.WORDPRESS_DB_USER }},WORDPRESS_DB_PASSWORD=${{ secrets.WORDPRESS_DB_PASSWORD }},WORDPRESS_DB_NAME=${{ secrets.WORDPRESS_DB_NAME }},WP_URL=${{ secrets.WP_URL }},WP_TITLE=${{ secrets.WP_TITLE }},WP_ADMIN_USER=${{ secrets.WP_ADMIN_USER }},WP_ADMIN_PASS=${{ secrets.WP_ADMIN_PASS }},WP_ADMIN_EMAIL=${{ secrets.WP_ADMIN_EMAIL }}" \
+            --add-cloudsql-instances ${{ secrets.CLOUD_SQL_CONNECTION_NAME }} \
+            --memory 1Gi \
+            --cpu 1 \
+            --timeout 300 \
+            --max-instances 10 \
+            --min-instances 0
+
+      - name: Get Service URL
+        run: |
+          SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --region $REGION --format 'value(status.url)')
+          echo "Service deployed to: $SERVICE_URL"
+          echo "SERVICE_URL=$SERVICE_URL" >> $GITHUB_ENV
+
+      - name: Deployment Summary
+        run: |
+          echo "## Deployment Successful! 🚀" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Service Name:** $SERVICE_NAME" >> $GITHUB_STEP_SUMMARY
+          echo "**Region:** $REGION" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" >> $GITHUB_STEP_SUMMARY
+          echo "**URL:** $SERVICE_URL" >> $GITHUB_STEP_SUMMARY
+
