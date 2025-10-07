@@ -5,8 +5,7 @@
 This WordPress app is configured for:
 
 ### Region
-- **Cloud Run Region:** `northamerica-northeast1`
-- **Artifact Registry Region:** `northamerica-northeast1`
+- **Region (Cloud Run & Artifact Registry):** `northamerica-northeast1`
 
 ### Artifact Registry
 - **Repository Name:** `wordpress_test`
