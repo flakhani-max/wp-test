@@ -38,7 +38,7 @@ jobs:
           echo "Repository: ${AR_REPO}"
           echo "Location: ${REGION}"
           
-          if gcloud artifacts repositories describe "${AR_REPO}" \
+          if gcloud artifacts repositories describe wordpress \
             --location="${REGION}" \
             --format="value(name)" &>/dev/null; then
             echo "✅ Repository exists in ${REGION}"
