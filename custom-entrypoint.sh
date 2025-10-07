@@ -31,12 +31,19 @@ DOCROOT="/var/www/html"
 # ---------------------------------------------
 # Cloud SQL Socket Configuration
 # ---------------------------------------------
+echo "DEBUG: Checking Cloud SQL configuration..."
+echo "CLOUD_SQL_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME:-NOT SET}"
+
 if [ -n "${CLOUD_SQL_CONNECTION_NAME:-}" ]; then
   _cloudsql_socket="/cloudsql/${CLOUD_SQL_CONNECTION_NAME}"
+  echo "DEBUG: Cloud SQL socket path will be: ${_cloudsql_socket}"
   if [ -z "${WORDPRESS_DB_HOST:-}" ] || [ "${WORDPRESS_DB_HOST}" = "${CLOUD_SQL_CONNECTION_NAME}" ]; then
     export WORDPRESS_DB_HOST="localhost"
     export CLOUDSQL_SOCKET_PATH="${_cloudsql_socket}"
+    echo "DEBUG: Set WORDPRESS_DB_HOST=localhost and CLOUDSQL_SOCKET_PATH=${_cloudsql_socket}"
   fi
+else
+  echo "DEBUG: CLOUD_SQL_CONNECTION_NAME is not set - will use default socket"
 fi
 
 if [ -n "${INSTANCE_UNIX_SOCKET:-}" ] && [ -z "${WORDPRESS_DB_HOST:-}" ]; then
@@ -84,10 +91,15 @@ echo "✓ Apache is listening on port ${PORT}"
 # ---------------------------------------------
 # Database Connection Check
 # ---------------------------------------------
-echo "Checking database connection..."
+echo "==================================================="
+echo "Database Connection Configuration"
+echo "==================================================="
 echo "WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST:-not set}"
 echo "WORDPRESS_DB_USER=${WORDPRESS_DB_USER:-not set}"
 echo "WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME:-not set}"
+echo "CLOUD_SQL_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME:-not set}"
+echo "CLOUDSQL_SOCKET_PATH=${CLOUDSQL_SOCKET_PATH:-not set}"
+echo "==================================================="
 
 i=0
 until wp db check --path="$DOCROOT" --allow-root 2>&1; do
