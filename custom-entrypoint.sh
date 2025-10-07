@@ -5,7 +5,23 @@ set -euo pipefail
 # Configuration Variables
 # ---------------------------------------------
 PORT="${PORT:-8080}"
-SITE_URL="${WP_URL:-http://127.0.0.1:${PORT}}"
+
+# Auto-detect Cloud Run URL if not set
+if [ -z "${WP_URL:-}" ]; then
+  # Check if we're on Cloud Run (K_SERVICE is set by Cloud Run)
+  if [ -n "${K_SERVICE:-}" ]; then
+    # Cloud Run service detected - construct URL
+    SITE_URL="https://${K_SERVICE}-${K_REVISION:-xxx}.${REGION:-us-central1}.run.app"
+    echo "Auto-detected Cloud Run URL: $SITE_URL"
+    echo "Note: This is an approximation. WordPress will auto-correct to the actual URL on first request."
+  else
+    # Local development
+    SITE_URL="http://127.0.0.1:${PORT}"
+  fi
+else
+  SITE_URL="${WP_URL}"
+fi
+
 SITE_TITLE="${WP_TITLE:-Hello World WordPress}"
 ADMIN_USER="${WP_ADMIN_USER:-admin}"
 ADMIN_PASS="${WP_ADMIN_PASS:-admin123}"

@@ -16,6 +16,10 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 # Copy custom Hello World theme
 COPY wp-content/themes/hello-world /var/www/html/wp-content/themes/hello-world
 
+# Copy must-use plugins (auto-loaded by WordPress)
+RUN mkdir -p /var/www/html/wp-content/mu-plugins
+COPY wp-content/mu-plugins /var/www/html/wp-content/mu-plugins
+
 # Copy custom entrypoint script
 COPY custom-entrypoint.sh /usr/local/bin/custom-entrypoint.sh
 RUN chmod +x /usr/local/bin/custom-entrypoint.sh

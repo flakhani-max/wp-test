@@ -10,6 +10,7 @@ A basic WordPress application with a custom "Hello World" theme, containerized w
 - 🚀 Automated deployment via GitHub Actions
 - 🔐 Cloud SQL compatible
 - 📦 WP-CLI pre-installed
+- 🔄 **Auto URL Detection** - No need to know the Cloud Run URL in advance!
 
 ## Local Development
 
@@ -123,7 +124,7 @@ A basic WordPress application with a custom "Hello World" theme, containerized w
 
 ### Configure GitHub Secrets
 
-Go to your GitHub repository → Settings → Secrets and variables → Actions, and add:
+Go to your GitHub repository → Settings → Secrets and variables → Actions, and add these **required** secrets:
 
 | Secret Name | Description | Example |
 |-------------|-------------|---------|
@@ -134,11 +135,18 @@ Go to your GitHub repository → Settings → Secrets and variables → Actions,
 | `WORDPRESS_DB_PASSWORD` | Database password | `your_secure_password` |
 | `WORDPRESS_DB_NAME` | Database name | `wordpress` |
 | `CLOUD_SQL_CONNECTION_NAME` | Full connection name | `project:region:instance` |
-| `WP_URL` | Your Cloud Run URL | `https://wordpress-hello-world-xxx.run.app` |
-| `WP_TITLE` | Site title | `Hello World WordPress` |
 | `WP_ADMIN_USER` | Admin username | `admin` |
 | `WP_ADMIN_PASS` | Admin password | `secure_admin_password` |
 | `WP_ADMIN_EMAIL` | Admin email | `admin@yourdomain.com` |
+
+**Optional secrets** (will use defaults or auto-detect if not provided):
+
+| Secret Name | Description | Default |
+|-------------|-------------|---------|
+| `WP_URL` | Your Cloud Run URL (auto-detected if not set) | Auto-detected from headers |
+| `WP_TITLE` | Site title | `Hello World WordPress` |
+
+> **✨ Auto URL Detection:** You don't need to know the Cloud Run URL in advance! The app automatically detects its URL from Cloud Run headers. You can deploy first, then optionally set `WP_URL` if you want to use a custom domain.
 
 ### Deploy
 
@@ -199,6 +207,8 @@ wp-test/
 │   └── workflows/
 │       └── deploy.yml          # GitHub Actions workflow
 ├── wp-content/
+│   ├── mu-plugins/
+│   │   └── cloud-run-url-fix.php  # Auto URL detection plugin
 │   └── themes/
 │       └── hello-world/        # Custom theme
 │           ├── style.css       # Theme styles
@@ -221,6 +231,14 @@ Edit files in `wp-content/themes/hello-world/`:
 - `style.css` - Modify the styling
 - `functions.php` - Add WordPress functionality
 
+### URL Auto-Detection
+
+The app includes a must-use plugin (`wp-content/mu-plugins/cloud-run-url-fix.php`) that:
+- Automatically detects the Cloud Run URL from HTTP headers
+- Fixes WordPress redirects and URLs dynamically
+- Works without needing to know the URL in advance
+- Supports custom domains when configured
+
 ### Environment Variables
 
 Available environment variables:
@@ -228,16 +246,16 @@ Available environment variables:
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `PORT` | Server port | `8080` |
-| `WP_URL` | WordPress site URL | `http://127.0.0.1:8080` |
+| `WP_URL` | WordPress site URL (optional) | Auto-detected from headers |
 | `WP_TITLE` | Site title | `Hello World WordPress` |
 | `WP_ADMIN_USER` | Admin username | `admin` |
 | `WP_ADMIN_PASS` | Admin password | `admin123` |
 | `WP_ADMIN_EMAIL` | Admin email | `admin@example.com` |
-| `WORDPRESS_DB_HOST` | Database host | - |
-| `WORDPRESS_DB_USER` | Database user | - |
-| `WORDPRESS_DB_PASSWORD` | Database password | - |
-| `WORDPRESS_DB_NAME` | Database name | - |
-| `CLOUD_SQL_CONNECTION_NAME` | Cloud SQL connection | - |
+| `WORDPRESS_DB_HOST` | Database host | Required |
+| `WORDPRESS_DB_USER` | Database user | Required |
+| `WORDPRESS_DB_PASSWORD` | Database password | Required |
+| `WORDPRESS_DB_NAME` | Database name | Required |
+| `CLOUD_SQL_CONNECTION_NAME` | Cloud SQL connection | Required for Cloud Run |
 
 ## Troubleshooting
 
