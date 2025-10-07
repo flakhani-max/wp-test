@@ -54,7 +54,10 @@ WP_TITLE               → Defaults to "Hello World WordPress"
 
 ## After First Deployment
 
-Your Cloud Run URL will be: `https://wordpress-hello-world-XXXXX-REGION.run.app`
+Your Cloud Run URL will be: `https://wordpress-hello-world-XXXXX-nn.a.run.app`
+
+**Region:** northamerica-northeast1  
+**Artifact Registry:** wordpress_test
 
 The app will automatically:
 - ✅ Detect its own URL

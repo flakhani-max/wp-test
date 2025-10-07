@@ -60,7 +60,15 @@ A basic WordPress application with a custom "Hello World" theme, containerized w
    gcloud services enable run.googleapis.com
    gcloud services enable cloudbuild.googleapis.com
    gcloud services enable sqladmin.googleapis.com
-   gcloud services enable containerregistry.googleapis.com
+   gcloud services enable artifactregistry.googleapis.com
+   ```
+
+5. **Artifact Registry repository** (if not already created):
+   ```bash
+   gcloud artifacts repositories create wordpress_test \
+     --repository-format=docker \
+     --location=northamerica-northeast1 \
+     --description="WordPress Docker images"
    ```
 
 ### Setup Cloud SQL
@@ -70,7 +78,7 @@ A basic WordPress application with a custom "Hello World" theme, containerized w
    gcloud sql instances create wordpress-db \
      --database-version=MYSQL_8_0 \
      --tier=db-f1-micro \
-     --region=us-central1
+     --region=northamerica-northeast1
    ```
 
 2. **Create database:**
@@ -109,7 +117,7 @@ A basic WordPress application with a custom "Hello World" theme, containerized w
    
    gcloud projects add-iam-policy-binding $PROJECT_ID \
      --member="serviceAccount:github-actions@${PROJECT_ID}.iam.gserviceaccount.com" \
-     --role="roles/storage.admin"
+     --role="roles/artifactregistry.writer"
    
    gcloud projects add-iam-policy-binding $PROJECT_ID \
      --member="serviceAccount:github-actions@${PROJECT_ID}.iam.gserviceaccount.com" \
@@ -163,11 +171,11 @@ Go to your GitHub repository → Settings → Secrets and variables → Actions,
    - Once complete, the service URL will be shown
 
 3. **Access your site:**
-   - The URL will be: `https://wordpress-hello-world-[hash].run.app`
+   - The URL will be: `https://wordpress-hello-world-[hash]-nn.a.run.app`
    - You can find it in the GitHub Actions output or:
      ```bash
      gcloud run services describe wordpress-hello-world \
-       --region us-central1 \
+       --region northamerica-northeast1 \
        --format="value(status.url)"
      ```
 
@@ -178,23 +186,28 @@ If you prefer to deploy manually:
 ```bash
 # Set variables
 PROJECT_ID="your-project-id"
-REGION="us-central1"
+REGION="northamerica-northeast1"
 SERVICE_NAME="wordpress-hello-world"
+ARTIFACT_REGISTRY_REPO="wordpress_test"
+
+# Configure Docker for Artifact Registry
+gcloud auth configure-docker northamerica-northeast1-docker.pkg.dev
 
 # Build image
-docker build -t gcr.io/$PROJECT_ID/$SERVICE_NAME:latest .
+IMAGE_BASE=northamerica-northeast1-docker.pkg.dev/$PROJECT_ID/$ARTIFACT_REGISTRY_REPO/$SERVICE_NAME
+docker build -t $IMAGE_BASE:latest .
 
-# Push to GCR
-docker push gcr.io/$PROJECT_ID/$SERVICE_NAME:latest
+# Push to Artifact Registry
+docker push $IMAGE_BASE:latest
 
 # Deploy to Cloud Run
 gcloud run deploy $SERVICE_NAME \
-  --image gcr.io/$PROJECT_ID/$SERVICE_NAME:latest \
+  --image $IMAGE_BASE:latest \
   --region $REGION \
   --platform managed \
   --allow-unauthenticated \
-  --set-env-vars "WORDPRESS_DB_HOST=localhost,WORDPRESS_DB_USER=wordpress,WORDPRESS_DB_PASSWORD=your_password,WORDPRESS_DB_NAME=wordpress,WP_URL=https://your-service-url.run.app,WP_TITLE=Hello World,WP_ADMIN_USER=admin,WP_ADMIN_PASS=admin_password,WP_ADMIN_EMAIL=admin@example.com" \
-  --add-cloudsql-instances your-project:region:instance \
+  --set-env-vars "WORDPRESS_DB_HOST=localhost,WORDPRESS_DB_USER=wordpress,WORDPRESS_DB_PASSWORD=your_password,WORDPRESS_DB_NAME=wordpress,WP_TITLE=Hello World,WP_ADMIN_USER=admin,WP_ADMIN_PASS=admin_password,WP_ADMIN_EMAIL=admin@example.com" \
+  --add-cloudsql-instances your-project:northamerica-northeast1:instance \
   --memory 1Gi \
   --cpu 1
 ```
@@ -279,7 +292,7 @@ ports:
 **Check logs:**
 ```bash
 gcloud run services logs read wordpress-hello-world \
-  --region us-central1 \
+  --region northamerica-northeast1 \
   --limit 50
 ```
 
@@ -307,7 +320,7 @@ gcloud run services logs read wordpress-hello-world \
 
 - **Cloud Run:** Pay per use (generous free tier)
 - **Cloud SQL:** Charged hourly (can use `db-f1-micro` for minimal cost)
-- **Container Registry:** Storage costs (minimal for single image)
+- **Artifact Registry:** Storage costs (minimal for single image, 0.5GB free)
 - **Bandwidth:** Egress charges apply
 
 ## Support
