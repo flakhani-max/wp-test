@@ -37,23 +37,32 @@ echo "CLOUD_SQL_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME:-NOT SET}"
 if [ -n "${CLOUD_SQL_CONNECTION_NAME:-}" ]; then
   _cloudsql_socket="/cloudsql/${CLOUD_SQL_CONNECTION_NAME}"
   echo "DEBUG: Cloud SQL socket path will be: ${_cloudsql_socket}"
-  if [ -z "${WORDPRESS_DB_HOST:-}" ] || [ "${WORDPRESS_DB_HOST}" = "${CLOUD_SQL_CONNECTION_NAME}" ]; then
-    export WORDPRESS_DB_HOST="localhost"
-    export CLOUDSQL_SOCKET_PATH="${_cloudsql_socket}"
-    echo "DEBUG: Set WORDPRESS_DB_HOST=localhost and CLOUDSQL_SOCKET_PATH=${_cloudsql_socket}"
+  
+  # Always set CLOUDSQL_SOCKET_PATH when using Cloud SQL
+  export CLOUDSQL_SOCKET_PATH="${_cloudsql_socket}"
+  
+  # Ensure WORDPRESS_DB_HOST is localhost for socket connection
+  if [ "${WORDPRESS_DB_HOST:-}" != "localhost" ]; then
+    echo "DEBUG: Changing WORDPRESS_DB_HOST from '${WORDPRESS_DB_HOST}' to 'localhost'"
   fi
+  export WORDPRESS_DB_HOST="localhost"
+  
+  echo "DEBUG: Set WORDPRESS_DB_HOST=localhost and CLOUDSQL_SOCKET_PATH=${_cloudsql_socket}"
 else
   echo "DEBUG: CLOUD_SQL_CONNECTION_NAME is not set - will use default socket"
 fi
 
-if [ -n "${INSTANCE_UNIX_SOCKET:-}" ] && [ -z "${WORDPRESS_DB_HOST:-}" ]; then
-  export WORDPRESS_DB_HOST="localhost"
-  export CLOUDSQL_SOCKET_PATH="${INSTANCE_UNIX_SOCKET}"
-fi
-
-if [[ "${WORDPRESS_DB_HOST:-}" == /cloudsql/* ]]; then
-  export CLOUDSQL_SOCKET_PATH="${WORDPRESS_DB_HOST}"
-  export WORDPRESS_DB_HOST="localhost"
+# Fallback for alternative Cloud SQL configuration methods
+if [ -z "${CLOUDSQL_SOCKET_PATH:-}" ]; then
+  if [ -n "${INSTANCE_UNIX_SOCKET:-}" ]; then
+    export WORDPRESS_DB_HOST="localhost"
+    export CLOUDSQL_SOCKET_PATH="${INSTANCE_UNIX_SOCKET}"
+    echo "DEBUG: Using INSTANCE_UNIX_SOCKET: ${INSTANCE_UNIX_SOCKET}"
+  elif [[ "${WORDPRESS_DB_HOST:-}" == /cloudsql/* ]]; then
+    export CLOUDSQL_SOCKET_PATH="${WORDPRESS_DB_HOST}"
+    export WORDPRESS_DB_HOST="localhost"
+    echo "DEBUG: Detected /cloudsql/* in WORDPRESS_DB_HOST"
+  fi
 fi
 
 # Configure PHP mysqli to use the Cloud SQL socket
