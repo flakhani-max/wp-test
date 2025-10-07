@@ -146,9 +146,20 @@ wp option update home "$SITE_URL" --path="$DOCROOT" --allow-root
 wp option update blogname "$SITE_TITLE" --path="$DOCROOT" --allow-root
 
 # Activate Hello World theme
+echo "Checking for hello-world theme..."
+wp theme list --path="$DOCROOT" --allow-root || echo "Could not list themes"
+
 if wp theme is-installed hello-world --path="$DOCROOT" --allow-root; then
+  echo "✓ hello-world theme is installed, activating..."
   wp theme activate hello-world --path="$DOCROOT" --allow-root
   echo "✓ Hello World theme activated!"
+  wp theme list --path="$DOCROOT" --allow-root --status=active
+else
+  echo "❌ hello-world theme NOT found!"
+  echo "Available themes:"
+  wp theme list --path="$DOCROOT" --allow-root || echo "Could not list themes"
+  echo "Theme directory contents:"
+  ls -la "$DOCROOT/wp-content/themes/" || echo "Could not list theme directory"
 fi
 
 # Remove default plugins
