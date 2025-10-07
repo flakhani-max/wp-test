@@ -32,6 +32,28 @@ jobs:
         run: |
           gcloud auth configure-docker $REGION-docker.pkg.dev
 
+      - name: Verify Artifact Registry repository exists
+        run: |
+          echo "Checking if Artifact Registry repository exists..."
+          if gcloud artifacts repositories describe $ARTIFACT_REGISTRY_REPO \
+            --location=$REGION \
+            --format="value(name)" &>/dev/null; then
+            echo "✅ Repository '$ARTIFACT_REGISTRY_REPO' exists in $REGION"
+          else
+            echo "❌ ERROR: Repository '$ARTIFACT_REGISTRY_REPO' does not exist in $REGION"
+            echo ""
+            echo "Create it with:"
+            echo "gcloud artifacts repositories create $ARTIFACT_REGISTRY_REPO \\"
+            echo "  --repository-format=docker \\"
+            echo "  --location=$REGION \\"
+            echo "  --description='WordPress Docker images'"
+            exit 1
+          fi
+          
+          echo ""
+          echo "Image will be pushed to:"
+          echo "$REGION-docker.pkg.dev/$PROJECT_ID/$ARTIFACT_REGISTRY_REPO/$SERVICE_NAME"
+
       - name: Build Docker image
         run: |
           IMAGE_BASE=$REGION-docker.pkg.dev/$PROJECT_ID/$ARTIFACT_REGISTRY_REPO/$SERVICE_NAME
