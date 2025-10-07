@@ -164,22 +164,33 @@ jobs:
           docker push ${IMAGE_BASE}:latest
 
       - name: Deploy to Cloud Run
+        env:
+          WORDPRESS_DB_HOST: ${{ secrets.WORDPRESS_DB_HOST }}
+          WORDPRESS_DB_USER: ${{ secrets.WORDPRESS_DB_USER }}
+          WORDPRESS_DB_PASSWORD: ${{ secrets.WORDPRESS_DB_PASSWORD }}
+          WORDPRESS_DB_NAME: ${{ secrets.WORDPRESS_DB_NAME }}
+          WP_ADMIN_USER: ${{ secrets.WP_ADMIN_USER }}
+          WP_ADMIN_PASS: ${{ secrets.WP_ADMIN_PASS }}
+          WP_ADMIN_EMAIL: ${{ secrets.WP_ADMIN_EMAIL }}
+          WP_URL: ${{ secrets.WP_URL }}
+          WP_TITLE: ${{ secrets.WP_TITLE }}
+          CLOUD_SQL_CONNECTION_NAME: ${{ secrets.CLOUD_SQL_CONNECTION_NAME }}
         run: |
-          # Build environment variables (WP_URL is optional - will auto-detect if not set)
-          ENV_VARS="WORDPRESS_DB_HOST=${{ secrets.WORDPRESS_DB_HOST }}"
-          ENV_VARS="${ENV_VARS},WORDPRESS_DB_USER=${{ secrets.WORDPRESS_DB_USER }}"
-          ENV_VARS="${ENV_VARS},WORDPRESS_DB_PASSWORD=${{ secrets.WORDPRESS_DB_PASSWORD }}"
-          ENV_VARS="${ENV_VARS},WORDPRESS_DB_NAME=${{ secrets.WORDPRESS_DB_NAME }}"
-          ENV_VARS="${ENV_VARS},WP_ADMIN_USER=${{ secrets.WP_ADMIN_USER }}"
-          ENV_VARS="${ENV_VARS},WP_ADMIN_PASS=${{ secrets.WP_ADMIN_PASS }}"
-          ENV_VARS="${ENV_VARS},WP_ADMIN_EMAIL=${{ secrets.WP_ADMIN_EMAIL }}"
+          # Build environment variables safely
+          ENV_VARS="WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}"
+          ENV_VARS="${ENV_VARS},WORDPRESS_DB_USER=${WORDPRESS_DB_USER}"
+          ENV_VARS="${ENV_VARS},WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}"
+          ENV_VARS="${ENV_VARS},WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}"
+          ENV_VARS="${ENV_VARS},WP_ADMIN_USER=${WP_ADMIN_USER}"
+          ENV_VARS="${ENV_VARS},WP_ADMIN_PASS=${WP_ADMIN_PASS}"
+          ENV_VARS="${ENV_VARS},WP_ADMIN_EMAIL=${WP_ADMIN_EMAIL}"
           
           # Add optional variables if set
-          if [ -n "${{ secrets.WP_URL }}" ]; then
-            ENV_VARS="${ENV_VARS},WP_URL=${{ secrets.WP_URL }}"
+          if [ -n "${WP_URL}" ]; then
+            ENV_VARS="${ENV_VARS},WP_URL=${WP_URL}"
           fi
-          if [ -n "${{ secrets.WP_TITLE }}" ]; then
-            ENV_VARS="${ENV_VARS},WP_TITLE=${{ secrets.WP_TITLE }}"
+          if [ -n "${WP_TITLE}" ]; then
+            ENV_VARS="${ENV_VARS},WP_TITLE=${WP_TITLE}"
           fi
           
           IMAGE_BASE="${REGION}-docker.pkg.dev/${PROJECT_ID}/wordpress/${SERVICE_NAME}"
@@ -189,7 +200,7 @@ jobs:
             --platform managed \
             --allow-unauthenticated \
             --set-env-vars "${ENV_VARS}" \
-            --add-cloudsql-instances ${{ secrets.CLOUD_SQL_CONNECTION_NAME }} \
+            --add-cloudsql-instances "${CLOUD_SQL_CONNECTION_NAME}" \
             --memory 1Gi \
             --cpu 1 \
             --timeout 300 \
