@@ -55,3 +55,4 @@ function cloudrun_fix_redirect($location, $status) {
     return $location;
 }
 
+
