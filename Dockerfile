@@ -1,4 +1,4 @@
-# Dockerfile for Basic WordPress with Hello World theme
+# Dockerfile for Basic WordPress with CTF Landing Pages theme
 FROM wordpress:6.5-php8.2-apache
 
 # Install system dependencies and WP-CLI
@@ -13,8 +13,13 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/local/bin/wp
 
-# Copy custom Hello World theme
+# Copy custom themes
 COPY wp-content/themes/hello-world /var/www/html/wp-content/themes/hello-world
+COPY wp-content/themes/ctf-landing-pages /var/www/html/wp-content/themes/ctf-landing-pages
+
+# Copy regular plugins
+RUN mkdir -p /var/www/html/wp-content/plugins
+COPY wp-content/plugins /var/www/html/wp-content/plugins
 
 # Copy must-use plugins (auto-loaded by WordPress)
 RUN mkdir -p /var/www/html/wp-content/mu-plugins

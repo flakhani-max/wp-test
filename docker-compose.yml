@@ -10,7 +10,7 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
-      WP_URL: http://localhost:8080
+      WP_URL: http://127.0.0.1:8080
       WP_TITLE: Hello World WordPress
       WP_ADMIN_USER: admin
       WP_ADMIN_PASS: admin123

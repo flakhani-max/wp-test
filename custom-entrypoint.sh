@@ -168,17 +168,17 @@ wp option update siteurl "$SITE_URL" --path="$DOCROOT" --allow-root
 wp option update home "$SITE_URL" --path="$DOCROOT" --allow-root
 wp option update blogname "$SITE_TITLE" --path="$DOCROOT" --allow-root
 
-# Activate Hello World theme
-echo "Checking for hello-world theme..."
+# Activate CTF Landing Pages theme
+echo "Checking for ctf-landing-pages theme..."
 wp theme list --path="$DOCROOT" --allow-root || echo "Could not list themes"
 
-if wp theme is-installed hello-world --path="$DOCROOT" --allow-root; then
-  echo "✓ hello-world theme is installed, activating..."
-  wp theme activate hello-world --path="$DOCROOT" --allow-root
-  echo "✓ Hello World theme activated!"
+if wp theme is-installed ctf-landing-pages --path="$DOCROOT" --allow-root; then
+  echo "✓ ctf-landing-pages theme is installed, activating..."
+  wp theme activate ctf-landing-pages --path="$DOCROOT" --allow-root
+  echo "✓ CTF Landing Pages theme activated!"
   wp theme list --path="$DOCROOT" --allow-root --status=active
 else
-  echo "❌ hello-world theme NOT found!"
+  echo "❌ ctf-landing-pages theme NOT found!"
   echo "Available themes:"
   wp theme list --path="$DOCROOT" --allow-root || echo "Could not list themes"
   echo "Theme directory contents:"
@@ -189,6 +189,13 @@ fi
 for plugin in akismet hello; do
   if wp plugin is-installed "$plugin" --path="$DOCROOT" --allow-root; then
     wp plugin delete "$plugin" --path="$DOCROOT" --allow-root || true
+  fi
+done
+
+# Remove default themes
+for theme in twentytwentyfour twentytwentythree twentytwentytwo twentytwentyone twentytwenty twentynineteen twentyseventeen twentysixteen twentyfifteen twentyfourteen twentythirteen twentytwelve twentyeleven twentyten; do
+  if wp theme is-installed "$theme" --path="$DOCROOT" --allow-root; then
+    wp theme delete "$theme" --path="$DOCROOT" --allow-root || true
   fi
 done
 
