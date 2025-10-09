@@ -115,18 +115,26 @@ until [ "$i" -gt 30 ]; do
   i=$((i+1))
   
   # Use mysql client with explicit socket path if Cloud SQL is configured
-  if [ -n "${CLOUDSQL_SOCKET_PATH:-}" ] && [ -S "${CLOUDSQL_SOCKET_PATH}" ]; then
-    if mysql --socket="${CLOUDSQL_SOCKET_PATH}" \
-            --user="${WORDPRESS_DB_USER}" \
-            --password="${WORDPRESS_DB_PASSWORD}" \
-            "${WORDPRESS_DB_NAME}" \
-            -e "SELECT 1;" >/dev/null 2>&1; then
-      echo "✓ Database connection successful via Cloud SQL socket!"
-      break
+  if [ -n "${CLOUDSQL_SOCKET_PATH:-}" ]; then
+    # First check if socket exists (wait for Cloud Run to mount it)
+    if [ ! -S "${CLOUDSQL_SOCKET_PATH}" ]; then
+      if [ "$i" -eq 1 ]; then
+        echo "Waiting for Cloud SQL socket to be mounted at: ${CLOUDSQL_SOCKET_PATH}"
+      fi
+    else
+      # Socket exists, try to connect
+      if mysql --socket="${CLOUDSQL_SOCKET_PATH}" \
+              --user="${WORDPRESS_DB_USER}" \
+              --password="${WORDPRESS_DB_PASSWORD}" \
+              "${WORDPRESS_DB_NAME}" \
+              -e "SELECT 1;" >/dev/null 2>&1; then
+        echo "✓ Database connection successful via Cloud SQL socket!"
+        break
+      fi
     fi
   else
-    # Fallback to wp db check for non-Cloud SQL setups
-    if wp db check --path="$DOCROOT" --allow-root 2>&1; then
+    # Fallback to wp db check for non-Cloud SQL setups (local development)
+    if wp db check --path="$DOCROOT" --allow-root >/dev/null 2>&1; then
       echo "✓ Database connection successful!"
       break
     fi
