@@ -33,16 +33,15 @@ Basic WordPress application with automated deployment to Google Cloud Run.
 ```
 
 **⚡ Smart Deployment:** Only triggers on changes to:
-- `Dockerfile`
-- `custom-entrypoint.sh`
-- `wp-content/` (themes, plugins)
-- `.github/workflows/deploy.yml`
+- `Dockerfile` - Container configuration
+- `custom-entrypoint.sh` - Startup script
+- `wp-content/` - Themes, plugins, assets
+- `.github/workflows/deploy.yml` - Deployment pipeline
 
-**📝 Ignored files** (won't trigger deployment):
-- `README.md`
-- `*.md` files
-- `*.sh` scripts (except `custom-entrypoint.sh`)
-- Documentation files
+**📝 Changes to these files WON'T trigger deployment:**
+- `README.md`, `*.md` - Documentation
+- `sync-*.sh`, `clone-*.sh` - Local development scripts
+- Other non-application files
 
 ### Deploy Changes
 

@@ -10,12 +10,6 @@ on:
       - 'custom-entrypoint.sh'
       - 'wp-content/**'
       - '.github/workflows/deploy.yml'
-    paths-ignore:
-      - '**.md'
-      - 'README.md'
-      - 'DEVOPS_BEST_PRACTICES.md'
-      - '**.sh'
-      - '!custom-entrypoint.sh'
   workflow_dispatch:
 
 env:
