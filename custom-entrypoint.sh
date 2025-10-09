@@ -11,7 +11,7 @@ if [ -z "${WP_URL:-}" ]; then
   # Check if we're on Cloud Run (K_SERVICE is set by Cloud Run)
   if [ -n "${K_SERVICE:-}" ]; then
     # Cloud Run service detected - construct URL
-    SITE_URL="https://${K_SERVICE}-${K_REVISION:-xxx}.${REGION:-us-central1}.run.app"
+    SITE_URL="https://${K_SERVICE}-${K_REVISION:-xxx}.${REGION:-northamerica-northeast1}.run.app"
     echo "Auto-detected Cloud Run URL: $SITE_URL"
     echo "Note: This is an approximation. WordPress will auto-correct to the actual URL on first request."
   else
@@ -167,6 +167,14 @@ fi
 wp option update siteurl "$SITE_URL" --path="$DOCROOT" --allow-root
 wp option update home "$SITE_URL" --path="$DOCROOT" --allow-root
 wp option update blogname "$SITE_TITLE" --path="$DOCROOT" --allow-root
+
+# Update admin user credentials (runs every deployment)
+echo "Updating admin user credentials..."
+wp user update "$ADMIN_USER" \
+  --user_pass="$ADMIN_PASS" \
+  --user_email="$ADMIN_EMAIL" \
+  --path="$DOCROOT" \
+  --allow-root 2>/dev/null || echo "Note: Admin user will be created on first install"
 
 # Activate CTF Landing Pages theme
 echo "Checking for ctf-landing-pages theme..."
