@@ -14,8 +14,9 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  REGION: northamerica-northeast1
-  SERVICE_NAME: wordpress-hello-world
+  REGION: ${{ secrets.REGION }}
+  SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
+  ARTIFACT_REGISTRY_REPO: ${{ secrets.ARTIFACT_REGISTRY_REPO }}
 
 jobs:
   deploy:
@@ -134,18 +135,18 @@ jobs:
       - name: Verify Artifact Registry repository exists
         run: |
           echo "Checking if Artifact Registry repository exists..."
-          echo "Repository: wordpress"
+          echo "Repository: ${ARTIFACT_REGISTRY_REPO}"
           echo "Location: ${REGION}"
           
-          if gcloud artifacts repositories describe wordpress \
+          if gcloud artifacts repositories describe ${ARTIFACT_REGISTRY_REPO} \
             --location="${REGION}" \
             --format="value(name)" &>/dev/null; then
-            echo "✅ Repository 'wordpress' exists in ${REGION}"
+            echo "✅ Repository '${ARTIFACT_REGISTRY_REPO}' exists in ${REGION}"
           else
-            echo "❌ ERROR: Repository 'wordpress' does not exist in ${REGION}"
+            echo "❌ ERROR: Repository '${ARTIFACT_REGISTRY_REPO}' does not exist in ${REGION}"
             echo ""
             echo "Create it with:"
-            echo "gcloud artifacts repositories create wordpress \\"
+            echo "gcloud artifacts repositories create ${ARTIFACT_REGISTRY_REPO} \\"
             echo "  --repository-format=docker \\"
             echo "  --location=${REGION} \\"
             echo "  --description='WordPress Docker images'"
@@ -154,18 +155,18 @@ jobs:
           
           echo ""
           echo "Image will be pushed to:"
-          echo "${REGION}-docker.pkg.dev/${PROJECT_ID}/wordpress/${SERVICE_NAME}"
+          echo "${REGION}-docker.pkg.dev/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPO}/${SERVICE_NAME}"
 
       - name: Build Docker image
         run: |
-          IMAGE_BASE="${REGION}-docker.pkg.dev/${PROJECT_ID}/wordpress/${SERVICE_NAME}"
+          IMAGE_BASE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPO}/${SERVICE_NAME}"
           docker build -t ${IMAGE_BASE}:${GITHUB_SHA} \
                        -t ${IMAGE_BASE}:latest \
                        -f Dockerfile .
 
       - name: Push Docker image to Artifact Registry
         run: |
-          IMAGE_BASE="${REGION}-docker.pkg.dev/${PROJECT_ID}/wordpress/${SERVICE_NAME}"
+          IMAGE_BASE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPO}/${SERVICE_NAME}"
           docker push ${IMAGE_BASE}:${GITHUB_SHA}
           docker push ${IMAGE_BASE}:latest
 
@@ -200,7 +201,7 @@ jobs:
             ENV_VARS="${ENV_VARS},WP_TITLE=${WP_TITLE}"
           fi
           
-          IMAGE_BASE="${REGION}-docker.pkg.dev/${PROJECT_ID}/wordpress/${SERVICE_NAME}"
+          IMAGE_BASE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPO}/${SERVICE_NAME}"
           gcloud run deploy ${SERVICE_NAME} \
             --image ${IMAGE_BASE}:${GITHUB_SHA} \
             --region ${REGION} \
@@ -222,7 +223,7 @@ jobs:
 
       - name: Deployment Summary
         run: |
-          IMAGE_BASE="${REGION}-docker.pkg.dev/${PROJECT_ID}/wordpress/${SERVICE_NAME}"
+          IMAGE_BASE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPO}/${SERVICE_NAME}"
           echo "## Deployment Successful! 🚀" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Service Name:** ${SERVICE_NAME}" >> $GITHUB_STEP_SUMMARY
