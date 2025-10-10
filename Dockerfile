@@ -22,8 +22,8 @@ RUN mkdir -p /var/www/html/wp-content/plugins
 COPY wp-content/plugins /var/www/html/wp-content/plugins
 
 # Copy must-use plugins (auto-loaded by WordPress)
-RUN mkdir -p /var/www/html/wp-content/mu-plugins
-COPY wp-content/mu-plugins /var/www/html/wp-content/mu-plugins
+#RUN mkdir -p /var/www/html/wp-content/mu-plugins
+#COPY wp-content/mu-plugins /var/www/html/wp-content/mu-plugins
 
 # Copy custom entrypoint script
 COPY custom-entrypoint.sh /usr/local/bin/custom-entrypoint.sh
