@@ -5,18 +5,19 @@
  * create a wordpress page template based on this page: https://www.taxpayer.com/petitions/no-sales-tax-on-used-cars
  */
 
+// Get content from ACF fields if they exist, otherwise use defaults
 $content = [
-    'title' => 'Will you sign the petition? No Sales Tax on Used Cars',
-    'image' => 'https://www.taxpayer.com/media/cars-4-14-2014.jpg',
-    'intro' => 'Used cars should not be a government cash cow.',
-    'body' => 'But governments charge you provincial and/or federal sales tax when you buy a used car, no matter how many times the car has been sold and taxed before.',
-    'petition' => 'We, the undersigned, call on all governments to scrap sales tax on used cars.',
-    'cta' => 'Sign the petition and join hundreds of thousands Canadian taxpayers receiving our Action Update emails.',
-    'sms_optin' => 'SMS: I also want to receive occasional text messages to keep me up to date.',
+    'title' => get_field('petition_title') ?: get_the_title(),
+    'image' => get_field('petition_image') ?: 'https://www.taxpayer.com/media/cars-4-14-2014.jpg',
+    'intro' => get_field('petition_intro') ?: 'Used cars should not be a government cash cow.',
+    'body' => get_field('petition_body') ?: 'But governments charge you provincial and/or federal sales tax when you buy a used car, no matter how many times the car has been sold and taxed before.',
+    'petition' => get_field('petition_text') ?: 'We, the undersigned, call on all governments to scrap sales tax on used cars.',
+    'cta' => get_field('petition_cta') ?: 'Sign the petition and join hundreds of thousands Canadian taxpayers receiving our Action Update emails.',
+    'sms_optin' => get_field('petition_sms_text') ?: 'SMS: I also want to receive occasional text messages to keep me up to date.',
     'privacy' => [
-        'text' => 'We take data security and privacy seriously. Your information will be kept safe, and will be used to sign your petition.',
-        'link' => 'https://www.taxpayer.com/privacy-policy/',
-        'link_text' => 'Privacy Policy'
+        'text' => get_field('privacy_text') ?: 'We take data security and privacy seriously. Your information will be kept safe, and will be used to sign your petition.',
+        'link' => get_field('privacy_link') ?: 'https://www.taxpayer.com/privacy-policy/',
+        'link_text' => get_field('privacy_link_text') ?: 'Privacy Policy'
     ]
 ];
 

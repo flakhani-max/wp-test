@@ -1,5 +1,9 @@
 <?php
 // Custom functions.php for petition template
+
+// Load ACF field definitions for petition pages
+require_once get_template_directory() . '/acf-petition-fields.php';
+
 add_action('wp_enqueue_scripts', function() {
     // Only enqueue for the custom petition template
     if (is_page_template('petition-template.php')) {
