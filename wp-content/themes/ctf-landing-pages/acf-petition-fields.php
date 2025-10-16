@@ -60,9 +60,9 @@ acf_add_local_field_group(array(
         ),
 
         array(
-            'key' => 'petition_Tag',
+            'key' => 'petition_tag',
             'label' => 'Mailchimp Petition Tag',
-            'name' => 'petition_image',
+            'name' => 'petition_tag',
             'type' => 'textarea',
             'instructions' => 'Mailchimp petition tag'
         ),
