@@ -58,6 +58,14 @@ acf_add_local_field_group(array(
             'instructions' => 'Text above the form',
             'rows' => 2,
         ),
+
+        array(
+            'key' => 'petition_Tag',
+            'label' => 'Mailchimp Petition Tag',
+            'name' => 'petition_image',
+            'type' => 'textarea',
+            'instructions' => 'Mailchimp petition tag'
+        ),
         array(
             'key' => 'field_petition_sms_text',
             'label' => 'SMS Opt-in Text',
@@ -80,6 +88,14 @@ acf_add_local_field_group(array(
             'type' => 'url',
             'default_value' => 'https://www.taxpayer.com/privacy-policy/',
         ),
+        array(
+            'key' => 'field_privacy_link_text',
+            'label' => 'Privacy Policy Link Text',
+            'name' => 'privacy_link_text',
+            'type' => 'text',
+            'default_value' => 'Privacy Policy',
+        ),
+
         array(
             'key' => 'field_privacy_link_text',
             'label' => 'Privacy Policy Link Text',
