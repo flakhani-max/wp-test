@@ -22,6 +22,7 @@ else
   SITE_URL="${WP_URL}"
 fi
 
+
 SITE_TITLE="${WP_TITLE:-Hello World WordPress}"
 ADMIN_USER="${WP_ADMIN_USER:-admin}"
 ADMIN_PASS="${WP_ADMIN_PASS:-admin123}"
@@ -199,6 +200,31 @@ else
   wp theme list --path="$DOCROOT" --allow-root || echo "Could not list themes"
   echo "Theme directory contents:"
   ls -la "$DOCROOT/wp-content/themes/" || echo "Could not list theme directory"
+fi
+
+# Install ACF Pro if license key is provided
+ACF_PRO_KEY="${ACF_PRO_KEY:-}"
+if [ -n "$ACF_PRO_KEY" ]; then
+  if ! wp plugin is-installed advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
+    echo "Installing ACF Pro..."
+    wp plugin install "https://connect.advancedcustomfields.com/v2/plugins/download?p=pro&k=${ACF_PRO_KEY}" \
+      --path="$DOCROOT" \
+      --allow-root || echo "Failed to install ACF Pro - check your license key"
+  fi
+  # Activate ACF Pro
+  if wp plugin is-installed advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
+    wp plugin activate advanced-custom-fields-pro --path="$DOCROOT" --allow-root || true
+    echo "✓ ACF Pro activated!"
+  fi
+else
+  # Fallback to free ACF if no license key
+  if ! wp plugin is-installed advanced-custom-fields --path="$DOCROOT" --allow-root; then
+    echo "Installing ACF (free version)..."
+    wp plugin install advanced-custom-fields --activate --path="$DOCROOT" --allow-root || true
+  else
+    wp plugin activate advanced-custom-fields --path="$DOCROOT" --allow-root || true
+  fi
+  echo "✓ ACF (free) activated!"
 fi
 
 # Remove default plugins
