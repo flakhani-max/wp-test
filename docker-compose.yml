@@ -15,8 +15,16 @@ services:
       WP_ADMIN_USER: admin
       WP_ADMIN_PASS: admin123
       WP_ADMIN_EMAIL: admin@example.com
+      # Optional: Set ACF_PRO_KEY if you have a license
+      # ACF_PRO_KEY: your-license-key-here
     volumes:
+      # Mount custom themes for live editing
+      - ./wp-content/themes/ctf-landing-pages:/var/www/html/wp-content/themes/ctf-landing-pages
       - ./wp-content/themes/hello-world:/var/www/html/wp-content/themes/hello-world
+      # Mount only custom plugins (not the entire plugins dir to allow ACF installation)
+      - ./wp-content/plugins/wp-petition-mailchimp:/var/www/html/wp-content/plugins/wp-petition-mailchimp
+      # Mount mu-plugins
+      - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
     depends_on:
       - db
 
