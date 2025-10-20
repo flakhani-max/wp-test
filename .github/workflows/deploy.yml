@@ -203,6 +203,16 @@ jobs:
           fi
           
           IMAGE_BASE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPO}/${SERVICE_NAME}"
+          
+          # Verify RUNTIME_SA is set
+          if [ -z "${RUNTIME_SA}" ]; then
+            echo "❌ ERROR: RUNTIME_SA secret is not set!"
+            echo "Please add RUNTIME_SA secret in GitHub with your service account email"
+            exit 1
+          fi
+          
+          echo "Using service account: ${RUNTIME_SA}"
+          
           gcloud run deploy ${SERVICE_NAME} \
             --image ${IMAGE_BASE}:${GITHUB_SHA} \
             --region ${REGION} \
