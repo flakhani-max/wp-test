@@ -182,6 +182,7 @@ jobs:
           WP_URL: ${{ secrets.WP_URL }}
           WP_TITLE: ${{ secrets.WP_TITLE }}
           CLOUD_SQL_CONNECTION_NAME: ${{ secrets.CLOUD_SQL_CONNECTION_NAME }}
+          RUNTIME_SERVICE_ACCOUNT: ${{ secrets.RUNTIME_SERVICE_ACCOUNT }}
         run: |
           # Build environment variables safely
           ENV_VARS="WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}"
@@ -207,6 +208,7 @@ jobs:
             --region ${REGION} \
             --platform managed \
             --allow-unauthenticated \
+            --service-account "${RUNTIME_SERVICE_ACCOUNT}" \
             --set-env-vars "${ENV_VARS}" \
             --add-cloudsql-instances "${CLOUD_SQL_CONNECTION_NAME}" \
             --memory 1Gi \
