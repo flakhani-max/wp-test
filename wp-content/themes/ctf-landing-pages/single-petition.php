@@ -25,6 +25,19 @@ get_header('custom');
 ?>
 
 <div class="custom-page-content petition-template">
+    <?php 
+    $categories = get_the_terms(get_the_ID(), 'petition_category');
+    if ($categories && !is_wp_error($categories)) : ?>
+        <div class="petition-categories" style="margin-bottom:1em;">
+            <?php foreach ($categories as $category) : ?>
+                <a href="<?php echo esc_url(get_term_link($category)); ?>" 
+                   style="display:inline-block;padding:0.25em 0.75em;background:#f0f0f0;color:#333;text-decoration:none;border-radius:3px;font-size:0.9em;margin-right:0.5em;">
+                    <?php echo esc_html($category->name); ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+    
     <h1><?= esc_html($content['title']) ?></h1>
     <div class="petition-image" style="margin-bottom:1em;">
         <img src="<?= esc_url($content['image']) ?>" alt="<?= esc_attr($content['title']) ?>" style="max-width:100%;height:auto;border-radius:6px;box-shadow:0 1px 8px rgba(0,0,0,0.06);" />

@@ -32,7 +32,12 @@ This WordPress site uses a **custom post type** for petitions, making it easy to
    - **Privacy Policy URL**: Link to your privacy policy
    - **Privacy Policy Link Text**: Text for the privacy link (usually "Privacy Policy")
 
-4. **Publish the Petition**
+4. **Assign Categories (Optional)**
+   - On the right sidebar, you'll see **"Petition Categories"**
+   - Check existing categories or click **"+ Add New Petition Category"**
+   - Categories help organize petitions by topic (e.g., "Tax Reform", "Government Spending", "Healthcare")
+
+5. **Publish the Petition**
    - Click **"Publish"** button on the right
    - Your petition is now live!
 
@@ -40,6 +45,7 @@ This WordPress site uses a **custom post type** for petitions, making it easy to
 
 - **Single Petition**: `https://your-site.run.app/petitions/your-petition-slug/`
 - **All Petitions**: `https://your-site.run.app/petitions/`
+- **By Category**: `https://your-site.run.app/petition-category/tax-reform/`
 
 ## URL Structure
 
@@ -61,9 +67,18 @@ You can customize the slug by editing it in the WordPress editor.
 1. Go to **Petitions** → **All Petitions**
 2. Hover over the petition and click **"Trash"**
 
+### Managing Categories
+1. Go to **Petitions** → **Categories**
+2. You can:
+   - Add new categories
+   - Edit existing categories
+   - Add descriptions (shown on category archive pages)
+   - Delete unused categories
+
 ### Viewing All Active Petitions
 - Go to **Petitions** → **All Petitions** in the admin
 - Or visit `https://your-site.run.app/petitions/` on the frontend
+- Filter by category in admin or visit category pages on frontend
 
 ## Technical Details
 
@@ -74,6 +89,12 @@ You can customize the slug by editing it in the WordPress editor.
 - **Templates Used**:
   - Single petition: `single-petition.php`
   - Petition archive: `archive-petition.php`
+
+### Custom Taxonomy
+- **Taxonomy Slug**: `petition_category`
+- **Hierarchical**: Yes (like categories)
+- **URL Slug**: `petition-category`
+- **Shown in**: Admin column, navigation menus, REST API
 
 ### ACF Field Group
 All custom fields are managed through Advanced Custom Fields (ACF):

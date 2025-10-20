@@ -8,7 +8,16 @@ get_header('custom');
 ?>
 
 <div class="custom-page-content petition-archive">
-    <h1>All Petitions</h1>
+    <?php if (is_tax('petition_category')) : ?>
+        <h1><?php single_term_title(); ?> Petitions</h1>
+        <?php if (term_description()) : ?>
+            <div class="category-description" style="margin-bottom:2em;">
+                <?php echo term_description(); ?>
+            </div>
+        <?php endif; ?>
+    <?php else : ?>
+        <h1>All Petitions</h1>
+    <?php endif; ?>
     
     <?php if (have_posts()) : ?>
         <div class="petition-list" style="display:grid;gap:2em;margin-top:2em;">
