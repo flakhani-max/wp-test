@@ -9,12 +9,7 @@ defined('ABSPATH') || exit;
     <link rel="icon" href="https://www.taxpayer.com/favicon.ico" type="image/x-icon">
     <title><?php wp_title('|', true, 'right'); ?><?php bloginfo('name'); ?></title>
     <?php wp_head(); ?>
-    <?php 
-    $analytics_file = get_template_directory() . '/snippits/analytics-inits.php';
-    if (file_exists($analytics_file)) {
-        include $analytics_file;
-    }
-    ?>
+    <?php include get_template_directory() . '/snippets/analytics-inits.php'; ?>
 </head>
 <body <?php body_class(); ?>>
 <header class="site-header" style="background:#1a8cff;color:#fff;padding:1.5em 0 1em 0;text-align:center;">

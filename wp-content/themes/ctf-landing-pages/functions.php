@@ -77,17 +77,9 @@ add_action('init', 'ctf_register_petition_category');
 require_once get_template_directory() . '/acf-petition-fields.php';
 
 add_action('wp_enqueue_scripts', function() {
-    // Always enqueue main theme stylesheet
-    wp_enqueue_style('ctf-landing-pages-style', get_stylesheet_uri());
-    
-    // Enqueue petition-specific styles for petition custom post type
+    // Enqueue for petition custom post type
     if (is_singular('petition')) {
-        wp_enqueue_style('petition-template', get_template_directory_uri() . '/css/petition-template.css', array('ctf-landing-pages-style'));
+        wp_enqueue_style('petition-template', get_template_directory_uri() . '/css/petition-template.css');
         wp_enqueue_script('petition-template', get_template_directory_uri() . '/js/petition-template.js', [], null, true);
-    }
-    
-    // Enqueue for petition archive
-    if (is_post_type_archive('petition') || is_tax('petition_category')) {
-        wp_enqueue_style('petition-template', get_template_directory_uri() . '/css/petition-template.css', array('ctf-landing-pages-style'));
     }
 });
