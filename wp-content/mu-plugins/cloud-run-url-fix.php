@@ -31,6 +31,42 @@ function cloudrun_fix_url($url) {
     return $url;
 }
 
+// Fix asset URLs (CSS, JS, images) to use correct domain
+add_filter('stylesheet_directory_uri', 'cloudrun_fix_asset_url', 10, 3);
+add_filter('template_directory_uri', 'cloudrun_fix_asset_url', 10, 3);
+add_filter('plugins_url', 'cloudrun_fix_asset_url', 10, 3);
+add_filter('content_url', 'cloudrun_fix_asset_url', 10, 1);
+
+function cloudrun_fix_asset_url($url) {
+    // Only auto-detect if we're on Cloud Run
+    if (!getenv('K_SERVICE')) {
+        return $url;
+    }
+    
+    // Get the correct hostname from headers
+    if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && isset($_SERVER['HTTP_HOST'])) {
+        $correct_protocol = $_SERVER['HTTP_X_FORWARDED_PROTO'];
+        $correct_host = $_SERVER['HTTP_HOST'];
+        
+        // Parse the URL
+        $parsed = parse_url($url);
+        
+        // If the hostname is wrong, replace it
+        if (isset($parsed['host']) && $parsed['host'] !== $correct_host) {
+            $fixed_url = $correct_protocol . '://' . $correct_host;
+            if (isset($parsed['path'])) {
+                $fixed_url .= $parsed['path'];
+            }
+            if (isset($parsed['query'])) {
+                $fixed_url .= '?' . $parsed['query'];
+            }
+            return $fixed_url;
+        }
+    }
+    
+    return $url;
+}
+
 // Fix redirect issues on Cloud Run
 add_filter('wp_redirect', 'cloudrun_fix_redirect', 10, 2);
 
