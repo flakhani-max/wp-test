@@ -16,7 +16,7 @@ get_header('custom');
             </div>
         <?php endif; ?>
     <?php else : ?>
-        <h1>All Petitions</h1>
+        <h1>Petitions</h1>
     <?php endif; ?>
     
     <?php if (have_posts()) : ?>

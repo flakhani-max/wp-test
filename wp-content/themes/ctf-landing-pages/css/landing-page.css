@@ -1,0 +1,17 @@
+/* ========================================
+   LANDING PAGE STYLES
+   Styles for general landing pages
+======================================== */
+
+.landing-page {
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+.cta-section {
+  text-align: center;
+  padding: 2rem;
+  background: #f8fafb;
+  border-radius: 8px;
+  margin: 2rem 0;
+}

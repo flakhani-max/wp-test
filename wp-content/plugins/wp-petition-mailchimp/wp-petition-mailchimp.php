@@ -22,17 +22,25 @@ add_action('admin_post_petition_mailchimp_submit', 'wp_petition_mailchimp_handle
 
 function wp_petition_mailchimp_handle_form() {
     if (
-        isset($_POST['name'], $_POST['email'], $_POST['postal']) &&
+        isset($_POST['first_name'], $_POST['last_name'], $_POST['email'], $_POST['postal_code']) &&
         is_email($_POST['email'])
     ) {
-        $name = sanitize_text_field($_POST['name']);
+        $first_name = sanitize_text_field($_POST['first_name']);
+        $last_name = sanitize_text_field($_POST['last_name']);
         $email = sanitize_email($_POST['email']);
-        $postal = sanitize_text_field($_POST['postal']);
+        $mobile = sanitize_text_field($_POST['mobile']);
+        $street_address = sanitize_text_field($_POST['street_address']);
+        $city = sanitize_text_field($_POST['city']);
+        $postal_code = sanitize_text_field($_POST['postal_code']);
         $sms_optin = !empty($_POST['sms_optin']) ? 'yes' : 'no';
 
         $result = wp_petition_mailchimp_subscribe($email, [
-            'FNAME' => $name,
-            'POSTAL' => $postal,
+            'FNAME' => $first_name,
+            'LNAME' => $last_name,
+            'PHONE' => $mobile,
+            'ADDRESS' => $street_address,
+            'CITY' => $city,
+            'POSTAL' => $postal_code,
             'SMS_OPTIN' => $sms_optin
         ]);
 

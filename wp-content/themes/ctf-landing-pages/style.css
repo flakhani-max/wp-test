@@ -1,12 +1,293 @@
 /*
-Theme Name: CTF Petition Theme
-Theme URI: https://example.com/
-Author: Your Name
-Author URI: https://example.com/
-Description: Custom petition theme based on taxpayer.com
+Theme Name: CTF Landing Pages
+Theme URI: https://taxpayer.com/
+Author: Canadian Taxpayers Federation
+Author URI: https://taxpayer.com/
+Description: Custom landing page and petition theme for CTF campaigns
 Version: 1.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: ctf-petition-theme
-Tags: petition, custom, mailchimp
+Text Domain: ctf-landing-pages
+Tags: petition, landing-page, custom, mailchimp, campaigns
 */
+
+/* ========================================
+   GLOBAL STYLES - Base Theme Styles
+======================================== */
+
+/* CSS Reset & Base */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f8fafb;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #1a2a3a;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+
+p {
+  margin: 0 0 1rem 0;
+  color: #2d3a4a;
+}
+
+a {
+  color: #1a8cff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Layout Containers */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.content-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Site Header */
+.site-header {
+  background: #dd230f;
+  color: #fff;
+  padding: 1.5em 0 1em 0;
+  text-align: center;
+}
+
+.header-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.header-content a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 2em;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.header-content a:hover {
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.site-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.site-title a {
+  color: #1a2a3a;
+  text-decoration: none;
+}
+
+/* Site Footer */
+.site-footer {
+  background: #f8fafb;
+  padding: 2em 0 1em 0;
+  text-align: center;
+  margin-top: auto;
+}
+
+.footer-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.site-footer a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.site-footer a:hover {
+  opacity: 0.9;
+}
+
+/* Home Page Styles */
+.home-template {
+  max-width: 900px;
+  margin: 2em auto;
+}
+
+.home-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.home-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.home-subtitle {
+  font-size: 1.2rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+.home-content {
+  margin-top: 2rem;
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.post-card {
+  background: #f8fafb;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.post-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.post-content {
+  padding: 1.5rem;
+}
+
+.post-content h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.post-content h3 a {
+  color: #1a2a3a;
+  text-decoration: none;
+}
+
+.post-content h3 a:hover {
+  color: #1a8cff;
+}
+
+.post-excerpt {
+  margin: 1rem 0;
+  color: #2d3a4a;
+}
+
+.post-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.post-type {
+  background: #1a8cff;
+  color: #fff;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
+}
+
+.pagination {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.pagination a,
+.pagination span {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin: 0 0.25rem;
+  border: 1px solid #e1e8ed;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #1a2a3a;
+}
+
+.pagination a:hover {
+  background: #f8fafb;
+  color: #1a8cff;
+}
+
+.pagination .current {
+  background: #1a8cff;
+  color: #fff;
+  border-color: #1a8cff;
+}
+
+.no-posts {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6c757d;
+}
+
+.home-cta {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  
+  .container {
+    padding: 0 0.5rem;
+  }
+  
+  .home-template {
+    margin: 1rem auto;
+    padding: 1rem;
+  }
+  
+  .home-header h1 {
+    font-size: 2rem;
+  }
+  
+  .posts-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .post-content {
+    padding: 1rem;
+  }
+}

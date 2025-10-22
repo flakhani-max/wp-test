@@ -1,93 +1,97 @@
-/* Petition Template Styles */
+/* ========================================
+   PETITION TEMPLATE STYLES
+   Template-specific styles for petition pages
+======================================== */
+
+/* Main Petition Container */
 .petition-template {
-  max-width: 600px;
+  max-width: 900px;
   margin: 2em auto;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-  padding: 2em 2em 1.5em 2em;
-  font-family: 'Segoe UI', Arial, sans-serif;
 }
+.petition-content {
+  display: inline-block;
+}
+
 .petition-template h1 {
   font-size: 2em;
   margin-bottom: 0.5em;
-  color: #1a2a3a;
   text-align: center;
 }
-.petition-image {
-  text-align: center;
-}
+
+/* Petition Content */
 .petition-intro p {
   font-size: 1.1em;
   margin: 0.5em 0;
-  color: #2d3a4a;
 }
+
 .petition-cta {
-  background: #f5faff;
-  border-left: 4px solid #1a8cff;
-  padding: 1em;
-  margin: 1.5em 0 1em 0;
   font-weight: 500;
-  color: #1a2a3a;
 }
+
+/* Petition Form Overrides */
 .petition-form {
   margin: 1.5em 0 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
 }
+
 .petition-form .form-group {
   display: flex;
   flex-direction: column;
 }
-.petition-form label {
-  font-weight: 500;
-  margin-bottom: 0.3em;
-  color: #1a2a3a;
+
+.petition-form .form-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
 }
-.petition-form input[type="text"],
-.petition-form input[type="email"] {
-  padding: 0.6em 0.8em;
-  border: 1px solid #cfd8dc;
-  border-radius: 4px;
-  font-size: 1em;
-  background: #f8fafb;
-  transition: border 0.2s;
+
+.petition-form .form-check input {
+  margin-top: 0.25rem;
 }
-.petition-form input[type="text"]:focus,
-.petition-form input[type="email"]:focus {
-  border: 1.5px solid #1a8cff;
-  outline: none;
+
+.petition-form .form-check label {
+  margin-bottom: 0;
+  font-weight: normal;
 }
-.petition-form input[type="checkbox"] {
-  margin-right: 0.5em;
-}
+
 .petition-form button[type="submit"] {
-  background: #1a8cff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 0.8em 1.5em;
-  font-size: 1.1em;
-  font-weight: 600;
-  cursor: pointer;
   margin-top: 0.5em;
-  transition: background 0.2s;
 }
-.petition-form button[type="submit"]:hover {
-  background: #176ec1;
+/* Petition Image Styles */
+.petition-image img {
+  max-width: 300px;
+  height: auto;
+  float: left;
+  margin-right: 2em;
+  border-radius: 6px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
 }
-.petition-privacy {
-  color: #6a7a8a;
-  font-size: 0.97em;
+
+/* Petition-specific alert overrides */
+.petition-success {
   text-align: center;
 }
-.petition-privacy a {
-  color: #1a8cff;
-  text-decoration: underline;
+
+.petition-error {
+  text-align: center;
 }
+
+/* Footer Content */
+.petition-privacy {
+  margin-top: 1em;
+  font-size: 0.95em;
+  color: #6a7a8a;
+  text-align: center;
+}
+
+
+
+/* Responsive Overrides */
 @media (max-width: 700px) {
   .petition-template {
     padding: 1em 0.5em;
+  }
+  .petition-image img {
+    max-width: 100%;
+    margin: auto;
   }
 }

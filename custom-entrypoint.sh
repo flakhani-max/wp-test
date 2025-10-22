@@ -203,8 +203,13 @@ else
 fi
 
 # Install ACF Pro if license key is provided
+echo "==================================================="
+echo "ACF Plugin Installation"
+echo "==================================================="
 ACF_PRO_KEY="${ACF_PRO_KEY:-}"
+echo "ACF_PRO_KEY: ${ACF_PRO_KEY:-'not set'}"
 if [ -n "$ACF_PRO_KEY" ]; then
+  echo "Installing ACF Pro..."
   if ! wp plugin is-installed advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
     echo "Installing ACF Pro..."
     wp plugin install "https://connect.advancedcustomfields.com/v2/plugins/download?p=pro&k=${ACF_PRO_KEY}" \
@@ -217,15 +222,18 @@ if [ -n "$ACF_PRO_KEY" ]; then
     echo "✓ ACF Pro activated!"
   fi
 else
+  echo "No ACF Pro key provided, installing free ACF..."
   # Fallback to free ACF if no license key
   if ! wp plugin is-installed advanced-custom-fields --path="$DOCROOT" --allow-root; then
     echo "Installing ACF (free version)..."
     wp plugin install advanced-custom-fields --activate --path="$DOCROOT" --allow-root || true
   else
+    echo "ACF already installed, activating..."
     wp plugin activate advanced-custom-fields --path="$DOCROOT" --allow-root || true
   fi
   echo "✓ ACF (free) activated!"
 fi
+echo "==================================================="
 
 # Remove default plugins
 for plugin in akismet hello; do

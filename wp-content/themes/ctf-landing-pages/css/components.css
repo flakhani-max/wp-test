@@ -1,0 +1,231 @@
+/* ========================================
+   SHARED COMPONENTS - Reusable UI Elements
+======================================== */
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: #dd230f;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #176ec1;
+  text-decoration: none;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: #545b62;
+  text-decoration: none;
+}
+
+.btn-large {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+/* Form Components */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #1a2a3a;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #cfd8dc;
+  border-radius: 4px;
+  font-size: 1rem;
+  background: #f8fafb;
+  transition: border-color 0.2s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #1a8cff;
+  box-shadow: 0 0 0 2px rgba(26, 140, 255, 0.2);
+}
+
+.form-control::placeholder {
+  color: #6c757d;
+}
+
+/* Checkboxes and Radio buttons */
+.form-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.form-check input[type="checkbox"],
+.form-check input[type="radio"] {
+  margin-top: 0.25rem;
+}
+
+.form-check label {
+  margin-bottom: 0;
+  font-weight: normal;
+}
+
+/* Required Field Indicator */
+.required-asterisk {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+/* Alert Messages */
+.alert {
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.alert-error,
+.alert-danger {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  color: #856404;
+}
+
+.alert-info {
+  background-color: #cce7ff;
+  border: 1px solid #89cdf1;
+  color: #0c5460;
+}
+
+/* Cards */
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-header {
+  border-bottom: 1px solid #e1e8ed;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  margin-bottom: 0;
+  font-size: 1.25rem;
+}
+
+/* Content Blocks */
+.content-block {
+  background: #f5faff;
+  border-left: 4px solid #1a8cff;
+  padding: 1rem;
+  margin: 1.5rem 0;
+}
+
+.content-block.warning {
+  background: #fff8e1;
+  border-left-color: #ff9800;
+}
+
+.content-block.success {
+  background: #e8f5e8;
+  border-left-color: #4caf50;
+}
+
+.content-block.error {
+  background: #ffebee;
+  border-left-color: #dd230f
+}
+
+/* Loading States */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #dd230f;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Form Grid Layout */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.form-grid .form-group {
+  margin-bottom: 1rem;
+}
+
+.form-grid .form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+/* Responsive Utilities */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .card {
+    padding: 1rem;
+  }
+  
+  .content-block {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}

@@ -16,21 +16,9 @@ This WordPress site uses a **custom post type** for petitions, making it easy to
    The petition form includes these custom fields:
 
    ### Basic Information
+
    - **Petition Title**: Main heading for your petition (e.g., "No Sales Tax on Used Cars")
    - **Petition Image URL**: URL of the hero image for the petition
-   - **Introduction Text**: Opening paragraph that grabs attention
-   - **Body Text**: Main petition description explaining the issue
-   - **Petition Statement**: The formal petition text (e.g., "We, the undersigned...")
-
-   ### Form Configuration
-   - **Call to Action**: Text shown above the signature form
-   - **Mailchimp Petition Tag**: Tag to apply in Mailchimp for this petition
-   - **SMS Opt-in Text**: Text for the SMS checkbox
-   
-   ### Privacy Settings
-   - **Privacy Notice Text**: Privacy disclaimer text
-   - **Privacy Policy URL**: Link to your privacy policy
-   - **Privacy Policy Link Text**: Text for the privacy link (usually "Privacy Policy")
 
 4. **Assign Categories (Optional)**
    - On the right sidebar, you'll see **"Petition Categories"**

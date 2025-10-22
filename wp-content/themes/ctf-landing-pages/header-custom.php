@@ -12,9 +12,9 @@ defined('ABSPATH') || exit;
     <?php include get_template_directory() . '/snippets/analytics-inits.php'; ?>
 </head>
 <body <?php body_class(); ?>>
-<header class="site-header" style="background:#1a8cff;color:#fff;padding:1.5em 0 1em 0;text-align:center;">
-    <div class="header-content" style="max-width:900px;margin:0 auto;">
-        <a href="https://www.taxpayer.com/" style="color:#fff;text-decoration:none;font-size:2em;font-weight:700;letter-spacing:1px;">
+<header class="site-header">
+    <div class="header-content">
+        <a href="https://www.taxpayer.com/">
             Canadian Taxpayers Federation
         </a>
     </div>
