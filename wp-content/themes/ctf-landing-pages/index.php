@@ -69,7 +69,7 @@ get_header('custom');
         <div class="home-cta content-block success">
             <h3>Get Involved</h3>
             <p>Stay informed about government spending and tax policy. Join our community of engaged taxpayers.</p>
-            <a href="https://www.taxpayer.com/about/" class="btn btn-secondary" target="_blank" rel="noopener">Learn More About CTF</a>
+            <a href="<?php echo esc_url(home_url('/about/')); ?>" class="btn btn-secondary">Learn More About CTF</a>
         </div>
     </div>
 </div>
