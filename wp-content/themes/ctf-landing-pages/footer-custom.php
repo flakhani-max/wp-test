@@ -5,11 +5,10 @@
     <div class="footer-content">
         <p>&copy; <?php echo date('Y'); ?> Canadian Taxpayers Federation. All rights reserved.</p>
         <p>
-            <a href="https://www.taxpayer.com/privacy-policy/">Privacy Policy</a>
+            <a href="<?php echo esc_url(get_privacy_policy_url()); ?>">Privacy Policy</a>
         </p>
     </div>
 </footer>
 <?php
 ?>
 <?php wp_footer(); ?>
-</content>
