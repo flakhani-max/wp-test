@@ -28,6 +28,14 @@ function ctf_enqueue_assets() {
         );
     }
     
+    if (is_singular('donation')) {
+        // Donation template styles
+        wp_enqueue_style('donation-template', 
+            get_template_directory_uri() . '/css/donation-template.css', 
+            ['ctf-components'], '1.0'
+        );
+    }
+    
     if (is_post_type_archive('petition')) {
         // Petition archive styles
         wp_enqueue_style('petition-archive', 
