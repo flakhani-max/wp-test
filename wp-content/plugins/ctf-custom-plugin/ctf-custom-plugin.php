@@ -34,8 +34,8 @@ register_activation_hook(__FILE__, 'ctf_custom_plugin_activate');
 
 function ctf_custom_plugin_activate() {
     // Load modules to register post types
-    require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/donations.php';
-    require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/petitions.php';
+    require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/donation-custom_post_type.php';
+    require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/petitions-custom_post_type.php';
     
     // Register post types
     if (function_exists('ctf_register_donation_cpt')) {

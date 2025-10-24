@@ -1,6 +1,13 @@
-# Google Secret Manager Integration
+# Google Secret Manager Integration (Simplified)
 
 This setup uses Google Secret Manager to securely manage API keys and sensitive configuration for the CTF WordPress site running on Google Cloud Run.
+
+## Why This Approach is Better
+
+**✅ No separate Docker image needed!**
+- Everything runs in the standard WordPress container
+- Google Cloud SDK is optional (only for local development)
+- Cloud Run uses metadata server for authentication (no SDK required)
 
 ## Architecture
 
@@ -8,10 +15,23 @@ This setup uses Google Secret Manager to securely manage API keys and sensitive 
 Cloud Run Container
 ├── WordPress Application
 ├── CTF Custom Plugin
-│   ├── Fetches secrets from Secret Manager
-│   └── Caches secrets in memory
-└── Google Cloud SDK (for secret access)
+│   ├── Uses metadata server for secrets (production)
+│   ├── Falls back to gcloud CLI (local dev)
+│   └── Falls back to environment variables (fallback)
+└── Optional: Google Cloud SDK (for local development only)
 ```
+
+## How It Works
+
+### Production (Cloud Run)
+1. **Metadata Server Authentication** - No SDK needed!
+2. **Direct API calls** to Secret Manager using service account token
+3. **Automatic failover** to environment variables if Secret Manager unavailable
+
+### Local Development
+1. **gcloud CLI** authentication (if available)
+2. **Environment variables** as fallback
+3. **No special setup** required
 
 ## Security Benefits
 
@@ -107,7 +127,7 @@ if (CTF_USE_SECRET_MANAGER) {
 
 ## Environment Variables
 
-Set these in your Cloud Run service:
+For Cloud Run deployment, set these environment variables:
 
 ```yaml
 env:
@@ -115,6 +135,34 @@ env:
   value: "true"
 - name: CTF_GCP_PROJECT_ID  
   value: "your-project-id"
+```
+
+For local development without Secret Manager:
+
+```bash
+export CTF_USE_SECRET_MANAGER=false
+export CTF_MAILCHIMP_API_KEY=your-local-key
+export CTF_MAILCHIMP_AUDIENCE_ID=your-local-audience
+```
+
+## Deployment
+
+### Single Dockerfile Approach
+
+```bash
+# Build the container (includes optional Google Cloud SDK)
+docker build -t gcr.io/YOUR_PROJECT/ctf-wordpress .
+
+# Push to registry
+docker push gcr.io/YOUR_PROJECT/ctf-wordpress
+
+# Deploy to Cloud Run with environment variables
+gcloud run deploy ctf-wordpress \
+  --image gcr.io/YOUR_PROJECT/ctf-wordpress \
+  --platform managed \
+  --region us-central1 \
+  --set-env-vars CTF_USE_SECRET_MANAGER=true,CTF_GCP_PROJECT_ID=YOUR_PROJECT \
+  --service-account ctf-wordpress-sa@YOUR_PROJECT.iam.gserviceaccount.com
 ```
 
 ## Local Development

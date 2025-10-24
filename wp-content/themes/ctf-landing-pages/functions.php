@@ -3,9 +3,6 @@
  * CTF Landing Pages Theme Functions
  */
 
-// Load petition custom post type and fields
-require_once get_template_directory() . '/inc/petition-post-type.php';
-require_once get_template_directory() . '/inc/petition-acf-fields.php';
 
 /**
  * Enqueue styles and scripts with conditional loading
