@@ -47,11 +47,11 @@ function ctf_enqueue_assets() {
     // Load page-specific styles
     if (is_page()) {
         $page_template = get_page_template_slug();
-        
-        // Example: Load specific CSS for page templates
-        if ($page_template === 'page-landing.php') {
-            wp_enqueue_style('landing-page', 
-                get_template_directory_uri() . '/css/landing-page.css', 
+
+        // Load specific CSS for page templates
+        if ($page_template === 'page-static.php') {
+            wp_enqueue_style('static-page',
+                get_template_directory_uri() . '/css/static-page.css',
                 ['ctf-components'], '1.0'
             );
         }

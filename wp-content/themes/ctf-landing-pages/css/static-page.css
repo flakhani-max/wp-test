@@ -1,0 +1,370 @@
+/* ========================================
+   STATIC PAGE TEMPLATE STYLES
+   Clean, professional styling for static content pages
+======================================== */
+
+/* Container */
+.static-page-container {
+    background: #f8f9fa;
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.static-page-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    line-height: 1.7;
+}
+
+/* Header */
+.static-page-header {
+    margin-bottom: 2rem;
+    text-align: center;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+}
+
+.static-page-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #212529;
+    margin: 0 0 1rem 0;
+    line-height: 1.3;
+}
+
+
+/* Content */
+.static-page-content {
+    background: #fff;
+    border-radius: 8px;
+    padding: 2.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e9ecef;
+    font-size: 1.05rem;
+    color: #495057;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+.static-page-content h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #212529;
+    margin: 2.5rem 0 1.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.static-page-content h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #212529;
+    margin: 2rem 0 1rem 0;
+    padding-left: 1rem;
+    border-left: 3px solid #dd230f;
+    background: #f8f9fa;
+    padding: 0.8rem 0 0.8rem 1rem;
+}
+
+.static-page-content h4 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #212529;
+    margin: 1.8rem 0 1rem 0;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.static-page-content p {
+    margin: 0 0 1.8rem 0;
+    text-align: left;
+    color: #374151;
+    font-weight: 400;
+}
+
+.static-page-content ul,
+.static-page-content ol {
+    margin: 1.5rem 0;
+    padding-left: 2rem;
+}
+
+.static-page-content ul li,
+.static-page-content ol li {
+    margin: 0.5rem 0;
+    padding: 0.3rem 0;
+    background: none;
+    border: none;
+    position: static;
+}
+
+.static-page-content ul li::before {
+    content: none;
+}
+
+.static-page-content ol {
+    counter-reset: none;
+}
+
+.static-page-content ol li {
+    border: none;
+}
+
+.static-page-content ol li::before {
+    content: none;
+}
+
+.static-page-content ul {
+    list-style-type: disc;
+}
+
+.static-page-content ol {
+    list-style-type: decimal;
+}
+
+.static-page-content blockquote {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-left: 4px solid #dd230f;
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: #495057;
+    position: static;
+    box-shadow: none;
+}
+
+.static-page-content blockquote::before {
+    content: none;
+}
+
+.static-page-content a {
+    color: #1a8cff;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.static-page-content a:hover {
+    color: #176ec1;
+    text-decoration: none;
+}
+
+.static-page-content strong {
+    font-weight: 600;
+    color: #1a2a3a;
+}
+
+.static-page-content em {
+    font-style: italic;
+    color: #495057;
+}
+
+/* Code blocks */
+.static-page-content code {
+    background: #f8fafb;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.9em;
+    color: #dd230f;
+}
+
+.static-page-content pre {
+    background: #f8fafb;
+    padding: 1.5rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border: 1px solid #e1e8ed;
+}
+
+.static-page-content pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+}
+
+/* Tables */
+.static-page-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.static-page-content th {
+    background: #f8fafb;
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #1a2a3a;
+    border-bottom: 2px solid #e1e8ed;
+}
+
+.static-page-content td {
+    padding: 1rem;
+    border-bottom: 1px solid #e1e8ed;
+    color: #2d3a4a;
+}
+
+.static-page-content tr:hover {
+    background: #fafbfc;
+}
+
+/* Footer */
+.static-page-footer {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.static-page-meta {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-weight: 400;
+}
+
+.static-page-date {
+    font-style: italic;
+    color: #dc3545;
+    font-weight: 500;
+}
+
+/* Not found state */
+.static-page-not-found {
+    text-align: center;
+    padding: 3rem 0;
+}
+
+.static-page-not-found h2 {
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .static-page-container {
+        padding: 1rem 0;
+    }
+
+    .static-page-wrapper {
+        padding: 0 1rem;
+    }
+
+    .static-page-header {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-radius: 6px;
+    }
+
+    .static-page-title {
+        font-size: 1.8rem;
+    }
+
+    .static-page-content {
+        font-size: 1rem;
+        padding: 1.5rem;
+        border-radius: 6px;
+    }
+
+    .static-page-content h2 {
+        font-size: 1.5rem;
+        margin: 1.8rem 0 1rem 0;
+    }
+
+    .static-page-content h3 {
+        font-size: 1.3rem;
+        margin: 1.5rem 0 0.8rem 0;
+    }
+
+    .static-page-content h4 {
+        font-size: 1.2rem;
+        margin: 1.3rem 0 0.7rem 0;
+    }
+
+    .static-page-content ul,
+    .static-page-content ol {
+        padding-left: 1.5rem;
+    }
+
+    .static-page-content blockquote {
+        padding: 1rem;
+        margin: 1.5rem 0;
+        border-radius: 4px;
+    }
+
+    .static-page-footer {
+        padding: 1rem;
+        margin-top: 1.5rem;
+        border-radius: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .static-page-container {
+        padding: 0.5rem 0;
+    }
+
+    .static-page-header {
+        padding: 1rem;
+        border-radius: 4px;
+    }
+
+    .static-page-title {
+        font-size: 1.5rem;
+    }
+
+    .static-page-content {
+        font-size: 0.95rem;
+        padding: 1rem;
+        border-radius: 4px;
+    }
+
+    .static-page-content h2 {
+        font-size: 1.3rem;
+        margin: 1.3rem 0 0.7rem 0;
+    }
+
+    .static-page-content h3 {
+        font-size: 1.2rem;
+        margin: 1.2rem 0 0.7rem 0;
+    }
+
+    .static-page-content h4 {
+        font-size: 1.1rem;
+        margin: 1rem 0 0.6rem 0;
+    }
+
+    .static-page-content ul,
+    .static-page-content ol {
+        padding-left: 1.2rem;
+    }
+
+    .static-page-content ul li,
+    .static-page-content ol li {
+        font-size: 0.9rem;
+    }
+
+    .static-page-content blockquote {
+        padding: 0.8rem;
+        margin: 1.2rem 0;
+        border-radius: 4px;
+    }
+
+    .static-page-footer {
+        padding: 0.8rem;
+        margin-top: 1.2rem;
+        border-radius: 4px;
+    }
+}
