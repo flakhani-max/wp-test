@@ -247,6 +247,44 @@ else
 fi
 echo "==================================================="
 
+
+# ---------------------------------------------
+# WP Offload Media Lite Configuration
+# ---------------------------------------------
+echo "==================================================="
+echo "Setting up WP Offload Media Lite"
+echo "==================================================="
+
+UPLOADS_PATH="/var/www/html/wp-content/uploads"
+mkdir -p "$UPLOADS_PATH"
+chown -R www-data:www-data "$UPLOADS_PATH"
+
+# --- Handle GCS key file for both local + Cloud Run ---
+if [ -n "${GCS_KEY_FILE:-}" ]; then
+  echo "🔑 Writing GCS key from environment variable..."
+  echo "${GCS_KEY_FILE}" > "${UPLOADS_PATH}/gcs-key.json"
+elif [ -f "/run/secrets/gcs-key.json" ]; then
+  echo "🔑 Using mounted gcs-key.json from /run/secrets"
+  cp /run/secrets/gcs-key.json "${UPLOADS_PATH}/gcs-key.json"
+elif [ -f "${UPLOADS_PATH}/gcs-key.json" ]; then
+  echo "✅ Found existing gcs-key.json in uploads directory"
+else
+  echo "⚠️  No GCS key file found – media uploads may fail"
+fi
+
+# Secure permissions
+chown www-data:www-data "${UPLOADS_PATH}/gcs-key.json" 2>/dev/null || true
+
+# # --- Auto-configure WP Offload Media bucket ---
+# if [ -n "${GCS_BUCKET_NAME:-}" ]; then
+#   echo "🪣 Configuring Offload Media bucket: ${GCS_BUCKET_NAME}"
+#   wp option update as3cf_settings "{\"provider\":\"gcp\",\"bucket\":\"${GCS_BUCKET_NAME}\"}" \
+#     --path=/var/www/html --allow-root || true
+# fi
+
+echo "✓ WP Offload Media Lite setup complete"
+echo "==================================================="
+
 # ---------------------------------------------
 # Inject WP Offload Media configuration into wp-config.php
 # ---------------------------------------------
@@ -271,43 +309,6 @@ else
   echo "⚠️ wp-config.php not found — cannot inject AS3CF_SETTINGS (WordPress not initialized yet)."
 fi
 
-
-# # ---------------------------------------------
-# # WP Offload Media Lite Configuration
-# # ---------------------------------------------
-# echo "==================================================="
-# echo "Setting up WP Offload Media Lite"
-# echo "==================================================="
-
-# UPLOADS_PATH="/var/www/html/wp-content/uploads"
-# mkdir -p "$UPLOADS_PATH"
-# chown -R www-data:www-data "$UPLOADS_PATH"
-
-# # --- Handle GCS key file for both local + Cloud Run ---
-# if [ -n "${GCS_KEY_FILE:-}" ]; then
-#   echo "🔑 Writing GCS key from environment variable..."
-#   echo "${GCS_KEY_FILE}" > "${UPLOADS_PATH}/gcs-key.json"
-# elif [ -f "/run/secrets/gcs-key.json" ]; then
-#   echo "🔑 Using mounted gcs-key.json from /run/secrets"
-#   cp /run/secrets/gcs-key.json "${UPLOADS_PATH}/gcs-key.json"
-# elif [ -f "${UPLOADS_PATH}/gcs-key.json" ]; then
-#   echo "✅ Found existing gcs-key.json in uploads directory"
-# else
-#   echo "⚠️  No GCS key file found – media uploads may fail"
-# fi
-
-# # Secure permissions
-# chown www-data:www-data "${UPLOADS_PATH}/gcs-key.json" 2>/dev/null || true
-
-# # --- Auto-configure WP Offload Media bucket ---
-# if [ -n "${GCS_BUCKET_NAME:-}" ]; then
-#   echo "🪣 Configuring Offload Media bucket: ${GCS_BUCKET_NAME}"
-#   wp option update as3cf_settings "{\"provider\":\"gcp\",\"bucket\":\"${GCS_BUCKET_NAME}\"}" \
-#     --path=/var/www/html --allow-root || true
-# fi
-
-# echo "✓ WP Offload Media Lite setup complete"
-# echo "==================================================="
 
 # Remove default plugins
 for plugin in akismet hello; do
