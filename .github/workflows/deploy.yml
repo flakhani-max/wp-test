@@ -185,6 +185,7 @@ jobs:
           RUNTIME_SA: ${{ secrets.RUNTIME_SA }}
           WP_OFFLOAD_MEDIA_LICENSE: ${{ secrets.WP_OFFLOAD_MEDIA_LICENSE }}
           GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
+          GCS_KEY_FILE: ${{ secrets.GCS_KEY_FILE}}
 
         run: |
           # Build environment variables safely
@@ -198,7 +199,7 @@ jobs:
           ENV_VARS="${ENV_VARS},CLOUD_SQL_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME}"
           ENV_VARS="${ENV_VARS},WP_OFFLOAD_MEDIA_LICENSE=${WP_OFFLOAD_MEDIA_LICENSE}"
           ENV_VARS="${ENV_VARS},GCS_BUCKET_NAME=${GCS_BUCKET_NAME}"
-          
+          ENV_VARS="${ENV_VARS},GCS_KEY_FILE=${GCS_KEY_FILE}"
 
           # Add optional variables if set
           if [ -n "${WP_URL}" ]; then
