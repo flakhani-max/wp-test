@@ -301,8 +301,6 @@ define( 'AS3CF_SETTINGS', serialize( array(\
 'provider' => 'gcp',\
 'key-file-path' => '${GCS_KEY_PATH_ESCAPED}',\
 'bucket' => '${GCS_BUCKET_ESCAPED}',\
-'serve-from-s3' => true,\
-'remove-local-file' => true,\
 ) ) );" "$WP_CONFIG_PATH"
   else
     echo "✅ AS3CF_SETTINGS already defined in wp-config.php"
