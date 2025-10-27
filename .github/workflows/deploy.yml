@@ -183,6 +183,9 @@ jobs:
           WP_TITLE: ${{ secrets.WP_TITLE }}
           CLOUD_SQL_CONNECTION_NAME: ${{ secrets.CLOUD_SQL_CONNECTION_NAME }}
           RUNTIME_SA: ${{ secrets.RUNTIME_SA }}
+          WP_OFFLOAD_MEDIA_LICENSE: ${{ secrets.WP_OFFLOAD_MEDIA_LICENSE }}
+          GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
+
         run: |
           # Build environment variables safely
           ENV_VARS="WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}"
@@ -193,7 +196,10 @@ jobs:
           ENV_VARS="${ENV_VARS},WP_ADMIN_PASS=${WP_ADMIN_PASS}"
           ENV_VARS="${ENV_VARS},WP_ADMIN_EMAIL=${WP_ADMIN_EMAIL}"
           ENV_VARS="${ENV_VARS},CLOUD_SQL_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME}"
+          ENV_VARS="${ENV_VARS},WP_OFFLOAD_MEDIA_LICENSE=${WP_OFFLOAD_MEDIA_LICENSE}"
+          ENV_VARS="${ENV_VARS},GCS_BUCKET_NAME=${GCS_BUCKET_NAME}"
           
+
           # Add optional variables if set
           if [ -n "${WP_URL}" ]; then
             ENV_VARS="${ENV_VARS},WP_URL=${WP_URL}"
