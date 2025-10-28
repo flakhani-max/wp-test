@@ -246,13 +246,13 @@ jobs:
           RUNTIME_SA_EMAIL="${{ steps.secrets.outputs.runtime_sa_email }}"
           
           # Verify RUNTIME_SA is set
-          if [ -z "${RUNTIME_SA}" ]; then
+          if [ -z "${RUNTIME_SA_EMAIL}" ]; then
             echo "❌ ERROR: RUNTIME_SA_EMAIL secret is not set in Secret Manager!"
             echo "Please add RUNTIME_SA_EMAIL secret in Secret Manager with your service account email"
             exit 1
           fi
           
-          echo "Using service account: ${RUNTIME_SA}"
+          echo "Using service account: ${RUNTIME_SA_EMAIL}"
           
           gcloud run deploy ${SERVICE_NAME} \
             --image ${IMAGE_BASE}:${GITHUB_SHA} \
