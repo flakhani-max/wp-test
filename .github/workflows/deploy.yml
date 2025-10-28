@@ -36,6 +36,7 @@ jobs:
           secrets: |-
             actions_sa_key:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/ACTIONS_SA_KEY
             runtime_sa_email:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/RUNTIME_SA_EMAIL
+            wp_media_sa_key:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/WP_MEDIA_SA_KEY
             region:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/REGION
             service_name:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/SERVICE_NAME
             artifact_registry_repo:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/ARTIFACT_REGISTRY_REPO
@@ -220,6 +221,7 @@ jobs:
           WP_TITLE='${{ steps.secrets.outputs.wp_title }}'
           CLOUD_SQL_CONNECTION_NAME='${{ steps.secrets.outputs.cloud_sql_connection_name }}'
           GCS_BUCKET_NAME='${{ steps.secrets.outputs.gcs_bucket_name }}'
+          WP_MEDIA_SA_KEY='${{ steps.secrets.outputs.wp_media_sa_key }}'
           
           # Build environment variables safely
           ENV_VARS="WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}"
@@ -231,6 +233,7 @@ jobs:
           ENV_VARS="${ENV_VARS},WP_ADMIN_EMAIL=${WP_ADMIN_EMAIL}"
           ENV_VARS="${ENV_VARS},CLOUD_SQL_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME}"
           ENV_VARS="${ENV_VARS},GCS_BUCKET_NAME=${GCS_BUCKET_NAME}"
+          ENV_VARS="${ENV_VARS},WP_MEDIA_SA_KEY=${WP_MEDIA_SA_KEY}"
 
           # Add optional variables if set
           if [ -n "${WP_URL}" ]; then
@@ -261,7 +264,6 @@ jobs:
             --allow-unauthenticated \
             --service-account "${RUNTIME_SA_EMAIL}" \
             --set-env-vars "${ENV_VARS}" \
-            --update-secrets GCS_KEY_FILE=gcs-media-key:latest \
             --add-cloudsql-instances "${CLOUD_SQL_CONNECTION_NAME}" \
             --memory 1Gi \
             --cpu 1 \

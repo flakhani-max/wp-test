@@ -2,6 +2,14 @@
 set -euo pipefail
 
 # ---------------------------------------------
+# Load .env file if it exists (for local development)
+# ---------------------------------------------
+if [ -f /var/www/html/.env ]; then
+  echo "📄 Loading environment from .env file..."
+  export $(grep -v '^#' /var/www/html/.env | xargs)
+fi
+
+# ---------------------------------------------
 # Configuration Variables
 # ---------------------------------------------
 PORT="${PORT:-8080}"
@@ -260,9 +268,9 @@ mkdir -p "$UPLOADS_PATH"
 chown -R www-data:www-data "$UPLOADS_PATH"
 
 # --- Handle GCS key file for both local + Cloud Run ---
-if [ -n "${GCS_KEY_FILE:-}" ]; then
+if [ -n "${WP_MEDIA_SA_KEY:-}" ]; then
   echo "🔑 Writing GCS key from environment variable..."
-  echo "${GCS_KEY_FILE}" > "${UPLOADS_PATH}/gcs-key.json"
+  echo "${WP_MEDIA_SA_KEY}" > "${UPLOADS_PATH}/gcs-key.json"
 elif [ -f "/run/secrets/gcs-key.json" ]; then
   echo "🔑 Using mounted gcs-key.json from /run/secrets"
   cp /run/secrets/gcs-key.json "${UPLOADS_PATH}/gcs-key.json"
