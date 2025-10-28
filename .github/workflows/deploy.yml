@@ -205,21 +205,21 @@ jobs:
 
       - name: Deploy to Cloud Run
         run: |
-          # Get all values from Secret Manager
-          REGION="${{ steps.secrets.outputs.region }}"
-          SERVICE_NAME="${{ steps.secrets.outputs.service_name }}"
-          ARTIFACT_REGISTRY_REPO="${{ steps.secrets.outputs.artifact_registry_repo }}"
-          WORDPRESS_DB_HOST="${{ steps.secrets.outputs.wordpress_db_host }}"
-          WORDPRESS_DB_USER="${{ steps.secrets.outputs.wordpress_db_user }}"
-          WORDPRESS_DB_PASSWORD="${{ steps.secrets.outputs.wordpress_db_password }}"
-          WORDPRESS_DB_NAME="${{ steps.secrets.outputs.wordpress_db_name }}"
-          WP_ADMIN_USER="${{ steps.secrets.outputs.wp_admin_user }}"
-          WP_ADMIN_PASS="${{ steps.secrets.outputs.wp_admin_pass }}"
-          WP_ADMIN_EMAIL="${{ steps.secrets.outputs.wp_admin_email }}"
-          WP_URL="${{ steps.secrets.outputs.wp_url }}"
-          WP_TITLE="${{ steps.secrets.outputs.wp_title }}"
-          CLOUD_SQL_CONNECTION_NAME="${{ steps.secrets.outputs.cloud_sql_connection_name }}"
-          GCS_BUCKET_NAME="${{ steps.secrets.outputs.gcs_bucket_name }}"
+          # Get all values from Secret Manager (using base64 to handle special characters)
+          REGION='${{ steps.secrets.outputs.region }}'
+          SERVICE_NAME='${{ steps.secrets.outputs.service_name }}'
+          ARTIFACT_REGISTRY_REPO='${{ steps.secrets.outputs.artifact_registry_repo }}'
+          WORDPRESS_DB_HOST='${{ steps.secrets.outputs.wordpress_db_host }}'
+          WORDPRESS_DB_USER='${{ steps.secrets.outputs.wordpress_db_user }}'
+          WORDPRESS_DB_PASSWORD='${{ steps.secrets.outputs.wordpress_db_password }}'
+          WORDPRESS_DB_NAME='${{ steps.secrets.outputs.wordpress_db_name }}'
+          WP_ADMIN_USER='${{ steps.secrets.outputs.wp_admin_user }}'
+          WP_ADMIN_PASS='${{ steps.secrets.outputs.wp_admin_pass }}'
+          WP_ADMIN_EMAIL='${{ steps.secrets.outputs.wp_admin_email }}'
+          WP_URL='${{ steps.secrets.outputs.wp_url }}'
+          WP_TITLE='${{ steps.secrets.outputs.wp_title }}'
+          CLOUD_SQL_CONNECTION_NAME='${{ steps.secrets.outputs.cloud_sql_connection_name }}'
+          GCS_BUCKET_NAME='${{ steps.secrets.outputs.gcs_bucket_name }}'
           
           # Build environment variables safely
           ENV_VARS="WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}"
@@ -243,7 +243,7 @@ jobs:
           IMAGE_BASE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPO}/${SERVICE_NAME}"
           
           # Get RUNTIME_SA from Secret Manager
-          RUNTIME_SA_EMAIL="${{ steps.secrets.outputs.runtime_sa_email }}"
+          RUNTIME_SA_EMAIL='${{ steps.secrets.outputs.runtime_sa_email }}'
           
           # Verify RUNTIME_SA is set
           if [ -z "${RUNTIME_SA_EMAIL}" ]; then
