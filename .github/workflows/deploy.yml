@@ -34,7 +34,6 @@ jobs:
         uses: google-github-actions/get-secretmanager-secrets@v2
         with:
           secrets: |-
-            actions_sa_key:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/ACTIONS_SA_KEY
             runtime_sa_email:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/RUNTIME_SA_EMAIL
             wp_media_sa_key:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/WP_MEDIA_SA_KEY
             region:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/REGION
@@ -57,10 +56,10 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: Authenticate with Service Account from Secret Manager
+      - name: Authenticate with Service Account from GitHub Secrets
         run: |
-          echo "Activating service account from Secret Manager..."
-          echo '${{ steps.secrets.outputs.actions_sa_key }}' > ${HOME}/gcloud-service-key.json
+          echo "Activating service account from GitHub..."
+          echo '${{ secrets.GCP_SA_KEY }}' > ${HOME}/gcloud-service-key.json
           gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
           gcloud config set project ${PROJECT_ID}
           echo "✅ Service account activated"
@@ -78,7 +77,7 @@ jobs:
           echo "==================================================="
           
           # Extract service account email from the credentials
-          SA_EMAIL=$(echo '${{ steps.secrets.outputs.actions_sa_key }}' | jq -r '.client_email')
+          SA_EMAIL=$(echo '${{ secrets.GCP_SA_KEY }}' | jq -r '.client_email')
           echo "Service Account: ${SA_EMAIL}"
           echo ""
           
