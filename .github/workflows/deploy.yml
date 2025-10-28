@@ -206,7 +206,7 @@ jobs:
 
       - name: Deploy to Cloud Run
         run: |
-          # Get all values from Secret Manager (using base64 to handle special characters)
+          # Get all values from Secret Manager
           REGION='${{ steps.secrets.outputs.region }}'
           SERVICE_NAME='${{ steps.secrets.outputs.service_name }}'
           ARTIFACT_REGISTRY_REPO='${{ steps.secrets.outputs.artifact_registry_repo }}'
@@ -221,7 +221,8 @@ jobs:
           WP_TITLE='${{ steps.secrets.outputs.wp_title }}'
           CLOUD_SQL_CONNECTION_NAME='${{ steps.secrets.outputs.cloud_sql_connection_name }}'
           GCS_BUCKET_NAME='${{ steps.secrets.outputs.gcs_bucket_name }}'
-          WP_MEDIA_SA_KEY='${{ steps.secrets.outputs.wp_media_sa_key }}'
+          # Base64 encode JSON to avoid special character issues
+          WP_MEDIA_SA_KEY=$(echo -n '${{ steps.secrets.outputs.wp_media_sa_key }}' | base64 | tr -d '\n')
           
           # Build environment variables safely
           ENV_VARS="WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}"

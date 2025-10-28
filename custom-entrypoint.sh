@@ -274,7 +274,13 @@ chown -R www-data:www-data "$UPLOADS_PATH"
 # --- Handle GCS key file for both local + Cloud Run ---
 if [ -n "${WP_MEDIA_SA_KEY:-}" ]; then
   echo "🔑 Writing GCS key from environment variable..."
-  echo "${WP_MEDIA_SA_KEY}" > "${UPLOADS_PATH}/gcs-key.json"
+  # Decode base64 if it's encoded (for Cloud Run)
+  if echo "${WP_MEDIA_SA_KEY}" | base64 -d &>/dev/null; then
+    echo "${WP_MEDIA_SA_KEY}" | base64 -d > "${UPLOADS_PATH}/gcs-key.json"
+  else
+    # Direct JSON (for local development)
+    echo "${WP_MEDIA_SA_KEY}" > "${UPLOADS_PATH}/gcs-key.json"
+  fi
 elif [ -f "/run/secrets/gcs-key.json" ]; then
   echo "🔑 Using mounted gcs-key.json from /run/secrets"
   cp /run/secrets/gcs-key.json "${UPLOADS_PATH}/gcs-key.json"
