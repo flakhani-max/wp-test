@@ -6,9 +6,11 @@ services:
       - "8080:8080"
     env_file:
       - .env.local
+      - .env.local.secrets
     volumes:
-      # Mount .env.local file for entrypoint to read
+      # Mount env files for entrypoint to read
       - ./.env.local:/var/www/html/.env:ro
+      - ./.env.local.secrets:/var/www/html/.env.secrets:ro
       # Mount custom themes for live editing
       - ./wp-content/themes/ctf-landing-pages:/var/www/html/wp-content/themes/ctf-landing-pages
       # Mount only custom plugins (not the entire plugins dir to allow ACF installation)

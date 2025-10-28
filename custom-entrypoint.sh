@@ -2,11 +2,15 @@
 set -euo pipefail
 
 # ---------------------------------------------
-# Load .env file if it exists (for local development)
+# Load .env files if they exist (for local development)
 # ---------------------------------------------
 if [ -f /var/www/html/.env ]; then
   echo "📄 Loading environment from .env file..."
   export $(grep -v '^#' /var/www/html/.env | xargs)
+fi
+if [ -f /var/www/html/.env.secrets ]; then
+  echo "📄 Loading production secrets..."
+  export $(grep -v '^#' /var/www/html/.env.secrets | xargs)
 fi
 
 # ---------------------------------------------
