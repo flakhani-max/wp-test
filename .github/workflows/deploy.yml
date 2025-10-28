@@ -49,7 +49,6 @@ jobs:
             wp_url:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/WP_URL
             wp_title:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/WP_TITLE
             cloud_sql_connection_name:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/CLOUD_SQL_CONNECTION_NAME
-            wp_offload_media_license:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/WP_OFFLOAD_MEDIA_LICENSE
             gcs_bucket_name:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/GCS_BUCKET_NAME
 
       - name: Set up Cloud SDK
@@ -220,7 +219,6 @@ jobs:
           WP_URL="${{ steps.secrets.outputs.wp_url }}"
           WP_TITLE="${{ steps.secrets.outputs.wp_title }}"
           CLOUD_SQL_CONNECTION_NAME="${{ steps.secrets.outputs.cloud_sql_connection_name }}"
-          WP_OFFLOAD_MEDIA_LICENSE="${{ steps.secrets.outputs.wp_offload_media_license }}"
           GCS_BUCKET_NAME="${{ steps.secrets.outputs.gcs_bucket_name }}"
           
           # Build environment variables safely
@@ -232,7 +230,6 @@ jobs:
           ENV_VARS="${ENV_VARS},WP_ADMIN_PASS=${WP_ADMIN_PASS}"
           ENV_VARS="${ENV_VARS},WP_ADMIN_EMAIL=${WP_ADMIN_EMAIL}"
           ENV_VARS="${ENV_VARS},CLOUD_SQL_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME}"
-          ENV_VARS="${ENV_VARS},WP_OFFLOAD_MEDIA_LICENSE=${WP_OFFLOAD_MEDIA_LICENSE}"
           ENV_VARS="${ENV_VARS},GCS_BUCKET_NAME=${GCS_BUCKET_NAME}"
 
           # Add optional variables if set
