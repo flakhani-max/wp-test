@@ -4,20 +4,13 @@ services:
     entrypoint: ["/usr/local/bin/custom-entrypoint.sh"]
     ports:
       - "8080:8080"
-    environment:
-      PORT: 8080
-      WORDPRESS_DB_HOST: db
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
-      WORDPRESS_DB_NAME: wordpress
-      WP_URL: http://127.0.0.1:8080
-      WP_TITLE: Canadian Taxpayers Federation
-      WP_ADMIN_USER: admin
-      WP_ADMIN_PASS: admin123
-      WP_ADMIN_EMAIL: admin@example.com
-      # Optional: Set ACF_PRO_KEY if you have a license
-      ACF_PRO_KEY: NGIzMjdmZWQ3ZTdmNzM2MjRjZTBmOGM2ZTJkMTFkOTJiMTdmZjk4MmRjZWQyODAxY2Q1Mjli
+    env_file:
+      - .env.local
+      - .env.local.secrets
     volumes:
+      # Mount env files for entrypoint to read
+      - ./.env.local:/var/www/html/.env:ro
+      - ./.env.local.secrets:/var/www/html/.env.secrets:ro
       # Mount custom themes for live editing
       - ./wp-content/themes/ctf-landing-pages:/var/www/html/wp-content/themes/ctf-landing-pages
       # Mount only custom plugins (not the entire plugins dir to allow ACF installation)

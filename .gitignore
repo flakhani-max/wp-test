@@ -15,7 +15,8 @@ wp-content/upgrade/
 
 # Environment files
 .env
-.env.local
+.env.local.secrets
+# .env.local is committed with safe defaults only
 
 # OS files
 .DS_Store
@@ -28,7 +29,8 @@ Thumbs.db
 *.swo
 *~
 
-
+#Secrets
+gcs-key.json
 
 
 

@@ -37,27 +37,38 @@ gcloud run services logs read wordpress-hello-world --region=northamerica-northe
 
 ## 💻 Local Development
 
+### First Time Setup
+
 ```bash
-# 1. Clone production data (optional, for testing with real data)
+# 1. Pull production secrets (GCS, ACF Pro key)
+./pull-secrets.sh
+
+# 2. Clone production data (optional, for testing with real data)
 ./sync-production-to-local.sh
 
-# 2. Start local WordPress
+# 3. Start local WordPress
 docker-compose up
+```
 
-# 3. Make changes to:
-#    - wp-content/themes/
-#    - wp-content/plugins/
-#    - Dockerfile, custom-entrypoint.sh, etc.
+**Login:** <http://localhost:8080/wp-admin> (admin/admin123)
 
-# 4. Test at <http://localhost:8080> or <http://127.0.0.1:8080>
+### Making Changes
 
-# 5. Deploy when ready
+```bash
+# Edit files in:
+#   - wp-content/themes/
+#   - wp-content/plugins/
+#   - Dockerfile, custom-entrypoint.sh, etc.
+
+# Changes auto-reload (no rebuild needed for theme/plugin edits)
+
+# Deploy when ready
 git add .
 git commit -m "Your changes"
 git push
 ```
 
-**Login:** <http://localhost:8080/wp-admin> (admin/admin123)
+**Note:** `.env.local` has all local settings. Run `./pull-secrets.sh` to update GCS/ACF keys from production.
 
 ---
 
