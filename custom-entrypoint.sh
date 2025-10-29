@@ -243,7 +243,7 @@ for plugin in akismet hello; do
 done
 
 # Remove default themes
-for theme in twentytwentyfour twentytwentythree twentytwentytwo twentytwentyone twentytwenty twentynineteen twentyseventeen twentysixteen twentyfifteen twentyfourteen twentythirteen twentytwelve twentyeleven twentyten; do
+for theme in twentytwentyfive twentytwentyfour twentytwentythree twentytwentytwo twentytwentyone twentytwenty twentynineteen twentyseventeen twentysixteen twentyfifteen twentyfourteen twentythirteen twentytwelve twentyeleven twentyten; do
   if wp theme is-installed "$theme" --path="$DOCROOT" --allow-root; then
     wp theme delete "$theme" --path="$DOCROOT" --allow-root || true
   fi

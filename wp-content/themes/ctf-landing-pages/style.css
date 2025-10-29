@@ -71,10 +71,21 @@ a:hover {
 
 /* Site Header */
 .site-header {
-  background: #dd230f;
-  color: #fff;
-  padding: 1.5em 0 1em 0;
+  color:#dd230f;
+  padding: 0.5em 0 1em 0;
   text-align: center;
+}
+
+.header-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.site-header img{
+  max-width: 150px;
+  height: auto;
+  float: right;
 }
 
 .header-content {
@@ -264,6 +275,458 @@ a:hover {
   margin-top: 3rem;
 }
 
+/* Petition Highlights Section */
+.petition-highlights {
+  margin: 3rem 0;
+  padding: 2rem 0;
+  background: linear-gradient(135deg, #f8fafb 0%, #e1e8ed 100%);
+  border-radius: 8px;
+}
+
+.petition-highlights .section-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.petition-highlights .section-header h2 {
+  color: #1a2a3a;
+  margin-bottom: 0.5rem;
+}
+
+.petition-highlights .section-header p {
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+.petition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+  padding: 0 1rem;
+}
+
+.petition-card.featured {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.donation-card.featured {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.petition-card.featured:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.donation-card.featured:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.petition-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.petition-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.petition-content {
+  padding: 1.5rem;
+}
+
+/* Generic card classes (for new card system) */
+.card-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+
+.card-content h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.3rem;
+  line-height: 1.4;
+}
+
+.card-content h3 a {
+  color: #1a2a3a;
+  text-decoration: none;
+}
+
+.card-content h3 a:hover {
+  color: #1a8cff;
+}
+
+.petition-content h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.3rem;
+  line-height: 1.4;
+}
+
+.petition-content h3 a {
+  color: #1a2a3a;
+  text-decoration: none;
+}
+
+.petition-content h3 a:hover {
+  color: #1a8cff;
+}
+
+.petition-excerpt {
+  color: #2d3a4a;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+/* Generic card class */
+.card-excerpt {
+  color: #2d3a4a;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.petition-stats {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f8fafb;
+  border-radius: 6px;
+}
+
+.signature-count {
+  display: block;
+  font-weight: bold;
+  color: #1a8cff;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.signature-goal {
+  display: block;
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e1e8ed;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1a8cff 0%, #0066cc 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.petition-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Generic card class */
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.petition-cta {
+  width: 100%;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  font-weight: bold;
+}
+
+/* Generic card class */
+.card-cta {
+  width: 100%;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  font-weight: bold;
+}
+
+.petition-archive-link {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 0 1rem;
+}
+
+/* Petition Archive Page */
+.petition-archive {
+  max-width: 1200px;
+  margin: 2rem auto;
+}
+
+.archive-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #dd230f 0%, #950f00 100%);
+  color: white;
+  border-radius: 8px;
+}
+
+.archive-header h1 {
+  margin: 0 0 0.5rem 0;
+  color: white;
+}
+
+.archive-subtitle {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.petition-archive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.petition-card.archive {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.petition-card.archive:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.petition-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.petition-status.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.petition-status.inactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.petition-category {
+  background: #e2e3e5;
+  color: #383d41;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
+}
+
+/* Generic card class */
+.card-category {
+  background: #e2e3e5;
+  color: #383d41;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
+}
+
+.no-petitions {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6c757d;
+}
+
+.archive-cta {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 2rem;
+  background: #f8fafb;
+  border-radius: 8px;
+}
+
+/* ========================================
+   GENERALIZED CAMPAIGN CARDS
+   Styles for petition, donation, and other campaign cards
+======================================== */
+
+.campaign-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.campaign-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.campaign-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.campaign-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.campaign-content {
+  padding: 1.5rem;
+}
+
+.campaign-content h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.3rem;
+  line-height: 1.4;
+}
+
+.campaign-content h3 a {
+  color: #1a2a3a;
+  text-decoration: none;
+}
+
+.campaign-content h3 a:hover {
+  color: #1a8cff;
+}
+
+.campaign-excerpt {
+  color: #6c757d;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.campaign-stats {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f8fafb;
+  border-radius: 6px;
+}
+
+.stat-count {
+  display: block;
+  font-weight: bold;
+  color: #1a8cff;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.stat-goal {
+  display: block;
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-meta {
+  display: block;
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1a8cff 0%, #0056b3 100%);
+  transition: width 0.3s ease;
+}
+
+.campaign-meta {
+  margin: 1rem 0 0.5rem 0;
+}
+
+.campaign-category {
+  display: inline-block;
+  background: #e9ecef;
+  color: #495057;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.campaign-cta {
+  width: 100%;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* Campaign type specific styling */
+.campaign-card.petition .stat-count {
+  color: #28a745;
+}
+
+.campaign-card.petition .progress-fill {
+  background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+}
+
+.campaign-card.donation .stat-count {
+  color: #dc3545;
+}
+
+.campaign-card.donation .progress-fill {
+  background: linear-gradient(90deg, #dc3545 0%, #c82333 100%);
+}
+
+/* Context specific styling */
+.campaign-card.featured {
+  border: 2px solid #1a8cff;
+}
+
+.campaign-card.archive {
+  margin-bottom: 1.5rem;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   h1 { font-size: 2rem; }
@@ -289,5 +752,55 @@ a:hover {
   
   .post-content {
     padding: 1rem;
+  }
+  
+  /* Petition section mobile styles */
+  .petition-highlights {
+    margin: 2rem 0;
+    padding: 1rem;
+  }
+  
+  .petition-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0;
+  }
+  
+  .petition-content {
+    padding: 1rem;
+  }
+  
+  .petition-content h3 {
+    font-size: 1.2rem;
+  }
+  
+  .petition-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  /* Archive page mobile styles */
+  .petition-archive {
+    margin: 1rem auto;
+    padding: 0 0.5rem;
+  }
+  
+  .archive-header {
+    margin-bottom: 2rem;
+    padding: 1.5rem 1rem;
+  }
+  
+  .archive-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .petition-archive-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .archive-cta {
+    padding: 1.5rem 1rem;
   }
 }

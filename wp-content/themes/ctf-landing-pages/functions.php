@@ -54,11 +54,17 @@ function ctf_enqueue_assets() {
         }
     }
     
-    // Load main theme JavaScript (if needed)
-    wp_enqueue_script('ctf-main', 
-        get_template_directory_uri() . '/js/main.js', 
-        ['jquery'], '1.0', true
-    );
+    // Load main theme JavaScript only if the file exists. Do not depend on jQuery by default.
+    $main_js_path = get_template_directory() . '/js/main.js';
+    if ( file_exists( $main_js_path ) ) {
+        wp_enqueue_script(
+            'ctf-main',
+            get_template_directory_uri() . '/js/main.js',
+            [],
+            '1.0',
+            true
+        );
+    }
 }
 add_action('wp_enqueue_scripts', 'ctf_enqueue_assets');
 
@@ -84,3 +90,16 @@ function ctf_theme_setup() {
     ]);
 }
 add_action('after_setup_theme', 'ctf_theme_setup');
+
+/**
+ * Set appropriate cache headers for pages with forms
+ */
+function ctf_set_cache_headers() {
+    // Don't cache pages with petition forms
+    if (is_singular('petition') || is_page()) {
+        // Set cache headers to prevent aggressive caching of dynamic content
+        header('Cache-Control: public, max-age=300, s-maxage=300'); // 5 minutes
+        header('Vary: Cookie'); // Vary by user session
+    }
+}
+add_action('template_redirect', 'ctf_set_cache_headers');

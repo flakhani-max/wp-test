@@ -13,9 +13,7 @@ defined('ABSPATH') || exit;
 </head>
 <body <?php body_class(); ?>>
 <header class="site-header">
-    <div class="header-content">
-        <a href="https://www.taxpayer.com/">
-            Canadian Taxpayers Federation
-        </a>
+    <div class="header-container">
+        <img src="https://www.taxpayer.com/media/Taxpayer.comVectorStandUpBeHeard.png">
     </div>
 </header>

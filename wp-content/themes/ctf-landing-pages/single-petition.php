@@ -26,8 +26,10 @@ get_header('custom');
             <?= apply_filters('the_content', $content['body']) ?>
         </div>
     </div>
-    <form class="petition-form" method="post" action="<?php echo esc_url( admin_url('admin-post.php') ); ?>">
-        <input type="hidden" name="action" value="petition_mailchimp_submit" />
+    <form class="petition-form" method="post" id="petition-form">
+        <?php wp_nonce_field('ctf_petition_form', 'petition_nonce'); ?>
+        <input type="hidden" name="action" value="ctf_submit_petition" />
+        <input type="hidden" name="petition_id" value="<?= esc_attr(get_the_ID()) ?>" />
         <input type="hidden" name="tag_id" value="<?= esc_attr($content['tag_id']) ?>" />
         <div class="form-grid">
             <div class="form-group">
@@ -40,7 +42,7 @@ get_header('custom');
                 <input type="email" id="email" name="email" class="form-control" required autocomplete="email" placeholder="Email *" />
             </div>
             <div class="form-group">
-                <input type="tel" id="mobile" name="mobile" class="form-control" autocomplete="tel" placeholder="Mobile Number" />
+                <input type="tel" id="phone" name="phone" class="form-control" autocomplete="tel" placeholder="Phone Number" />
             </div>
             <div class="form-group">
                 <input type="text" id="street_address" name="street_address" class="form-control" autocomplete="street-address" placeholder="Street Address" />
@@ -49,7 +51,7 @@ get_header('custom');
                 <input type="text" id="city" name="city" class="form-control" autocomplete="address-level2" placeholder="City" />
             </div>
             <div class="form-group">
-                <input type="text" id="postal_code" name="postal_code" class="form-control" required autocomplete="postal-code" pattern="[A-Za-z]\d[A-Za-z] ?\d[A-Za-z]\d" placeholder="Postal Code *" />
+                <input type="text" id="zip_code" name="zip_code" class="form-control" required autocomplete="postal-code" pattern="[A-Za-z]\d[A-Za-z] ?\d[A-Za-z]\d" placeholder="Postal Code *" />
             </div>
             <div class="form-group">
                 <div class="form-check">
@@ -59,6 +61,7 @@ get_header('custom');
             </div>
         </div>
         <button type="submit" class="btn btn-primary btn-large">Sign the petition</button>
+        <div class="form-messages" style="display: none; margin-top: 1rem;"></div>
     </form>
     <div class="petition-privacy">
         <p>We take data security and privacy seriously. Your information will be kept safe, and will be used to sign your petition.</p>

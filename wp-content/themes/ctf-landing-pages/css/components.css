@@ -150,25 +150,21 @@
 
 /* Content Blocks */
 .content-block {
-  background: #f5faff;
-  border-left: 4px solid #1a8cff;
+  background: linear-gradient(135deg, #f8fafb 0%, #e1e8ed 100%);
   padding: 1rem;
   margin: 1.5rem 0;
 }
 
 .content-block.warning {
   background: #fff8e1;
-  border-left-color: #ff9800;
 }
 
 .content-block.success {
   background: #e8f5e8;
-  border-left-color: #4caf50;
 }
 
 .content-block.error {
   background: #ffebee;
-  border-left-color: #dd230f
 }
 
 /* Loading States */

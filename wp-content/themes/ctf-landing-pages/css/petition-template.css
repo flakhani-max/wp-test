@@ -83,6 +83,39 @@
   text-align: center;
 }
 
+/* Form Messages */
+.form-messages {
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+.form-messages.success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.form-messages.error {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.form-messages p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.form-messages ul {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.5rem;
+}
+
+.form-messages li {
+  margin: 0.25rem 0;
+}
+
 
 
 /* Responsive Overrides */
