@@ -56,7 +56,7 @@ function ctf_register_donation_cpt() {
         'menu_position'      => null,
         'menu_icon'          => 'dashicons-heart',
         'supports'           => array('title', 'editor', 'excerpt', 'thumbnail', 'custom-fields'),
-        'show_in_rest'       => true,
+        'show_in_rest'       => false,
     );
 
     register_post_type('donation', $args);
@@ -141,7 +141,7 @@ function ctf_add_donation_acf_fields() {
                         'name' => 'amount',
                         'type' => 'number',
                         'instructions' => 'Enter donation amount (whole numbers only)',
-                        'required' => 1,
+                        'required' => 0,
                         'conditional_logic' => 0,
                         'wrapper' => array(
                             'width' => '',

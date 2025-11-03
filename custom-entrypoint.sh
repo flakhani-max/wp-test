@@ -195,6 +195,14 @@ else
   wp plugin activate amazon-s3-and-cloudfront --path="$DOCROOT" --allow-root || true
 fi
 
+# Activate CTF Custom Plugin
+if wp plugin is-installed ctf-custom-plugin --path="$DOCROOT" --allow-root; then
+  echo "Activating CTF Custom Plugin..."
+  wp plugin activate ctf-custom-plugin --path="$DOCROOT" --allow-root || true
+else
+  echo "⚠️ CTF Custom Plugin not found"
+fi
+
 
 # Update WordPress options
 wp option update siteurl "$SITE_URL" --path="$DOCROOT" --allow-root
