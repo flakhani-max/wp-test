@@ -121,8 +121,8 @@ function ctf_add_donation_acf_fields() {
                 'label' => 'Frequency Display Options',
                 'name' => 'frequency_display',
                 'type' => 'checkbox',
-                'instructions' => 'Select which donation frequency options to display on the page',
-                'required' => 0,
+                'instructions' => 'Select which donation frequency options to display on the page (at least one required)',
+                'required' => 1,
                 'conditional_logic' => 0,
                 'wrapper' => array(
                     'width' => '',
