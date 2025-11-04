@@ -50,6 +50,7 @@ jobs:
             wp_title:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/WP_TITLE
             cloud_sql_connection_name:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/CLOUD_SQL_CONNECTION_NAME
             gcs_bucket_name:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/GCS_BUCKET_NAME
+            acf_pro_key:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/ACF_PRO_KEY
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -220,6 +221,7 @@ jobs:
           WP_TITLE='${{ steps.secrets.outputs.wp_title }}'
           CLOUD_SQL_CONNECTION_NAME='${{ steps.secrets.outputs.cloud_sql_connection_name }}'
           GCS_BUCKET_NAME='${{ steps.secrets.outputs.gcs_bucket_name }}'
+          ACF_PRO_KEY='${{ steps.secrets.outputs.acf_pro_key }}'
           # Base64 encode JSON to avoid special character issues
           WP_MEDIA_SA_KEY=$(echo -n '${{ steps.secrets.outputs.wp_media_sa_key }}' | base64 | tr -d '\n')
           
@@ -234,6 +236,7 @@ jobs:
           ENV_VARS="${ENV_VARS},CLOUD_SQL_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME}"
           ENV_VARS="${ENV_VARS},GCS_BUCKET_NAME=${GCS_BUCKET_NAME}"
           ENV_VARS="${ENV_VARS},WP_MEDIA_SA_KEY=${WP_MEDIA_SA_KEY}"
+          ENV_VARS="${ENV_VARS},ACF_PRO_KEY=${ACF_PRO_KEY}"
 
           # Add optional variables if set
           if [ -n "${WP_URL}" ]; then
