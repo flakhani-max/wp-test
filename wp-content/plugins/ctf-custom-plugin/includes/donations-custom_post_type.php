@@ -117,11 +117,11 @@ function ctf_add_donation_acf_fields() {
                 'ui_off_text' => 'Hide',
             ),
             array(
-                'key' => 'field_donation_amount_options',
-                'label' => 'Donation Amount Options',
-                'name' => 'amount_options',
-                'type' => 'repeater',
-                'instructions' => 'Add donation amount options (integers only). These will be used as preset donation values.',
+                'key' => 'field_donation_frequency_display',
+                'label' => 'Frequency Display Options',
+                'name' => 'frequency_display',
+                'type' => 'checkbox',
+                'instructions' => 'Select which donation frequency options to display on the page',
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
@@ -129,18 +129,49 @@ function ctf_add_donation_acf_fields() {
                     'class' => '',
                     'id' => '',
                 ),
+                'choices' => array(
+                    'monthly' => 'Show Monthly Donations',
+                    'onetime' => 'Show One-Time Donations',
+                ),
+                'default_value' => array('monthly', 'onetime'),
+                'layout' => 'vertical',
+                'toggle' => 0,
+                'return_format' => 'value',
+                'allow_custom' => 0,
+            ),
+            array(
+                'key' => 'field_donation_monthly_amounts',
+                'label' => 'Monthly Donation Amounts',
+                'name' => 'monthly_amounts',
+                'type' => 'repeater',
+                'instructions' => 'Add monthly donation amount options (integers only)',
+                'required' => 0,
+                'conditional_logic' => array(
+                    array(
+                        array(
+                            'field' => 'field_donation_frequency_display',
+                            'operator' => '==',
+                            'value' => 'monthly',
+                        ),
+                    ),
+                ),
+                'wrapper' => array(
+                    'width' => '50',
+                    'class' => '',
+                    'id' => '',
+                ),
                 'collapsed' => '',
-                'min' => 1,
+                'min' => 0,
                 'max' => 10,
                 'layout' => 'table',
                 'button_label' => 'Add Amount',
                 'sub_fields' => array(
                     array(
-                        'key' => 'field_donation_amount_value',
+                        'key' => 'field_monthly_amount_value',
                         'label' => 'Amount',
                         'name' => 'amount',
                         'type' => 'number',
-                        'instructions' => 'Enter donation amount (whole numbers only)',
+                        'instructions' => 'Enter monthly donation amount',
                         'required' => 0,
                         'conditional_logic' => 0,
                         'wrapper' => array(
@@ -149,7 +180,57 @@ function ctf_add_donation_acf_fields() {
                             'id' => '',
                         ),
                         'default_value' => '',
-                        'placeholder' => 'e.g. 25',
+                        'placeholder' => '15',
+                        'prepend' => '$',
+                        'append' => '',
+                        'min' => 1,
+                        'max' => 10000,
+                        'step' => 1,
+                    ),
+                ),
+            ),
+            array(
+                'key' => 'field_donation_onetime_amounts',
+                'label' => 'One-Time Donation Amounts',
+                'name' => 'onetime_amounts',
+                'type' => 'repeater',
+                'instructions' => 'Add one-time donation amount options (integers only)',
+                'required' => 0,
+                'conditional_logic' => array(
+                    array(
+                        array(
+                            'field' => 'field_donation_frequency_display',
+                            'operator' => '==',
+                            'value' => 'onetime',
+                        ),
+                    ),
+                ),
+                'wrapper' => array(
+                    'width' => '50',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'collapsed' => '',
+                'min' => 0,
+                'max' => 10,
+                'layout' => 'table',
+                'button_label' => 'Add Amount',
+                'sub_fields' => array(
+                    array(
+                        'key' => 'field_onetime_amount_value',
+                        'label' => 'Amount',
+                        'name' => 'amount',
+                        'type' => 'number',
+                        'instructions' => 'Enter one-time donation amount',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => array(
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ),
+                        'default_value' => '',
+                        'placeholder' => '25',
                         'prepend' => '$',
                         'append' => '',
                         'min' => 1,
@@ -224,16 +305,36 @@ function ctf_get_donation_show_title($post_id = null) {
 }
 
 /**
- * Get donation amount options
+ * Get frequency display options
+ * 
+ * @param int $post_id Optional post ID, defaults to current post
+ * @return array Array with 'monthly' and/or 'onetime'
+ */
+function ctf_get_frequency_display($post_id = null) {
+    if (!$post_id) {
+        $post_id = get_the_ID();
+    }
+    $frequency = get_field('frequency_display', $post_id);
+    
+    // Default to both if not set
+    if (empty($frequency)) {
+        return array('monthly', 'onetime');
+    }
+    
+    return $frequency;
+}
+
+/**
+ * Get monthly donation amount options
  * 
  * @param int $post_id Optional post ID, defaults to current post
  * @return array Array of donation amounts
  */
-function ctf_get_donation_amount_options($post_id = null) {
+function ctf_get_monthly_amounts($post_id = null) {
     if (!$post_id) {
         $post_id = get_the_ID();
     }
-    $amounts = get_field('amount_options', $post_id);
+    $amounts = get_field('monthly_amounts', $post_id);
     $amount_values = array();
     
     if ($amounts && is_array($amounts)) {
@@ -244,7 +345,52 @@ function ctf_get_donation_amount_options($post_id = null) {
         }
     }
     
+    // Default monthly amounts if empty
+    if (empty($amount_values)) {
+        $amount_values = array(15, 20, 25);
+    }
+    
     return $amount_values;
+}
+
+/**
+ * Get one-time donation amount options
+ * 
+ * @param int $post_id Optional post ID, defaults to current post
+ * @return array Array of donation amounts
+ */
+function ctf_get_onetime_amounts($post_id = null) {
+    if (!$post_id) {
+        $post_id = get_the_ID();
+    }
+    $amounts = get_field('onetime_amounts', $post_id);
+    $amount_values = array();
+    
+    if ($amounts && is_array($amounts)) {
+        foreach ($amounts as $amount) {
+            if (isset($amount['amount']) && is_numeric($amount['amount'])) {
+                $amount_values[] = intval($amount['amount']);
+            }
+        }
+    }
+    
+    // Default one-time amounts if empty
+    if (empty($amount_values)) {
+        $amount_values = array(15, 20, 25, 50, 100, 200);
+    }
+    
+    return $amount_values;
+}
+
+/**
+ * Get donation amount options (DEPRECATED - kept for backwards compatibility)
+ * 
+ * @param int $post_id Optional post ID, defaults to current post
+ * @return array Array of donation amounts
+ */
+function ctf_get_donation_amount_options($post_id = null) {
+    // Return one-time amounts for backwards compatibility
+    return ctf_get_onetime_amounts($post_id);
 }
 
 /**

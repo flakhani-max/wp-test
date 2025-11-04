@@ -18,18 +18,34 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.donationAmounts) {
         monthlyAmounts = window.donationAmounts.monthly;
         onetimeAmounts = window.donationAmounts.onetime;
+        const showMonthly = window.donationAmounts.showMonthly;
+        const showOnetime = window.donationAmounts.showOnetime;
         console.log('Monthly amounts:', monthlyAmounts);
         console.log('One-time amounts:', onetimeAmounts);
+        console.log('Show monthly:', showMonthly);
+        console.log('Show onetime:', showOnetime);
+        
+        // Determine which frequency to show by default
+        let defaultFrequency = 'once';
+        if (showOnetime && showMonthly) {
+            defaultFrequency = 'once'; // Both available, default to one-time
+        } else if (showMonthly && !showOnetime) {
+            defaultFrequency = 'monthly'; // Only monthly available
+        } else if (showOnetime && !showMonthly) {
+            defaultFrequency = 'once'; // Only one-time available
+        }
+        
+        initializeDonationForm();
+        if (showMonthly && showOnetime) {
+            setupFrequencyToggle(); // Only setup toggle if both options exist
+        }
+        renderAmountButtons(defaultFrequency);
+        setupFormValidation();
+        setupCardValidation();
     } else {
         console.error('Donation amounts not found!');
         return;
     }
-    
-    initializeDonationForm();
-    setupFrequencyToggle();
-    renderAmountButtons('once'); // Render one-time amounts by default
-    setupFormValidation();
-    setupCardValidation();
 });
 
 function initializeDonationForm() {
@@ -102,25 +118,20 @@ function renderAmountButtons(frequency) {
     
     // Generate amount buttons
     amounts.forEach(amount => {
-        const isFeatured = amount == 100 && frequency === 'once';
+        const isFeatured = amount == 100;
         
         const label = document.createElement('label');
         label.className = 'amount-option' + (isFeatured ? ' amount-featured' : '');
         
         let html = '';
         
-        // Add badge for $100 one-time donation
+        // Add badge for $100 donation (both monthly and one-time)
         if (isFeatured) {
             html += '<span class="amount-badge">Top 10% of donors</span>';
         }
         
         html += `<input type="radio" name="donation_amount" value="${amount}" />`;
         html += `<span class="amount-display">$${amount}</span>`;
-        
-        // Add magazine note for $100+
-        if (amount >= 100) {
-            html += '<small>Includes The Taxpayer magazine</small>';
-        }
         
         label.innerHTML = html;
         amountGrid.appendChild(label);
@@ -150,6 +161,12 @@ function setupAmountSelection() {
                 selectedAmount = parseFloat(this.value);
                 clearCustomAmountInput();
                 updateDonateButton();
+            } else {
+                // Focus the textbox when "Other" is selected
+                const customAmountInput = document.querySelector('input[name="custom_amount"]');
+                if (customAmountInput) {
+                    customAmountInput.focus();
+                }
             }
         });
     });
