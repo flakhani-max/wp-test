@@ -34,7 +34,7 @@ function ctf_enqueue_assets() {
         // Donation template scripts
         wp_enqueue_script('donation-template', 
             get_template_directory_uri() . '/js/donation-template.js', 
-            [], '1.6', true
+            [], '1.0', true
         );
     }
     
