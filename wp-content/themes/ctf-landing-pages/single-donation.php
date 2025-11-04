@@ -121,7 +121,19 @@ $show_onetime = in_array('onetime', $frequency_display);
             </div>
             
             <div class="donation-info-text">
-                <p class="magazine-note">Donations of $100 and higher receive The Taxpayer magazine.</p>
+                <p class="magazine-note">
+                    <?php 
+                    if ($show_monthly && !$show_onetime) {
+                        echo 'Monthly donations of $9 and higher receive The Taxpayer magazine.';
+                    } elseif (!$show_monthly && $show_onetime) {
+                        echo 'Donations of $100 and higher receive The Taxpayer magazine.';
+                    } else {
+                        // Both options available - show dynamic text
+                        echo '<span class="monthly-mag-text">Monthly donations of $9 and higher receive The Taxpayer magazine.</span>';
+                        echo '<span class="onetime-mag-text">Donations of $100 and higher receive The Taxpayer magazine.</span>';
+                    }
+                    ?>
+                </p>
                 <p class="tax-note">Donations to the Canadian Taxpayers Federation are not tax deductible</p>
             </div>
         </div>

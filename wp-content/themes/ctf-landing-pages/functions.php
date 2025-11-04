@@ -29,7 +29,7 @@ function ctf_enqueue_assets() {
         // Donation template styles
         wp_enqueue_style('donation-template', 
             get_template_directory_uri() . '/css/donation-template.css', 
-            ['ctf-components'], '1.0'
+            ['ctf-components'], '5.1'
         );
         // Donation template scripts
         wp_enqueue_script('donation-template', 

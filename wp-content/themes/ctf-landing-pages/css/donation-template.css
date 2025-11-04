@@ -321,6 +321,25 @@
   font-style: italic;
 }
 
+/* Toggle magazine text based on frequency */
+.monthly-mag-text,
+.onetime-mag-text {
+  display: none;
+}
+
+body.frequency-monthly .monthly-mag-text {
+  display: inline;
+}
+
+body.frequency-once .onetime-mag-text {
+  display: inline;
+}
+
+/* Default to one-time text if no body class set */
+body:not(.frequency-monthly):not(.frequency-once) .onetime-mag-text {
+  display: inline;
+}
+
 .donation-note {
   background: #ffe5e5;
   border-left: 4px solid #dd230f;
