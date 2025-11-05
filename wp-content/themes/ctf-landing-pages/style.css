@@ -136,13 +136,30 @@ a:hover {
   margin: 0 auto;
 }
 
-.site-footer a {
-  color: #fff;
+.footer-content p {
+  margin: 0.5rem 0;
+  color: #6c757d;
+}
+
+.footer-links {
+  margin-top: 1rem;
+}
+
+.footer-links a {
+  color: #1a2a3a;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: #dd230f;
   text-decoration: underline;
 }
 
-.site-footer a:hover {
-  opacity: 0.9;
+.footer-links .separator {
+  margin: 0 0.75rem;
+  color: #6c757d;
 }
 
 /* Home Page Styles */
