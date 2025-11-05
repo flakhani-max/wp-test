@@ -9,7 +9,7 @@
  */
 function ctf_enqueue_assets() {
     // Always load main theme styles and shared components
-    wp_enqueue_style('ctf-main', get_stylesheet_uri(), [], '1.0');
+    wp_enqueue_style('ctf-main', get_stylesheet_uri(), [], '1.1');
     wp_enqueue_style('ctf-components', get_template_directory_uri() . '/css/components.css', ['ctf-main'], '1.0');
     
     // Load template-specific styles conditionally
