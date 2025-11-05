@@ -146,14 +146,14 @@ a:hover {
 }
 
 .footer-links a {
-  color: #1a2a3a;
+  color: #000 !important;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;
 }
 
 .footer-links a:hover {
-  color: #dd230f;
+  color: #dd230f !important;
   text-decoration: underline;
 }
 
