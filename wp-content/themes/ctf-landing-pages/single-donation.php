@@ -185,12 +185,33 @@ $show_onetime = in_array('onetime', $frequency_display);
 
         <div class="payment-section">
             <h3>Credit card information</h3>
-            
-            <!-- Stripe Card Element will be inserted here -->
-            <div id="card-element" class="stripe-card-element"></div>
-            
-            <!-- Display card errors -->
-            <div id="card-errors" class="card-errors" role="alert"></div>
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <input type="text" name="cardholder_name" class="form-control" required placeholder="Cardholder name *" autocomplete="cc-name" />
+                </div>
+                <div class="form-group">
+                    <input type="text" name="card_number" class="form-control" required placeholder="Card number *" autocomplete="cc-number" maxlength="19" />
+                </div>
+                <div class="form-group">
+                    <input type="text" name="cvv" class="form-control" required placeholder="CVV *" autocomplete="cc-csc" maxlength="4" />
+                </div>
+                <div class="form-group">
+                    <select name="expiry_month" class="form-control" required autocomplete="cc-exp-month">
+                        <option value="">Month</option>
+                        <?php for($i = 1; $i <= 12; $i++): ?>
+                            <option value="<?php echo sprintf('%02d', $i); ?>"><?php echo sprintf('%02d', $i); ?></option>
+                        <?php endfor; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select name="expiry_year" class="form-control" required autocomplete="cc-exp-year">
+                        <option value="">Year</option>
+                        <?php for($i = date('Y'); $i <= date('Y') + 10; $i++): ?>
+                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                        <?php endfor; ?>
+                    </select>
+                </div>
+            </div>
             
             <button type="submit" class="btn btn-primary btn-large donate-button">Donate</button>
         </div>
@@ -223,14 +244,11 @@ $show_onetime = in_array('onetime', $frequency_display);
 <?php get_footer('custom'); ?>
 
 <script>
-// Pass donation amounts and Stripe key to JavaScript
+// Pass donation amounts to JavaScript
 window.donationAmounts = {
     monthly: <?php echo json_encode($monthly_amounts); ?>,
     onetime: <?php echo json_encode($onetime_amounts); ?>,
     showMonthly: <?php echo json_encode($show_monthly); ?>,
     showOnetime: <?php echo json_encode($show_onetime); ?>
 };
-
-// Pass Stripe publishable key to JavaScript
-window.stripePublishableKey = '<?php echo esc_js(getenv('STRIPE_PUBLISHABLE_KEY')); ?>';
 </script>
