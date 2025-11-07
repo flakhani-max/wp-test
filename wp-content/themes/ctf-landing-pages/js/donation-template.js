@@ -1,7 +1,7 @@
 /**
  * Donation Template JavaScript
  * Handles all donation form functionality including amount selection,
- * frequency toggle, form validation, and card validation
+ * frequency toggle, form validation, and Stripe payment processing
  */
 
 // Global variables
@@ -9,6 +9,8 @@ let selectedAmount = 0;
 let isRecurring = false;
 let monthlyAmounts = [];
 let onetimeAmounts = [];
+let stripe = null;
+let cardElement = null;
 
 /**
  * Initialize the donation form
@@ -40,8 +42,10 @@ document.addEventListener('DOMContentLoaded', function() {
             setupFrequencyToggle(); // Only setup toggle if both options exist
         }
         renderAmountButtons(defaultFrequency);
+        initializeStripe(); // Initialize Stripe Elements
         setupFormValidation();
-        setupCardValidation();
+        // Remove old card validation since we're using Stripe
+        // setupCardValidation();
     } else {
         console.error('Donation amounts not found!');
         return;
@@ -56,6 +60,57 @@ function initializeDonationForm() {
         document.body.classList.add('frequency-once');
         isRecurring = false;
     }
+}
+
+/**
+ * Initialize Stripe Elements
+ */
+function initializeStripe() {
+    // Check if Stripe publishable key is available
+    if (!window.stripePublishableKey) {
+        console.error('Stripe publishable key not found!');
+        showError('Payment system not configured. Please contact support.');
+        return;
+    }
+    
+    // Initialize Stripe
+    stripe = Stripe(window.stripePublishableKey);
+    
+    // Create an instance of Elements
+    const elements = stripe.elements();
+    
+    // Custom styling for the card element
+    const style = {
+        base: {
+            color: '#1a2a3a',
+            fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
+            fontSmoothing: 'antialiased',
+            fontSize: '16px',
+            '::placeholder': {
+                color: '#99aab5'
+            }
+        },
+        invalid: {
+            color: '#dc3545',
+            iconColor: '#dc3545'
+        }
+    };
+    
+    // Create the card Element and mount it
+    cardElement = elements.create('card', { style: style });
+    cardElement.mount('#card-element');
+    
+    // Handle real-time validation errors from the card Element
+    cardElement.on('change', function(event) {
+        const displayError = document.getElementById('card-errors');
+        if (event.error) {
+            displayError.textContent = event.error.message;
+        } else {
+            displayError.textContent = '';
+        }
+    });
+    
+    console.log('✅ Stripe initialized successfully');
 }
 
 function setupFrequencyToggle() {
@@ -251,8 +306,8 @@ function setupFormValidation() {
         });
     });
     
-    // Form submission handling
-    form.addEventListener('submit', function(e) {
+    // Form submission handling with Stripe
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         if (!validateForm()) {
@@ -269,23 +324,85 @@ function setupFormValidation() {
             return false;
         }
         
-        // Set the final amount value
-        const hiddenAmountInput = document.querySelector('input[name="amount"]');
-        if (hiddenAmountInput) {
-            hiddenAmountInput.value = selectedAmount.toFixed(2);
-        }
-        
         // Show processing state
         const submitBtn = this.querySelector('.donate-button');
         if (submitBtn) {
+            submitBtn.classList.add('processing');
             submitBtn.textContent = 'Processing...';
             submitBtn.disabled = true;
         }
         
-        // Form is valid, proceed with actual submission
-        setTimeout(() => {
-            this.submit();
-        }, 100);
+        try {
+            // Create PaymentMethod with Stripe
+            const { paymentMethod, error } = await stripe.createPaymentMethod({
+                type: 'card',
+                card: cardElement,
+                billing_details: {
+                    name: `${form.first_name.value} ${form.last_name.value}`,
+                    email: form.email.value,
+                    phone: form.phone.value,
+                    address: {
+                        line1: form.address.value,
+                        city: form.city.value,
+                        state: form.province.value,
+                        postal_code: form.postal_code.value,
+                        country: 'CA'
+                    }
+                }
+            });
+            
+            if (error) {
+                throw new Error(error.message);
+            }
+            
+            console.log('✅ PaymentMethod created:', paymentMethod.id);
+            
+            // Prepare form data for backend
+            const formData = new FormData(form);
+            formData.append('action', 'process_donation');
+            formData.append('payment_method_id', paymentMethod.id);
+            formData.append('amount', selectedAmount.toFixed(2));
+            
+            // Send to backend via AJAX
+            const response = await fetch('/wp-admin/admin-ajax.php', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (!result.success) {
+                throw new Error(result.data.message || 'Payment failed');
+            }
+            
+            // Check if payment requires additional action (3D Secure)
+            if (result.data.requires_action) {
+                const { error: confirmError } = await stripe.confirmCardPayment(
+                    result.data.payment_intent_client_secret
+                );
+                
+                if (confirmError) {
+                    throw new Error(confirmError.message);
+                }
+                
+                // Payment confirmed successfully after 3D Secure
+                showSuccess('Thank you for your donation!');
+            } else {
+                // Payment succeeded immediately
+                showSuccess(result.data.message || 'Thank you for your donation!');
+            }
+            
+        } catch (error) {
+            console.error('Payment error:', error);
+            showError(error.message || 'An error occurred processing your donation.');
+            
+            // Reset button state
+            if (submitBtn) {
+                submitBtn.classList.remove('processing');
+                submitBtn.textContent = `Donate $${selectedAmount.toFixed(2)}`;
+                submitBtn.disabled = false;
+            }
+        }
     });
 }
 
@@ -470,7 +587,16 @@ function validateExpiry() {
 
 function showError(message) {
     // Simple alert for now - could be enhanced with modal or toast
+    alert('Error: ' + message);
+}
+
+function showSuccess(message) {
+    // Show success message and redirect or reset form
     alert(message);
+    // Could redirect to a thank you page:
+    // window.location.href = '/thank-you';
+    // Or reload the page to show a fresh form:
+    // window.location.reload();
 }
 
 // Utility function to trim whitespace and clean currency input
@@ -479,4 +605,3 @@ function cleanCurrencyInput(input) {
         input.value = input.value.trim().replace(/[^0-9.]/g, '');
     }
 }
-

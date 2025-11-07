@@ -9,7 +9,7 @@
  */
 function ctf_enqueue_assets() {
     // Always load main theme styles and shared components
-    wp_enqueue_style('ctf-main', get_stylesheet_uri(), [], '1.1');
+    wp_enqueue_style('ctf-main', get_stylesheet_uri(), [], '1.0');
     wp_enqueue_style('ctf-components', get_template_directory_uri() . '/css/components.css', ['ctf-main'], '1.0');
     
     // Load template-specific styles conditionally
@@ -29,12 +29,17 @@ function ctf_enqueue_assets() {
         // Donation template styles
         wp_enqueue_style('donation-template', 
             get_template_directory_uri() . '/css/donation-template.css', 
-            ['ctf-components'], '5.1'
+            ['ctf-components'], '5.2'
         );
-        // Donation template scripts
+        // Load Stripe.js library (must load before our script)
+        wp_enqueue_script('stripe-js', 
+            'https://js.stripe.com/v3/', 
+            [], null, true
+        );
+        // Donation template scripts (depends on Stripe.js)
         wp_enqueue_script('donation-template', 
             get_template_directory_uri() . '/js/donation-template.js', 
-            [], '1.0', true
+            ['stripe-js'], '2.0', true
         );
     }
     
