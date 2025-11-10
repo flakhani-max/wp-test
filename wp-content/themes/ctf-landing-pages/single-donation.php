@@ -184,7 +184,14 @@ $show_onetime = in_array('onetime', $frequency_display);
         </div>
 
         <div class="payment-section">
-            <h3>Credit card information</h3>
+            <h3>Payment method</h3>
+            
+            <!-- Payment Request Button (Google Pay, Apple Pay, etc.) -->
+            <div id="payment-request-button" class="payment-request-button-container"></div>
+            
+            <div class="payment-divider">
+                <span>or pay with card</span>
+            </div>
             
             <!-- Stripe Card Element will be inserted here -->
             <div id="card-element" class="stripe-card-element"></div>

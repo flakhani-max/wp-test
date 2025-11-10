@@ -664,6 +664,55 @@ body:not(.frequency-monthly):not(.frequency-once) .onetime-mag-text {
  * Stripe Elements Styling
  * ======================================== */
 
+/* Payment Request Button (Google Pay, Apple Pay, etc.) */
+.payment-request-button-container {
+  margin-bottom: 1.5rem;
+}
+
+#payment-request-button {
+  height: 44px;
+}
+
+/* Show divider only when payment request button is visible */
+.payment-divider {
+  display: none;
+  text-align: center;
+  position: relative;
+  margin: 1.5rem 0;
+}
+
+.payment-divider.visible {
+  display: block;
+}
+
+.payment-divider::before,
+.payment-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background-color: #e1e8ed;
+}
+
+.payment-divider::before {
+  left: 0;
+}
+
+.payment-divider::after {
+  right: 0;
+}
+
+.payment-divider span {
+  background: #fff;
+  padding: 0 1rem;
+  color: #6c757d;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Card Element */
 .stripe-card-element {
   background: #f8fafb;
   border: 1px solid #e1e8ed;

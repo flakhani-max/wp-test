@@ -203,25 +203,6 @@ else
   echo "⚠️ CTF Custom Plugin not found"
 fi
 
-# Force-activate critical plugins on every container start
-echo "==================================================="
-echo "Force-activating critical plugins..."
-echo "==================================================="
-# ACF (Pro or Free)
-if wp plugin is-installed advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
-  wp plugin activate advanced-custom-fields-pro --path="$DOCROOT" --allow-root 2>/dev/null || true
-elif wp plugin is-installed advanced-custom-fields --path="$DOCROOT" --allow-root; then
-  wp plugin activate advanced-custom-fields --path="$DOCROOT" --allow-root 2>/dev/null || true
-fi
-# WP Offload Media
-wp plugin activate amazon-s3-and-cloudfront --path="$DOCROOT" --allow-root 2>/dev/null || true
-# CTF Custom Plugin
-wp plugin activate ctf-custom-plugin --path="$DOCROOT" --allow-root 2>/dev/null || true
-
-echo "Active plugins:"
-wp plugin list --status=active --path="$DOCROOT" --allow-root --format=table
-echo "==================================================="
-
 
 # Update WordPress options
 wp option update siteurl "$SITE_URL" --path="$DOCROOT" --allow-root
@@ -269,14 +250,8 @@ if [ -n "$ACF_PRO_KEY" ]; then
   fi
   # Activate ACF Pro
   if wp plugin is-installed advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
-    echo "Activating ACF Pro..."
     wp plugin activate advanced-custom-fields-pro --path="$DOCROOT" --allow-root || true
-    # Verify activation
-    if wp plugin is-active advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
-      echo "✓ ACF Pro is ACTIVE"
-    else
-      echo "❌ ACF Pro failed to activate!"
-    fi
+    echo "✓ ACF Pro activated!"
   fi
 else
   echo "No ACF Pro key provided, installing free ACF..."
@@ -288,17 +263,8 @@ else
     echo "ACF already installed, activating..."
     wp plugin activate advanced-custom-fields --path="$DOCROOT" --allow-root || true
   fi
-  # Verify activation
-  if wp plugin is-active advanced-custom-fields --path="$DOCROOT" --allow-root; then
-    echo "✓ ACF (free) is ACTIVE"
-  else
-    echo "❌ ACF (free) failed to activate!"
-  fi
+  echo "✓ ACF (free) activated!"
 fi
-
-# List all active plugins for debugging
-echo "Currently active plugins:"
-wp plugin list --status=active --path="$DOCROOT" --allow-root || echo "Could not list active plugins"
 echo "==================================================="
 
 

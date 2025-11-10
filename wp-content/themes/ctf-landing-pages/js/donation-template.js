@@ -10,7 +10,9 @@ let isRecurring = false;
 let monthlyAmounts = [];
 let onetimeAmounts = [];
 let stripe = null;
+let elements = null;
 let cardElement = null;
+let paymentRequest = null;
 
 /**
  * Initialize the donation form
@@ -77,7 +79,7 @@ function initializeStripe() {
     stripe = Stripe(window.stripePublishableKey);
     
     // Create an instance of Elements
-    const elements = stripe.elements();
+    elements = stripe.elements();
     
     // Custom styling for the card element
     const style = {
@@ -110,7 +112,152 @@ function initializeStripe() {
         }
     });
     
+    // Initialize Payment Request Button (Google Pay, Apple Pay, etc.)
+    initializePaymentRequestButton();
+    
     console.log('✅ Stripe initialized successfully');
+}
+
+/**
+ * Initialize Express Checkout Element (Apple Pay, Google Pay, Link, etc.)
+ * Using the simpler Payment Request Button approach (works without clientSecret)
+ */
+function initializePaymentRequestButton() {
+    console.log('🔄 Initializing Payment Request Button...');
+    console.log('Selected amount:', selectedAmount);
+    
+    // Start with amount of 10 if nothing is selected yet
+    const initialAmount = selectedAmount > 0 ? selectedAmount : 10;
+    
+    // Create a Payment Request
+    paymentRequest = stripe.paymentRequest({
+        country: 'CA',
+        currency: 'cad',
+        total: {
+            label: 'Donation to Canadian Taxpayers Federation',
+            amount: Math.round(initialAmount * 100), // Convert to cents
+        },
+        requestPayerName: true,
+        requestPayerEmail: true,
+    });
+    
+    console.log('📦 Payment Request created');
+    
+    // Create the Payment Request Button Element
+    const prButton = elements.create('paymentRequestButton', {
+        paymentRequest: paymentRequest,
+    });
+    
+    console.log('🔘 Payment Request Button element created');
+    
+    // Check if Payment Request is available (browser supports it)
+    paymentRequest.canMakePayment().then(function(result) {
+        console.log('🔍 canMakePayment result:', result);
+        
+        if (result) {
+            // Mount the button
+            prButton.mount('#payment-request-button');
+            
+            // Show the divider
+            document.querySelector('.payment-divider').classList.add('visible');
+            
+            console.log('✅ Payment Request Button mounted successfully!');
+            console.log('Available payment methods:', result);
+        } else {
+            // Hide the payment request button container if not available
+            document.getElementById('payment-request-button').style.display = 'none';
+            console.log('ℹ️ Payment Request Button not available on this device/browser');
+            console.log('Possible reasons: No saved cards, browser not supported, or HTTPS required');
+        }
+    }).catch(function(error) {
+        console.error('❌ Error checking Payment Request availability:', error);
+        document.getElementById('payment-request-button').style.display = 'none';
+    });
+    
+    // Handle payment method from Payment Request Button
+    paymentRequest.on('paymentmethod', async function(ev) {
+        console.log('💳 Payment method received from Payment Request Button');
+        
+        // Get form data
+        const form = document.getElementById('donation-form');
+        const formData = new FormData(form);
+        
+        // Validate required fields
+        const firstName = formData.get('first_name') || ev.payerName?.split(' ')[0] || '';
+        const lastName = formData.get('last_name') || ev.payerName?.split(' ').slice(1).join(' ') || '';
+        const email = formData.get('email') || ev.payerEmail || '';
+        
+        if (!firstName || !lastName || !email || selectedAmount <= 0) {
+            ev.complete('fail');
+            showError('Please fill in all required fields and select a donation amount.');
+            return;
+        }
+        
+        // Append payment details to form data
+        formData.append('action', 'process_donation');
+        formData.append('payment_method_id', ev.paymentMethod.id);
+        formData.append('amount', selectedAmount.toFixed(2));
+        formData.append('donation_frequency', isRecurring ? 'monthly' : 'once');
+        
+        try {
+            // Process the payment on backend
+            const response = await fetch('/wp-admin/admin-ajax.php', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            console.log('📡 Backend response:', result);
+            
+            if (!result.success) {
+                ev.complete('fail');
+                throw new Error(result.data.message || 'Payment failed');
+            }
+            
+            // Handle 3D Secure if required
+            if (result.data.requires_action) {
+                const { error: confirmError } = await stripe.confirmCardPayment(
+                    result.data.payment_intent_client_secret
+                );
+                
+                if (confirmError) {
+                    ev.complete('fail');
+                    throw new Error(confirmError.message);
+                }
+            }
+            
+            // Payment successful!
+            ev.complete('success');
+            showSuccess(result.data.message || 'Thank you for your donation!');
+            
+        } catch (error) {
+            console.error('❌ Payment error:', error);
+            ev.complete('fail');
+            showError(error.message || 'An error occurred processing your donation.');
+        }
+    });
+    
+    // Update Payment Request amount when donation amount changes
+    window.updatePaymentRequestAmount = function(newAmount) {
+        if (paymentRequest && newAmount > 0) {
+            console.log('🔄 Updating Payment Request amount to:', newAmount);
+            paymentRequest.update({
+                total: {
+                    label: 'Donation to Canadian Taxpayers Federation',
+                    amount: Math.round(newAmount * 100),
+                },
+            });
+        }
+    };
+}
+
+/**
+ * Update Payment Request Button amount (helper function)
+ */
+function updatePaymentRequestAmount(newAmount) {
+    if (window.updatePaymentRequestAmount) {
+        window.updatePaymentRequestAmount(newAmount);
+    }
 }
 
 function setupFrequencyToggle() {
@@ -216,6 +363,7 @@ function setupAmountSelection() {
                 selectedAmount = parseFloat(this.value);
                 clearCustomAmountInput();
                 updateDonateButton();
+                updatePaymentRequestAmount(selectedAmount);
             } else {
                 // Focus the textbox when "Other" is selected
                 const customAmountInput = document.querySelector('input[name="custom_amount"]');
@@ -241,9 +389,11 @@ function setupAmountSelection() {
                 selectedAmount = amount;
                 if (customAmountRadio) customAmountRadio.checked = true;
                 updateDonateButton();
+                updatePaymentRequestAmount(selectedAmount);
             } else {
                 selectedAmount = 0;
                 updateDonateButton();
+                updatePaymentRequestAmount(0);
             }
         });
         
