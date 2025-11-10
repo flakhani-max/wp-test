@@ -139,6 +139,7 @@ function ctf_process_onetime_donation($data) {
             'confirm' => true, // Immediately confirm the payment
             'description' => "Donation from {$data['first_name']} {$data['last_name']}",
             'receipt_email' => $data['email'],
+            'payment_method_types' => ['card'], // Only accept cards (no redirects)
             'metadata' => [
                 'donor_name' => "{$data['first_name']} {$data['last_name']}",
                 'donor_email' => $data['email'],
@@ -217,13 +218,13 @@ function ctf_get_stripe_price_id($amount) {
     // Map donation amounts to Stripe Price IDs
     // Replace these placeholder IDs with your actual Price IDs from Stripe Dashboard
     $price_map = [
-        9   => 'price_REPLACE_WITH_9_DOLLAR_PRICE_ID',
-        15  => 'price_REPLACE_WITH_15_DOLLAR_PRICE_ID',
-        20  => 'price_REPLACE_WITH_20_DOLLAR_PRICE_ID',
-        25  => 'price_REPLACE_WITH_25_DOLLAR_PRICE_ID',
-        50  => 'price_REPLACE_WITH_50_DOLLAR_PRICE_ID',
-        100 => 'price_REPLACE_WITH_100_DOLLAR_PRICE_ID',
-        200 => 'price_REPLACE_WITH_200_DOLLAR_PRICE_ID',
+        10   => 'price_1SQwzzKqkrhlTgYRpA5hgWSg',
+        15  => 'price_1SQx0AKqkrhlTgYRRjh9KAzM',
+        20  => 'price_1SQx0NKqkrhlTgYRgf7dy5Cl',
+        25  => 'price_1SQx0WKqkrhlTgYRvvLUYQpO',
+        50  => 'price_1SQx0iKqkrhlTgYRr7pp5EC2',
+        100 => 'price_1SQx0uKqkrhlTgYR7wneXeoz',
+        200 => 'price_1SQx12KqkrhlTgYRzxs9rM23',
     ];
     
     // Convert amount to integer for lookup

@@ -57,7 +57,7 @@ $show_onetime = in_array('onetime', $frequency_display);
                 <?php while (have_posts()) : the_post(); ?>
                     <?php if (get_the_content()) : ?>
                         <div class="donation-content">
-                            <?php the_content(); ?>
+                        <?php the_content(); ?>
                         </div>
                     <?php else: ?>
                         <!-- Default content if no custom content is provided -->
@@ -103,7 +103,7 @@ $show_onetime = in_array('onetime', $frequency_display);
         <input type="hidden" name="post_id" value="<?php echo get_the_ID(); ?>" />
         <input type="hidden" name="amount" id="final_amount" value="" />
         <?php wp_nonce_field('donation_form', 'donation_nonce'); ?>
-        
+
         <div class="amount-section">
             <h3>
                 <?php 
@@ -122,7 +122,7 @@ $show_onetime = in_array('onetime', $frequency_display);
             
             <div class="donation-info-text">
                 <p class="magazine-note">
-                    <?php 
+                <?php 
                     if ($show_monthly && !$show_onetime) {
                         echo 'Monthly donations of $9 and higher receive The Taxpayer magazine.';
                     } elseif (!$show_monthly && $show_onetime) {
@@ -140,42 +140,42 @@ $show_onetime = in_array('onetime', $frequency_display);
 
         <div class="donor-info-section">
             <h3>Enter your information:</h3>
-            <div class="form-grid">
-                <div class="form-group">
-                    <input type="text" name="first_name" class="form-control" required placeholder="First Name *" autocomplete="given-name" />
-                </div>
-                <div class="form-group">
-                    <input type="text" name="last_name" class="form-control" required placeholder="Last Name *" autocomplete="family-name" />
-                </div>
-                <div class="form-group">
-                    <input type="email" name="email" class="form-control" required placeholder="Email *" autocomplete="email" />
-                </div>
-                <div class="form-group">
-                    <input type="tel" name="phone" class="form-control" placeholder="Phone" autocomplete="tel" />
-                </div>
-                <div class="form-group">
-                    <input type="text" name="address" class="form-control" placeholder="Street Address" autocomplete="street-address" />
-                </div>
-                <div class="form-group">
-                    <input type="text" name="city" class="form-control" placeholder="City" autocomplete="address-level2" />
-                </div>
-                <div class="form-group">
-                    <select name="province" class="form-control" autocomplete="address-level1">
+        <div class="form-grid">
+            <div class="form-group">
+                <input type="text" name="first_name" class="form-control" required placeholder="First Name *" autocomplete="given-name" />
+            </div>
+            <div class="form-group">
+                <input type="text" name="last_name" class="form-control" required placeholder="Last Name *" autocomplete="family-name" />
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" class="form-control" required placeholder="Email *" autocomplete="email" />
+            </div>
+            <div class="form-group">
+                <input type="tel" name="phone" class="form-control" placeholder="Phone" autocomplete="tel" />
+            </div>
+            <div class="form-group">
+                <input type="text" name="address" class="form-control" placeholder="Street Address" autocomplete="street-address" />
+            </div>
+            <div class="form-group">
+                <input type="text" name="city" class="form-control" placeholder="City" autocomplete="address-level2" />
+            </div>
+            <div class="form-group">
+                <select name="province" class="form-control" autocomplete="address-level1">
                         <option value="">Select Province</option>
-                        <option value="AB">Alberta</option>
-                        <option value="BC">British Columbia</option>
-                        <option value="MB">Manitoba</option>
-                        <option value="NB">New Brunswick</option>
-                        <option value="NL">Newfoundland and Labrador</option>
-                        <option value="NS">Nova Scotia</option>
-                        <option value="ON">Ontario</option>
-                        <option value="PE">Prince Edward Island</option>
-                        <option value="QC">Quebec</option>
-                        <option value="SK">Saskatchewan</option>
-                        <option value="NT">Northwest Territories</option>
-                        <option value="NU">Nunavut</option>
-                        <option value="YT">Yukon</option>
-                    </select>
+                    <option value="AB">Alberta</option>
+                    <option value="BC">British Columbia</option>
+                    <option value="MB">Manitoba</option>
+                    <option value="NB">New Brunswick</option>
+                    <option value="NL">Newfoundland and Labrador</option>
+                    <option value="NS">Nova Scotia</option>
+                    <option value="ON">Ontario</option>
+                    <option value="PE">Prince Edward Island</option>
+                    <option value="QC">Quebec</option>
+                    <option value="SK">Saskatchewan</option>
+                    <option value="NT">Northwest Territories</option>
+                    <option value="NU">Nunavut</option>
+                    <option value="YT">Yukon</option>
+                </select>
                 </div>
                 <div class="form-group">
                     <input type="text" name="postal_code" class="form-control" placeholder="Postal Code" autocomplete="postal-code" pattern="[A-Za-z]\d[A-Za-z] ?\d[A-Za-z]\d" />

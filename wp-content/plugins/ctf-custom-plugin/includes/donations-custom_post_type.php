@@ -183,7 +183,7 @@ function ctf_add_donation_acf_fields() {
                         'placeholder' => '15',
                         'prepend' => '$',
                         'append' => '',
-                        'min' => 1,
+                'min' => 1,
                         'max' => 10000,
                         'step' => 1,
                     ),

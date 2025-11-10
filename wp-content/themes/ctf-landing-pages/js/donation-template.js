@@ -363,6 +363,12 @@ function setupFormValidation() {
             formData.append('payment_method_id', paymentMethod.id);
             formData.append('amount', selectedAmount.toFixed(2));
             
+            // Debug: Log what we're sending
+            console.log('Sending to backend:');
+            for (let [key, value] of formData.entries()) {
+                console.log(`  ${key}:`, value);
+            }
+            
             // Send to backend via AJAX
             const response = await fetch('/wp-admin/admin-ajax.php', {
                 method: 'POST',

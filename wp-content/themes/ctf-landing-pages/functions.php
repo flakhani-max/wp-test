@@ -29,7 +29,7 @@ function ctf_enqueue_assets() {
         // Donation template styles
         wp_enqueue_style('donation-template', 
             get_template_directory_uri() . '/css/donation-template.css', 
-            ['ctf-components'], '5.2'
+            ['ctf-components'], '1.0'
         );
         // Load Stripe.js library (must load before our script)
         wp_enqueue_script('stripe-js', 
@@ -39,7 +39,7 @@ function ctf_enqueue_assets() {
         // Donation template scripts (depends on Stripe.js)
         wp_enqueue_script('donation-template', 
             get_template_directory_uri() . '/js/donation-template.js', 
-            ['stripe-js'], '2.0', true
+            ['stripe-js'], '1.0', true
         );
     }
     
