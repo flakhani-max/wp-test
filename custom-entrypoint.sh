@@ -258,70 +258,47 @@ echo "==================================================="
 echo "ACF Plugin Installation"
 echo "==================================================="
 ACF_PRO_KEY="${ACF_PRO_KEY:-}"
-
-# Try ACF Pro first if key is provided
-ACF_INSTALLED=false
-if [ -n "$ACF_PRO_KEY" ] && [ "$ACF_PRO_KEY" != "not set" ]; then
-  echo "Attempting to install ACF Pro..."
+echo "ACF_PRO_KEY: ${ACF_PRO_KEY:-'not set'}"
+if [ -n "$ACF_PRO_KEY" ]; then
+  echo "Installing ACF Pro..."
   if ! wp plugin is-installed advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
-    if wp plugin install "https://connect.advancedcustomfields.com/v2/plugins/download?p=pro&k=${ACF_PRO_KEY}" \
+    echo "Installing ACF Pro..."
+    wp plugin install "https://connect.advancedcustomfields.com/v2/plugins/download?p=pro&k=${ACF_PRO_KEY}" \
       --path="$DOCROOT" \
-      --allow-root 2>/dev/null; then
-      echo "✓ ACF Pro installed successfully"
-      ACF_INSTALLED=true
-    else
-      echo "⚠️  ACF Pro installation failed - will use free version"
-    fi
-  else
-    echo "✓ ACF Pro already installed"
-    ACF_INSTALLED=true
+      --allow-root || echo "Failed to install ACF Pro - check your license key"
   fi
-  
-  # Try to activate ACF Pro if installed
-  if [ "$ACF_INSTALLED" = true ]; then
-    wp plugin activate advanced-custom-fields-pro --path="$DOCROOT" --allow-root 2>/dev/null || true
-    if wp plugin is-active advanced-custom-fields-pro --path="$DOCROOT" --allow-root 2>/dev/null; then
+  # Activate ACF Pro
+  if wp plugin is-installed advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
+    echo "Activating ACF Pro..."
+    wp plugin activate advanced-custom-fields-pro --path="$DOCROOT" --allow-root || true
+    # Verify activation
+    if wp plugin is-active advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
       echo "✓ ACF Pro is ACTIVE"
+    else
+      echo "❌ ACF Pro failed to activate!"
     fi
   fi
-fi
-
-# Fallback to free ACF if Pro is not active
-if ! wp plugin is-active advanced-custom-fields-pro --path="$DOCROOT" --allow-root 2>/dev/null; then
-  echo "Installing ACF (free version) as fallback..."
+else
+  echo "No ACF Pro key provided, installing free ACF..."
+  # Fallback to free ACF if no license key
   if ! wp plugin is-installed advanced-custom-fields --path="$DOCROOT" --allow-root; then
-    wp plugin install advanced-custom-fields --path="$DOCROOT" --allow-root || {
-      echo "❌ CRITICAL: Failed to install ACF!"
-      exit 1
-    }
+    echo "Installing ACF (free version)..."
+    wp plugin install advanced-custom-fields --activate --path="$DOCROOT" --allow-root || true
+  else
+    echo "ACF already installed, activating..."
+    wp plugin activate advanced-custom-fields --path="$DOCROOT" --allow-root || true
   fi
-  
-  # Activate free ACF
-  wp plugin activate advanced-custom-fields --path="$DOCROOT" --allow-root || {
-    echo "❌ CRITICAL: Failed to activate ACF!"
-    exit 1
-  }
-  
   # Verify activation
   if wp plugin is-active advanced-custom-fields --path="$DOCROOT" --allow-root; then
     echo "✓ ACF (free) is ACTIVE"
   else
-    echo "❌ CRITICAL: ACF failed to activate!"
-    exit 1
+    echo "❌ ACF (free) failed to activate!"
   fi
 fi
 
-# Final verification - at least one ACF version must be active
-if wp plugin is-active advanced-custom-fields-pro --path="$DOCROOT" --allow-root 2>/dev/null || \
-   wp plugin is-active advanced-custom-fields --path="$DOCROOT" --allow-root 2>/dev/null; then
-  echo "✓ ACF is ready!"
-else
-  echo "❌ CRITICAL ERROR: No ACF version is active!"
-  echo "Listing all plugins for debugging:"
-  wp plugin list --path="$DOCROOT" --allow-root
-  exit 1
-fi
-
+# List all active plugins for debugging
+echo "Currently active plugins:"
+wp plugin list --status=active --path="$DOCROOT" --allow-root || echo "Could not list active plugins"
 echo "==================================================="
 
 
