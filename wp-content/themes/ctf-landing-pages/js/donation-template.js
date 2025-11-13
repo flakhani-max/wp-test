@@ -99,7 +99,12 @@ function initializeStripe() {
     };
     
     // Create the card Element and mount it
-    cardElement = elements.create('card', { style: style });
+    // hidePostalCode: true removes the ZIP/Postal code field since we're in Canada
+    // and Stripe's postal code validation is primarily US-focused
+    cardElement = elements.create('card', { 
+        style: style,
+        hidePostalCode: true
+    });
     cardElement.mount('#card-element');
     
     // Handle real-time validation errors from the card Element
@@ -160,6 +165,11 @@ function initializePaymentRequestButton() {
             
             // Show the divider
             document.querySelector('.payment-divider').classList.add('visible');
+            
+            // Disable button initially if no amount is selected
+            if (selectedAmount <= 0) {
+                disablePaymentRequestButton();
+            }
             
             console.log('✅ Payment Request Button mounted successfully!');
             console.log('Available payment methods:', result);
@@ -228,7 +238,9 @@ function initializePaymentRequestButton() {
             
             // Payment successful!
             ev.complete('success');
-            showSuccess(result.data.message || 'Thank you for your donation!');
+            
+            // Redirect to thank you page
+            window.location.href = '/thank-you-for-your-donation/';
             
         } catch (error) {
             console.error('❌ Payment error:', error);
@@ -237,9 +249,14 @@ function initializePaymentRequestButton() {
         }
     });
     
-    // Update Payment Request amount when donation amount changes
-    window.updatePaymentRequestAmount = function(newAmount) {
-        if (paymentRequest && newAmount > 0) {
+}
+
+/**
+ * Update Payment Request Button amount
+ */
+function updatePaymentRequestAmount(newAmount) {
+    if (paymentRequest) {
+        if (newAmount > 0) {
             console.log('🔄 Updating Payment Request amount to:', newAmount);
             paymentRequest.update({
                 total: {
@@ -247,16 +264,35 @@ function initializePaymentRequestButton() {
                     amount: Math.round(newAmount * 100),
                 },
             });
+            enablePaymentRequestButton();
+        } else {
+            console.log('⚠️ Amount is 0, disabling Payment Request button');
+            disablePaymentRequestButton();
         }
-    };
+    }
 }
 
 /**
- * Update Payment Request Button amount (helper function)
+ * Disable Payment Request Button (Apple Pay, Google Pay, Link)
  */
-function updatePaymentRequestAmount(newAmount) {
-    if (window.updatePaymentRequestAmount) {
-        window.updatePaymentRequestAmount(newAmount);
+function disablePaymentRequestButton() {
+    const prButtonContainer = document.getElementById('payment-request-button');
+    if (prButtonContainer) {
+        prButtonContainer.style.pointerEvents = 'none';
+        prButtonContainer.style.opacity = '0.5';
+        console.log('🔒 Payment Request Button disabled');
+    }
+}
+
+/**
+ * Enable Payment Request Button (Apple Pay, Google Pay, Link)
+ */
+function enablePaymentRequestButton() {
+    const prButtonContainer = document.getElementById('payment-request-button');
+    if (prButtonContainer) {
+        prButtonContainer.style.pointerEvents = 'auto';
+        prButtonContainer.style.opacity = '1';
+        console.log('🔓 Payment Request Button enabled');
     }
 }
 
@@ -413,6 +449,7 @@ function clearAmountSelection() {
         radio.checked = false;
     });
     clearCustomAmountInput();
+    updatePaymentRequestAmount(0); // Disable payment request button
 }
 
 function clearCustomAmountInput() {
@@ -540,13 +577,10 @@ function setupFormValidation() {
                 if (confirmError) {
                     throw new Error(confirmError.message);
                 }
-                
-                // Payment confirmed successfully after 3D Secure
-                showSuccess('Thank you for your donation!');
-            } else {
-                // Payment succeeded immediately
-                showSuccess(result.data.message || 'Thank you for your donation!');
             }
+            
+            // Payment successful - redirect to thank you page
+            window.location.href = '/thank-you-for-your-donation/';
             
         } catch (error) {
             console.error('Payment error:', error);

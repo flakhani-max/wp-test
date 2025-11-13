@@ -13,6 +13,8 @@ WP_MEDIA_SA_KEY=$(gcloud secrets versions access latest --secret=WP_MEDIA_SA_KEY
 ACF_PRO_KEY=$(gcloud secrets versions access latest --secret=ACF_PRO_KEY --project=$PROJECT_ID)
 STRIPE_PUBLISHABLE_KEY=$(gcloud secrets versions access latest --secret=STRIPE_PUBLISHABLE_KEY --project=$PROJECT_ID)
 STRIPE_SECRET_KEY=$(gcloud secrets versions access latest --secret=STRIPE_SECRET_KEY --project=$PROJECT_ID)
+WP_ADMIN_USER=$(gcloud secrets versions access latest --secret=WP_ADMIN_USER --project=$PROJECT_ID)
+WP_ADMIN_PASS=$(gcloud secrets versions access latest --secret=WP_ADMIN_PASS --project=$PROJECT_ID)
 
 # Write to .env.local.secrets (gitignored)
 cat > .env.local.secrets << EOF

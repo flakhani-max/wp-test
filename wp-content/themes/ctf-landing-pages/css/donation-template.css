@@ -584,8 +584,8 @@ body:not(.frequency-monthly):not(.frequency-once) .onetime-mag-text {
     min-width: 120px;
     padding: 0.65rem 1.5rem;
     font-size: 0.85rem;
-  }
-  
+}
+
   .amount-badge {
     font-size: 0.65rem;
     padding: 3px 8px;
