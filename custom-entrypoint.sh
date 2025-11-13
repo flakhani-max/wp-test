@@ -211,11 +211,25 @@ wp option update blogname "$SITE_TITLE" --path="$DOCROOT" --allow-root
 
 # Update admin user credentials (runs every deployment)
 echo "Updating admin user credentials..."
-wp user update "$ADMIN_USER" \
-  --user_pass="$ADMIN_PASS" \
-  --user_email="$ADMIN_EMAIL" \
-  --path="$DOCROOT" \
-  --allow-root 2>/dev/null || echo "Note: Admin user will be created on first install"
+if wp user get "$ADMIN_USER" --path="$DOCROOT" --allow-root >/dev/null 2>&1; then
+  # User exists - update password and email
+  echo "✓ Admin user exists, updating credentials..."
+  wp user update "$ADMIN_USER" \
+    --user_pass="$ADMIN_PASS" \
+    --user_email="$ADMIN_EMAIL" \
+    --path="$DOCROOT" \
+    --allow-root
+  echo "✓ Admin credentials updated successfully!"
+else
+  # User doesn't exist - create it
+  echo "⚠️ Admin user doesn't exist, creating..."
+  wp user create "$ADMIN_USER" "$ADMIN_EMAIL" \
+    --user_pass="$ADMIN_PASS" \
+    --role=administrator \
+    --path="$DOCROOT" \
+    --allow-root
+  echo "✓ Admin user created successfully!"
+fi
 
 # Activate CTF Landing Pages theme
 echo "Checking for ctf-landing-pages theme..."
