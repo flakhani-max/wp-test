@@ -211,32 +211,25 @@ wp option update blogname "$SITE_TITLE" --path="$DOCROOT" --allow-root
 
 # Update admin user credentials (runs every deployment)
 echo "Updating admin user credentials..."
-echo "DEBUG: ADMIN_USER=$ADMIN_USER"
-echo "DEBUG: ADMIN_EMAIL=$ADMIN_EMAIL"
-if wp user get "$ADMIN_USER" --path="$DOCROOT" --allow-root 2>&1; then
-  # User exists - update password and email
-  echo "✓ Admin user exists, updating credentials..."
-  if wp user update "$ADMIN_USER" \
+# First, try to get the user ID by email (more reliable than username)
+EXISTING_USER_ID=$(wp user list --field=ID --user_email="$ADMIN_EMAIL" --path="$DOCROOT" --allow-root 2>/dev/null | head -1)
+
+if [ -n "$EXISTING_USER_ID" ]; then
+  # User with this email exists - update their password and username
+  echo "✓ Found existing user (ID: $EXISTING_USER_ID) with email $ADMIN_EMAIL, updating..."
+  wp user update "$EXISTING_USER_ID" \
+    --user_login="$ADMIN_USER" \
     --user_pass="$ADMIN_PASS" \
-    --user_email="$ADMIN_EMAIL" \
     --path="$DOCROOT" \
-    --allow-root 2>&1; then
-    echo "✓ Admin credentials updated successfully!"
-  else
-    echo "❌ Failed to update admin credentials"
-  fi
+    --allow-root 2>&1 && echo "✓ Admin credentials updated successfully!" || echo "⚠️ Some updates may have failed"
 else
-  # User doesn't exist - create it
-  echo "⚠️ Admin user doesn't exist, creating..."
-  if wp user create "$ADMIN_USER" "$ADMIN_EMAIL" \
+  # No user with this email - create new user
+  echo "⚠️ No user found with email $ADMIN_EMAIL, creating new admin user..."
+  wp user create "$ADMIN_USER" "$ADMIN_EMAIL" \
     --user_pass="$ADMIN_PASS" \
     --role=administrator \
     --path="$DOCROOT" \
-    --allow-root 2>&1; then
-    echo "✓ Admin user created successfully!"
-  else
-    echo "❌ Failed to create admin user"
-  fi
+    --allow-root 2>&1 && echo "✓ Admin user created successfully!" || echo "❌ Failed to create admin user"
 fi
 
 # Activate CTF Landing Pages theme
