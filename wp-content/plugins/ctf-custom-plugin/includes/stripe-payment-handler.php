@@ -206,31 +206,97 @@ function ctf_process_onetime_donation($data) {
 }
 
 /**
- * Get Stripe Price ID for a given monthly donation amount
+ * Get or create a Stripe Price ID for any donation amount
  * 
- * TODO: Replace these with your actual Stripe Price IDs from your dashboard
- * Go to: https://dashboard.stripe.com/products and create recurring prices
+ * This function creates a new Price object in Stripe for custom amounts,
+ * allowing donors to choose any monthly donation amount they want.
  * 
  * @param float $amount Monthly donation amount in dollars
- * @return string|null Stripe Price ID or null if not found
+ * @return string|WP_Error Stripe Price ID or error
  */
-function ctf_get_stripe_price_id($amount) {
-    // Map donation amounts to Stripe Price IDs
-    // Replace these placeholder IDs with your actual Price IDs from Stripe Dashboard
-    $price_map = [
-        10   => 'price_1SQwzzKqkrhlTgYRpA5hgWSg',
-        15  => 'price_1SQx0AKqkrhlTgYRRjh9KAzM',
-        20  => 'price_1SQx0NKqkrhlTgYRgf7dy5Cl',
-        25  => 'price_1SQx0WKqkrhlTgYRvvLUYQpO',
-        50  => 'price_1SQx0iKqkrhlTgYRr7pp5EC2',
-        100 => 'price_1SQx0uKqkrhlTgYR7wneXeoz',
-        200 => 'price_1SQx12KqkrhlTgYRzxs9rM23',
-    ];
+function ctf_get_or_create_price_id($amount) {
+    try {
+        // Ensure we have a valid Product ID for donations
+        $product_id = ctf_get_or_create_donation_product();
+        
+        if (is_wp_error($product_id)) {
+            return $product_id;
+        }
+        
+        // Convert amount to cents (Stripe uses smallest currency unit)
+        $amount_cents = intval($amount * 100);
+        
+        error_log("CTF Stripe: Creating price for \${$amount}/month ({$amount_cents} cents)");
+        
+        // Create a new Price object for this specific amount
+        $price = \Stripe\Price::create([
+            'product' => $product_id,
+            'unit_amount' => $amount_cents,
+            'currency' => 'cad',
+            'recurring' => [
+                'interval' => 'month',
+                'interval_count' => 1,
+            ],
+            'metadata' => [
+                'created_by' => 'ctf_donation_system',
+                'amount_dollars' => $amount,
+            ],
+        ]);
+        
+        error_log("CTF Stripe: Price created - {$price->id} for \${$amount}/month");
+        
+        return $price->id;
+        
+    } catch (\Stripe\Exception\ApiErrorException $e) {
+        error_log("CTF Stripe: Error creating price - " . $e->getMessage());
+        return new WP_Error('price_creation_failed', 'Unable to create subscription price. Please try again.');
+    }
+}
+
+/**
+ * Get or create the main Donation Product in Stripe
+ * 
+ * All monthly donations use the same Product, with different Prices
+ * 
+ * @return string|WP_Error Stripe Product ID or error
+ */
+function ctf_get_or_create_donation_product() {
+    // Check if we have a cached product ID
+    $product_id = get_option('ctf_stripe_donation_product_id');
     
-    // Convert amount to integer for lookup
-    $amount_int = intval($amount);
+    if (!empty($product_id)) {
+        // Verify the product still exists in Stripe
+        try {
+            \Stripe\Product::retrieve($product_id);
+            return $product_id;
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            // Product doesn't exist anymore, create a new one
+            error_log("CTF Stripe: Cached product not found, creating new one");
+        }
+    }
     
-    return $price_map[$amount_int] ?? null;
+    // Create a new Product
+    try {
+        $product = \Stripe\Product::create([
+            'name' => 'Monthly Donation - Canadian Taxpayers Federation',
+            'description' => 'Recurring monthly donation to support the Canadian Taxpayers Federation',
+            'metadata' => [
+                'type' => 'donation',
+                'organization' => 'CTF',
+            ],
+        ]);
+        
+        // Cache the product ID
+        update_option('ctf_stripe_donation_product_id', $product->id);
+        
+        error_log("CTF Stripe: Donation product created - {$product->id}");
+        
+        return $product->id;
+        
+    } catch (\Stripe\Exception\ApiErrorException $e) {
+        error_log("CTF Stripe: Error creating product - " . $e->getMessage());
+        return new WP_Error('product_creation_failed', 'Unable to setup subscription product. Please contact support.');
+    }
 }
 
 /**
@@ -243,15 +309,12 @@ function ctf_process_subscription($data) {
     try {
         error_log("CTF Stripe: Creating subscription for {$data['email']} - \${$data['amount']}/month");
         
-        // Step 1: Get the Stripe Price ID for this amount
-        $price_id = ctf_get_stripe_price_id($data['amount']);
+        // Step 1: Get or create a Stripe Price ID for this amount
+        $price_id = ctf_get_or_create_price_id($data['amount']);
         
-        if (empty($price_id) || strpos($price_id, 'REPLACE_WITH') !== false) {
-            error_log("CTF Stripe: No price configured for \${$data['amount']}/month");
-            return new WP_Error(
-                'invalid_amount',
-                'This subscription amount is not available. Please choose a different amount or contact support.'
-            );
+        if (is_wp_error($price_id)) {
+            error_log("CTF Stripe: Failed to create price for \${$data['amount']}/month");
+            return $price_id; // Return the WP_Error
         }
         
         // Step 2: Create a Stripe Customer
