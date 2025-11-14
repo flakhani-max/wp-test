@@ -1,5 +1,5 @@
 # Dockerfile for Basic WordPress with CTF Landing Pages theme
-FROM wordpress:6.6-php8.2-apache
+FROM wordpress:php8.2-apache
 
 # Install system dependencies, WP-CLI, and Composer
 RUN apt-get update && apt-get install -y \
