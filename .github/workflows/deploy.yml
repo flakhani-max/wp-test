@@ -7,6 +7,7 @@ on:
     paths:
       - 'Dockerfile'
       - 'docker-compose.yml'
+      - 'cloudbuild.yaml'
       - 'custom-entrypoint.sh'
       - 'wp-content/**'
       - '.github/workflows/deploy.yml'
@@ -192,10 +193,15 @@ jobs:
           REGION="${{ steps.secrets.outputs.region }}"
           SERVICE_NAME="${{ steps.secrets.outputs.service_name }}"
           ARTIFACT_REGISTRY_REPO="${{ steps.secrets.outputs.artifact_registry_repo }}"
+          ACF_PRO_KEY="${{ steps.secrets.outputs.acf_pro_key }}"
           IMAGE_BASE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPO}/${SERVICE_NAME}"
-          docker build -t ${IMAGE_BASE}:${GITHUB_SHA} \
-                       -t ${IMAGE_BASE}:latest \
-                       -f Dockerfile .
+          
+          echo "Building Docker image with ACF Pro pre-installed..."
+          docker build \
+            --build-arg ACF_PRO_KEY="${ACF_PRO_KEY}" \
+            -t ${IMAGE_BASE}:${GITHUB_SHA} \
+            -t ${IMAGE_BASE}:latest \
+            -f Dockerfile .
 
       - name: Push Docker image to Artifact Registry
         run: |

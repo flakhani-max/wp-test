@@ -1,0 +1,27 @@
+steps:
+  # Build the Docker image with ACF Pro key from Secret Manager
+  - name: 'gcr.io/cloud-builders/docker'
+    secretEnv: ['ACF_PRO_KEY']
+    args:
+      - 'build'
+      - '--build-arg'
+      - 'ACF_PRO_KEY=$$ACF_PRO_KEY'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/wordpress-ctf:latest'
+      - '.'
+  
+  # Push the image to GCR
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/wordpress-ctf:latest'
+
+# Make Secret Manager secret available to the build
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/ACF_PRO_KEY/versions/latest
+      env: 'ACF_PRO_KEY'
+
+images:
+  - 'gcr.io/$PROJECT_ID/wordpress-ctf:latest'
+

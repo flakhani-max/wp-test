@@ -253,52 +253,14 @@ else
 fi
 
 # Install ACF Pro if license key is provided
-echo "==================================================="
-echo "ACF Plugin Installation"
-echo "==================================================="
-ACF_PRO_KEY="${ACF_PRO_KEY:-}"
-echo "ACF_PRO_KEY: ${ACF_PRO_KEY:-'not set'}"
-if [ -n "$ACF_PRO_KEY" ]; then
-  if ! wp plugin is-installed advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
-    echo "Installing ACF Pro with retry logic..."
-    # Try 3 times with 15 second timeout each
-    for i in 1 2 3; do
-      echo "Attempt $i/3..."
-      if timeout 15 wp plugin install "https://connect.advancedcustomfields.com/v2/plugins/download?p=pro&k=${ACF_PRO_KEY}" \
-        --path="$DOCROOT" \
-        --allow-root 2>&1; then
-        echo "✓ ACF Pro installed successfully!"
-        break
-      else
-        if [ $i -eq 3 ]; then
-          echo "⚠️ Failed to install ACF Pro after 3 attempts - continuing without it"
-        else
-          echo "⚠️ Attempt $i failed, retrying in 2 seconds..."
-          sleep 2
-        fi
-      fi
-    done
-  else
-    echo "✓ ACF Pro already installed"
-  fi
-  # Activate ACF Pro if installed
-  if wp plugin is-installed advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
-    wp plugin activate advanced-custom-fields-pro --path="$DOCROOT" --allow-root || true
-    echo "✓ ACF Pro activated!"
-  fi
+# ACF Pro is pre-installed in Docker image, just activate it
+echo "Activating ACF Pro..."
+if wp plugin is-installed advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
+  wp plugin activate advanced-custom-fields-pro --path="$DOCROOT" --allow-root || true
+  echo "✓ ACF Pro activated!"
 else
-  echo "No ACF Pro key provided, installing free ACF..."
-  # Fallback to free ACF if no license key
-  if ! wp plugin is-installed advanced-custom-fields --path="$DOCROOT" --allow-root; then
-    echo "Installing ACF (free version)..."
-    wp plugin install advanced-custom-fields --activate --path="$DOCROOT" --allow-root || true
-  else
-    echo "ACF already installed, activating..."
-    wp plugin activate advanced-custom-fields --path="$DOCROOT" --allow-root || true
-  fi
-  echo "✓ ACF (free) activated!"
+  echo "⚠️ ACF Pro not found (should be pre-installed in image)"
 fi
-echo "==================================================="
 
 
 # ---------------------------------------------

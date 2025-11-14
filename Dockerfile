@@ -35,8 +35,18 @@ RUN curl -L -o amazon-s3-and-cloudfront.zip https://downloads.wordpress.org/plug
     && rm amazon-s3-and-cloudfront.zip \
     && chown -R www-data:www-data amazon-s3-and-cloudfront
 
-# ACF Pro will be installed at runtime from Secret Manager
-# (Can't pre-install during build because license key is secret)
+# Pre-install ACF Pro using build argument for the license key
+ARG ACF_PRO_KEY
+RUN if [ -n "$ACF_PRO_KEY" ]; then \
+        echo "Downloading ACF Pro during build..."; \
+        curl -L -o acf-pro.zip "https://connect.advancedcustomfields.com/v2/plugins/download?p=pro&k=${ACF_PRO_KEY}" \
+        && unzip -q acf-pro.zip \
+        && rm acf-pro.zip \
+        && chown -R www-data:www-data advanced-custom-fields-pro \
+        && echo "ACF Pro pre-installed successfully"; \
+    else \
+        echo "No ACF_PRO_KEY provided, skipping ACF Pro pre-installation"; \
+    fi
 
 # Reset working directory
 WORKDIR /var/www/html
