@@ -28,6 +28,16 @@ COPY wp-content/plugins/ctf-custom-plugin /var/www/html/wp-content/plugins/ctf-c
 WORKDIR /var/www/html/wp-content/plugins/ctf-custom-plugin
 RUN composer install --no-dev --optimize-autoloader
 
+# Pre-install WP Offload Media Lite (so we don't download on every container start)
+WORKDIR /var/www/html/wp-content/plugins
+RUN curl -L -o amazon-s3-and-cloudfront.zip https://downloads.wordpress.org/plugin/amazon-s3-and-cloudfront.3.2.11.zip \
+    && unzip -q amazon-s3-and-cloudfront.zip \
+    && rm amazon-s3-and-cloudfront.zip \
+    && chown -R www-data:www-data amazon-s3-and-cloudfront
+
+# ACF Pro will be installed at runtime from Secret Manager
+# (Can't pre-install during build because license key is secret)
+
 # Reset working directory
 WORKDIR /var/www/html
 

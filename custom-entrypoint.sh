@@ -184,15 +184,12 @@ if ! wp core is-installed --path="$DOCROOT" --allow-root; then
   echo "✓ WordPress installed successfully!"
 fi
 
-# Install and activate WP Offload Media Lite if missing
-if ! wp plugin is-installed amazon-s3-and-cloudfront --path="$DOCROOT" --allow-root; then
-  echo "Installing WP Offload Media Lite..."
-  wp plugin install amazon-s3-and-cloudfront --activate --path="$DOCROOT" --allow-root || {
-    echo "❌ Failed to install WP Offload Media Lite"; exit 1;
-  }
-else
-  echo "WP Offload Media Lite already installed, ensuring activation..."
+# WP Offload Media Lite is pre-installed in Docker image, just activate it
+if wp plugin is-installed amazon-s3-and-cloudfront --path="$DOCROOT" --allow-root; then
   wp plugin activate amazon-s3-and-cloudfront --path="$DOCROOT" --allow-root || true
+  echo "✓ WP Offload Media Lite activated"
+else
+  echo "⚠️ WP Offload Media Lite not found (should be pre-installed in image)"
 fi
 
 # Activate CTF Custom Plugin
@@ -209,28 +206,28 @@ wp option update siteurl "$SITE_URL" --path="$DOCROOT" --allow-root
 wp option update home "$SITE_URL" --path="$DOCROOT" --allow-root
 wp option update blogname "$SITE_TITLE" --path="$DOCROOT" --allow-root
 
-# Update admin user credentials (runs every deployment)
-echo "Updating admin user credentials..."
-# First, try to get the user ID by email (more reliable than username)
-EXISTING_USER_ID=$(wp user list --field=ID --user_email="$ADMIN_EMAIL" --path="$DOCROOT" --allow-root 2>/dev/null | head -1)
+# Update admin user credentials (optimized to skip if user exists with correct username)
+echo "Checking admin user credentials..."
 
-if [ -n "$EXISTING_USER_ID" ]; then
-  # User with this email exists - delete it and create fresh
-  echo "✓ Found existing user (ID: $EXISTING_USER_ID) with email $ADMIN_EMAIL"
-  echo "🗑️  Deleting old user and creating fresh account..."
-  
-  # Delete the existing user (reassign their posts to ID 1 if needed, or use --yes to skip)
-  wp user delete "$EXISTING_USER_ID" --yes --path="$DOCROOT" --allow-root 2>&1
-  
-  # Create new user with fresh credentials
-  wp user create "$ADMIN_USER" "$ADMIN_EMAIL" \
-    --user_pass="$ADMIN_PASS" \
-    --role=administrator \
-    --path="$DOCROOT" \
-    --allow-root 2>&1 && echo "✓ Admin user created successfully!" || echo "❌ Failed to create admin user"
+# Check if user with correct username AND email already exists
+EXISTING_USER_LOGIN=$(wp user get "$ADMIN_USER" --field=user_login --path="$DOCROOT" --allow-root 2>/dev/null || echo "")
+EXISTING_USER_EMAIL=$(wp user get "$ADMIN_USER" --field=user_email --path="$DOCROOT" --allow-root 2>/dev/null || echo "")
+
+if [ "$EXISTING_USER_LOGIN" = "$ADMIN_USER" ] && [ "$EXISTING_USER_EMAIL" = "$ADMIN_EMAIL" ]; then
+  # User exists with correct username and email - just update password
+  echo "✓ Admin user '$ADMIN_USER' exists, updating password..."
+  wp user update "$ADMIN_USER" --user_pass="$ADMIN_PASS" --path="$DOCROOT" --allow-root 2>&1 | grep -v "Warning: User logins can't be changed" || true
+  echo "✓ Admin password updated!"
 else
-  # No user with this email - create new user
-  echo "⚠️ No user found with email $ADMIN_EMAIL, creating new admin user..."
+  # Need to delete old user and create fresh
+  EXISTING_USER_ID=$(wp user list --field=ID --user_email="$ADMIN_EMAIL" --path="$DOCROOT" --allow-root 2>/dev/null | head -1)
+  
+  if [ -n "$EXISTING_USER_ID" ]; then
+    echo "✓ Found user (ID: $EXISTING_USER_ID) with email $ADMIN_EMAIL, recreating with username '$ADMIN_USER'..."
+    wp user delete "$EXISTING_USER_ID" --yes --path="$DOCROOT" --allow-root 2>&1
+  fi
+  
+  # Create new user
   wp user create "$ADMIN_USER" "$ADMIN_EMAIL" \
     --user_pass="$ADMIN_PASS" \
     --role=administrator \
@@ -262,14 +259,29 @@ echo "==================================================="
 ACF_PRO_KEY="${ACF_PRO_KEY:-}"
 echo "ACF_PRO_KEY: ${ACF_PRO_KEY:-'not set'}"
 if [ -n "$ACF_PRO_KEY" ]; then
-  echo "Installing ACF Pro..."
   if ! wp plugin is-installed advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
-    echo "Installing ACF Pro..."
-    wp plugin install "https://connect.advancedcustomfields.com/v2/plugins/download?p=pro&k=${ACF_PRO_KEY}" \
-      --path="$DOCROOT" \
-      --allow-root || echo "Failed to install ACF Pro - check your license key"
+    echo "Installing ACF Pro with retry logic..."
+    # Try 3 times with 15 second timeout each
+    for i in 1 2 3; do
+      echo "Attempt $i/3..."
+      if timeout 15 wp plugin install "https://connect.advancedcustomfields.com/v2/plugins/download?p=pro&k=${ACF_PRO_KEY}" \
+        --path="$DOCROOT" \
+        --allow-root 2>&1; then
+        echo "✓ ACF Pro installed successfully!"
+        break
+      else
+        if [ $i -eq 3 ]; then
+          echo "⚠️ Failed to install ACF Pro after 3 attempts - continuing without it"
+        else
+          echo "⚠️ Attempt $i failed, retrying in 2 seconds..."
+          sleep 2
+        fi
+      fi
+    done
+  else
+    echo "✓ ACF Pro already installed"
   fi
-  # Activate ACF Pro
+  # Activate ACF Pro if installed
   if wp plugin is-installed advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
     wp plugin activate advanced-custom-fields-pro --path="$DOCROOT" --allow-root || true
     echo "✓ ACF Pro activated!"
