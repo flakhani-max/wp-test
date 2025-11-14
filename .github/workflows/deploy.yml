@@ -7,7 +7,6 @@ on:
     paths:
       - 'Dockerfile'
       - 'docker-compose.yml'
-      - 'cloudbuild.yaml'
       - 'custom-entrypoint.sh'
       - 'wp-content/**'
       - '.github/workflows/deploy.yml'
