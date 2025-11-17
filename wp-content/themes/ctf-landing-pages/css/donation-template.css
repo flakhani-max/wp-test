@@ -687,7 +687,7 @@ body:not(.frequency-monthly):not(.frequency-once) .onetime-mag-text {
 
 
 .payment-divider span {
-  background: #fff;
+  background: transparent;
   padding: 0 1rem;
   color: #6c757d;
   font-size: 0.9rem;
