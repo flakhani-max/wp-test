@@ -685,23 +685,6 @@ body:not(.frequency-monthly):not(.frequency-once) .onetime-mag-text {
   display: block;
 }
 
-.payment-divider::before,
-.payment-divider::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  width: 45%;
-  height: 1px;
-  background-color: #e1e8ed;
-}
-
-.payment-divider::before {
-  left: 0;
-}
-
-.payment-divider::after {
-  right: 0;
-}
 
 .payment-divider span {
   background: #fff;
