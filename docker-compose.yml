@@ -1,6 +1,9 @@
 services:
   wordpress:
-    build: .
+    build:
+      context: .
+      args:
+        ACF_PRO_KEY: ${ACF_PRO_KEY}
     entrypoint: ["/usr/local/bin/custom-entrypoint.sh"]
     ports:
       - "8080:8080"
