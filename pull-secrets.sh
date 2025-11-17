@@ -1,6 +1,5 @@
 #!/bin/bash
-# Pull secrets from Google Cloud Secret Manager to .env.local.secrets
-# Keeps .env.local clean and safe to commit
+# Pull secrets from Google Cloud Secret Manager to .env
 # Usage: ./pull-secrets.sh
 
 PROJECT_ID="dashboard-254616"
@@ -16,8 +15,9 @@ STRIPE_SECRET_KEY=$(gcloud secrets versions access latest --secret=STRIPE_SECRET
 WP_ADMIN_USER=$(gcloud secrets versions access latest --secret=WP_ADMIN_USER --project=$PROJECT_ID)
 WP_ADMIN_PASS=$(gcloud secrets versions access latest --secret=WP_ADMIN_PASS --project=$PROJECT_ID)
 WP_ADMIN_EMAIL=$(gcloud secrets versions access latest --secret=WP_ADMIN_EMAIL --project=$PROJECT_ID)
-# Write to .env.local.secrets (gitignored)
-cat > .env.local.secrets << EOF
+
+# Write to .env (gitignored)
+cat > .env << EOF
 # Production secrets from Secret Manager
 # Generated: $(date)
 # This file is gitignored - safe to have real secrets here
@@ -32,7 +32,8 @@ WP_ADMIN_PASS=$WP_ADMIN_PASS
 WP_ADMIN_EMAIL=$WP_ADMIN_EMAIL
 EOF
 
-echo "✅ Production secrets saved to .env.local.secrets"
+echo "✅ All secrets saved to .env"
 echo "This file is gitignored and will not be committed"
-echo "You can now run: docker-compose up"
+echo ""
+echo "You can now run: docker-compose build && docker-compose up"
 

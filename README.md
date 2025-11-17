@@ -40,13 +40,17 @@ gcloud run services logs read wordpress-hello-world --region=northamerica-northe
 ### First Time Setup
 
 ```bash
-# 1. Pull production secrets (GCS, ACF Pro key)
+# 1. Pull production secrets (GCS, ACF Pro key, etc.)
 ./pull-secrets.sh
+# This creates .env (gitignored)
 
-# 2. Clone production data (optional, for testing with real data)
+# 2. Build Docker image with ACF Pro
+docker-compose build
+
+# 3. Clone production data (optional, for testing with real data)
 ./sync-production-to-local.sh
 
-# 3. Start local WordPress
+# 4. Start local WordPress
 docker-compose up
 ```
 
@@ -68,7 +72,9 @@ git commit -m "Your changes"
 git push
 ```
 
-**Note:** `.env.local` has all local settings. Run `./pull-secrets.sh` to update GCS/ACF keys from production.
+**Note:** 
+- `.env.local` has local database settings (safe to commit)
+- `.env` has all production secrets (gitignored, auto-created by `pull-secrets.sh`)
 
 ---
 
