@@ -4,7 +4,7 @@
  * Displays all petitions in a grid layout
  */
 
-get_header('custom');
+get_header();
 ?>
 
 <div class="petition-archive card">
@@ -55,5 +55,4 @@ get_header('custom');
 
 </div>
 
-<?php get_footer('custom'); ?>
-
+<?php get_footer(); ?>

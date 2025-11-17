@@ -4,7 +4,7 @@
  * Displays all donations in a grid layout
  */
 
-get_header('custom');
+get_header();
 ?>
 
 <div class="donation-archive card">
@@ -53,11 +53,6 @@ get_header('custom');
         <?php endif; ?>
     </div>
 
-    <div class="archive-cta content-block">
-        <h3>Want to Make a General Donation?</h3>
-        <p>Support the Canadian Taxpayers Federation's ongoing work to fight for lower taxes and government accountability.</p>
-        <a href="<?php echo esc_url(home_url('/donate/')); ?>" class="btn btn-secondary">Make a Donation</a>
-    </div>
 </div>
 
-<?php get_footer('custom'); ?>
+<?php get_footer(); ?>

@@ -85,25 +85,54 @@ a:hover {
 .site-header img{
   max-width: 150px;
   height: auto;
-  float: right;
 }
 
 .header-content {
   max-width: 900px;
   margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .header-content a {
   color: #fff;
   text-decoration: none;
-  font-size: 2em;
-  font-weight: 700;
-  letter-spacing: 1px;
+  display: inline-block;
 }
 
 .header-content a:hover {
   text-decoration: none;
   opacity: 0.9;
+}
+
+/* Main Navigation */
+.main-navigation ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 2rem;
+}
+
+.main-navigation li {
+  margin: 0;
+}
+
+.main-navigation a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.main-navigation a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
 }
 
 .site-header .container {
@@ -279,8 +308,7 @@ a:hover {
 .petition-highlights {
   margin: 3rem 0;
   padding: 2rem 0;
-  background: linear-gradient(135deg, #f8fafb 0%, #e1e8ed 100%);
-  border-radius: 8px;
+  background: #f8fafb;
 }
 
 .petition-highlights .section-header {
@@ -496,9 +524,8 @@ a:hover {
   text-align: center;
   margin-bottom: 3rem;
   padding: 2rem 1rem;
-  background: linear-gradient(135deg, #dd230f 0%, #950f00 100%);
+  background: #dd230f;
   color: white;
-  border-radius: 8px;
 }
 
 .archive-header h1 {
@@ -528,7 +555,20 @@ a:hover {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.donation-card.archive {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
 .petition-card.archive:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.donation-card.archive:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
@@ -769,18 +809,31 @@ a:hover {
   .petition-content {
     padding: 1rem;
   }
-  
+
   .petition-content h3 {
     font-size: 1.2rem;
   }
-  
+
   .petition-meta {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
-  /* Archive page mobile styles */
+
+  /* Generic card responsive styles */
+  .card-content {
+    padding: 1rem;
+  }
+
+  .card-content h3 {
+    font-size: 1.2rem;
+  }
+
+  .card-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }  /* Archive page mobile styles */
   .petition-archive {
     margin: 1rem auto;
     padding: 0 0.5rem;

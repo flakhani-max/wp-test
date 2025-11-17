@@ -11,6 +11,26 @@
  * 
  * @package CTF_Landing_Pages
  */
+
+// Debug: Check what variables are available
+error_log('Base card - card_type: ' . (isset($card_type) ? $card_type : 'NOT SET'));
+error_log('Base card - context: ' . (isset($context) ? $context : 'NOT SET'));
+error_log('Base card - card_data: ' . (isset($card_data) ? print_r($card_data, true) : 'NOT SET'));
+
+// Set fallbacks if variables not passed
+if (!isset($card_type)) $card_type = 'petition';
+if (!isset($context)) $context = 'archive';
+if (!isset($show_excerpt_length)) $show_excerpt_length = 25;
+if (!isset($show_category)) $show_category = true;
+if (!isset($card_data)) {
+    $card_data = array(
+        'image' => get_field('petition_image'),
+        'title' => get_field('petition_title') ?: get_the_title(),
+        'intro' => get_field('petition_intro'),
+        'cta_text' => 'View Details',
+        'taxonomy' => 'petition_category'
+    );
+}
 ?>
 
 <article class="<?php echo esc_attr($card_type); ?>-card <?php echo esc_attr($context); ?>">

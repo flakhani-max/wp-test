@@ -11,6 +11,15 @@
 <body <?php body_class(); ?>>
 <header class="site-header">
     <div class="header-content">
-        <a href="<?php echo esc_url(home_url('/')); ?>">CTF Petition Theme</a>
+        <a href="<?php echo esc_url(home_url('/')); ?>">
+            <img src="https://www.taxpayer.com/media/Taxpayer.comVectorStandUpBeHeard.png" alt="Taxpayer.com">
+        </a>
+        <nav class="main-navigation">
+            <ul>
+                <li><a href="<?php echo esc_url(home_url('/')); ?>">Home</a></li>
+                <li><a href="<?php echo esc_url(home_url('/petition/')); ?>">Petitions</a></li>
+                <li><a href="<?php echo esc_url(home_url('/donation/')); ?>">Donations</a></li>
+            </ul>
+        </nav>
     </div>
 </header>
