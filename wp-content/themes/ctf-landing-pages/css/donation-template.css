@@ -773,18 +773,15 @@ body:not(.frequency-monthly):not(.frequency-once) .onetime-mag-text {
 }
 
 .notification-title {
-  font-weight: 700;
-  font-size: 22px;
-  color: #1a2a3a;
-  margin-bottom: 12px;
-  letter-spacing: -0.02em;
+  display: none;
 }
 
 .notification-message {
-  font-size: 16px;
-  color: #6c757d;
+  font-size: 18px;
+  color: #1a2a3a;
   line-height: 1.6;
   margin: 0;
+  font-weight: 500;
 }
 
 .notification-close {
