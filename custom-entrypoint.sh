@@ -186,6 +186,18 @@ if ! wp core is-installed --path="$DOCROOT" --allow-root; then
     --skip-email \
     --allow-root
   echo "✓ WordPress installed successfully!"
+else
+  echo "WordPress already installed, updating site URL..."
+  # Always update the site URL to match current environment
+  CURRENT_URL=$(wp option get siteurl --path="$DOCROOT" --allow-root 2>/dev/null || echo "")
+  if [ "$CURRENT_URL" != "$SITE_URL" ]; then
+    echo "Updating WordPress URL from '$CURRENT_URL' to '$SITE_URL'"
+    wp option update home "$SITE_URL" --path="$DOCROOT" --allow-root
+    wp option update siteurl "$SITE_URL" --path="$DOCROOT" --allow-root
+    echo "✓ WordPress URLs updated successfully!"
+  else
+    echo "✓ WordPress URL already set to $SITE_URL"
+  fi
 fi
 
 # WP Offload Media Lite is pre-installed in Docker image, just activate it
