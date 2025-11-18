@@ -94,7 +94,7 @@ $show_onetime = in_array('onetime', $frequency_display);
     </div>
     <?php endif; ?>
 
-    <form class="donation-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+    <form id="donation-form" class="donation-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
         <input type="hidden" name="action" value="process_donation" />
         <input type="hidden" name="donation_frequency" id="donation_frequency" value="once" />
         <input type="hidden" name="campaign_id" value="<?php echo esc_attr($campaign_id); ?>" />
