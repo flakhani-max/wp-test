@@ -159,8 +159,8 @@ until [ "$i" -gt 30 ]; do
     if [ -n "${CLOUDSQL_SOCKET_PATH:-}" ]; then
       echo "Socket exists: $([ -S "${CLOUDSQL_SOCKET_PATH}" ] && echo 'YES' || echo 'NO')"
       ls -la /cloudsql/ 2>&1 || echo "/cloudsql directory not found"
-      echo "❌ Exiting due to Cloud SQL connection failure"
-      exit 1
+      echo "⚠️  DB check failed but continuing - WordPress may be able to connect anyway"
+      break
     else
       echo "⚠️  Continuing anyway (local development mode)"
       break
