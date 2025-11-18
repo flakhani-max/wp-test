@@ -871,6 +871,20 @@ function initializePayPal() {
                 showError('Please select a donation amount first.');
                 return false;
             }
+            
+            // Check if there are any error messages on screen
+            const errorMessages = document.querySelectorAll('.error-message, .is-invalid, #card-errors:not(:empty)');
+            if (errorMessages.length > 0) {
+                showError('Please fix the errors in the form before proceeding.');
+                return false;
+            }
+            
+            // Validate required form fields
+            const form = document.getElementById('donation-form');
+            if (!validateForm()) {
+                showError('Please fill in all required fields (name and email).');
+                return false;
+            }
         },
         
         // Called when button is clicked
