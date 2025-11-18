@@ -154,13 +154,17 @@ until [ "$i" -gt 30 ]; do
   fi
   
   if [ "$i" -ge 30 ]; then
-    echo "❌ Database not reachable after 60s."
+    echo "⚠️  Database check failed after 60s."
     echo "Cloud SQL socket: ${CLOUDSQL_SOCKET_PATH:-not set}"
     if [ -n "${CLOUDSQL_SOCKET_PATH:-}" ]; then
       echo "Socket exists: $([ -S "${CLOUDSQL_SOCKET_PATH}" ] && echo 'YES' || echo 'NO')"
       ls -la /cloudsql/ 2>&1 || echo "/cloudsql directory not found"
+      echo "❌ Exiting due to Cloud SQL connection failure"
+      exit 1
+    else
+      echo "⚠️  Continuing anyway (local development mode)"
+      break
     fi
-    exit 1
   fi
   
   echo "Waiting for DB... (attempt $i/30)"
@@ -229,9 +233,9 @@ else
   
   # Create new user
   wp user create "$ADMIN_USER" "$ADMIN_EMAIL" \
-    --user_pass="$ADMIN_PASS" \
+  --user_pass="$ADMIN_PASS" \
     --role=administrator \
-    --path="$DOCROOT" \
+  --path="$DOCROOT" \
     --allow-root 2>&1 && echo "✓ Admin user created successfully!" || echo "❌ Failed to create admin user"
 fi
 
@@ -255,9 +259,9 @@ fi
 # Install ACF Pro if license key is provided
 # ACF Pro is pre-installed in Docker image, just activate it
 echo "Activating ACF Pro..."
-if wp plugin is-installed advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
-  wp plugin activate advanced-custom-fields-pro --path="$DOCROOT" --allow-root || true
-  echo "✓ ACF Pro activated!"
+  if wp plugin is-installed advanced-custom-fields-pro --path="$DOCROOT" --allow-root; then
+    wp plugin activate advanced-custom-fields-pro --path="$DOCROOT" --allow-root || true
+    echo "✓ ACF Pro activated!"
 else
   echo "⚠️ ACF Pro not found (should be pre-installed in image)"
 fi

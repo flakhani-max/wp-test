@@ -78,12 +78,7 @@ $show_onetime = in_array('onetime', $frequency_display);
 
     <?php if ($show_monthly && $show_onetime): ?>
     <div class="donation-options">
-        <div class="monthly-prompt">
-            <p>A monthly gift will go even further to hold politicians accountable and fight for lower taxes and against government waste.</p>
-        </div>
-        
         <div class="toggle-wrapper">
-            <span class="prompt-arrow">↓</span>
             <div class="donation-frequency-toggle">
                 <input type="radio" id="frequency-monthly" name="frequency_toggle" value="monthly">
                 <input type="radio" id="frequency-once" name="frequency_toggle" value="once" checked>
@@ -91,6 +86,10 @@ $show_onetime = in_array('onetime', $frequency_display);
                 <label for="frequency-monthly" class="toggle-label">DONATE MONTHLY</label>
                 <label for="frequency-once" class="toggle-label">DONATE TODAY</label>
             </div>
+        </div>
+        
+        <div class="monthly-prompt">
+            <span class="prompt-arrow">↓</span><p>A monthly gift will go even further to hold politicians accountable and fight for lower taxes and against government waste.</p>
         </div>
     </div>
     <?php endif; ?>

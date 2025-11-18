@@ -199,8 +199,8 @@ jobs:
           docker build \
             --build-arg ACF_PRO_KEY="${ACF_PRO_KEY}" \
             -t ${IMAGE_BASE}:${GITHUB_SHA} \
-            -t ${IMAGE_BASE}:latest \
-            -f Dockerfile .
+                       -t ${IMAGE_BASE}:latest \
+                       -f Dockerfile .
 
       - name: Push Docker image to Artifact Registry
         run: |
@@ -278,11 +278,11 @@ jobs:
             --allow-unauthenticated \
             --service-account "${RUNTIME_SA_EMAIL}" \
             --set-env-vars "${ENV_VARS}" \
-           --add-cloudsql-instances "${CLOUD_SQL_CONNECTION_NAME}" \
-           --memory 1Gi \
-           --cpu 1 \
-           --timeout 300 \
-           --max-instances 10 \
+            --add-cloudsql-instances "${CLOUD_SQL_CONNECTION_NAME}" \
+            --memory 1Gi \
+            --cpu 1 \
+            --timeout 300 \
+            --max-instances 10 \
            --min-instances 1
 
       - name: Get Service URL

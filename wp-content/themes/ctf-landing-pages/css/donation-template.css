@@ -39,16 +39,21 @@
 }
 
 .monthly-prompt {
-  margin-bottom: 1rem;
+  margin: 1rem 0 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 30%;
 }
 
 .monthly-prompt p {
-  margin: 0 auto 0.75rem;
+  margin: -10px 0 -5px 0;
   font-size: 0.9rem;
   line-height: 1.4;
   color: #1a2a3a;
-  max-width: 500px;
-  text-align: center;
+  max-width: 400px;
+  text-align: left;
 }
 
 .toggle-wrapper {
@@ -58,17 +63,14 @@
 }
 
 .prompt-arrow {
-  position: absolute;
-  top: -2.5rem;
-  left: 25%;
-  transform: translateX(-50%);
+  flex-shrink: 0;
   width: 39px;
   height: 30px;
+  margin: -15px 0.5rem 0 0;
   background-image: url('https://www.taxpayer.com/media/black_arrow_25.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  z-index: 10;
   font-size: 0;
 }
 
@@ -595,13 +597,13 @@ body:not(.frequency-monthly):not(.frequency-once) .onetime-mag-text {
     top: -10px;
   }
   
+  .monthly-prompt {
+    padding-left: 25%;
+  }
+
   .monthly-prompt p {
     max-width: 100%;
     font-size: 0.85rem;
-  }
-  
-  .monthly-prompt .prompt-arrow {
-    display: none;
   }
 }
 
