@@ -252,9 +252,26 @@ function initializePaymentRequestButton() {
 }
 
 /**
+ * Check if required fields are filled
+ */
+function areRequiredFieldsFilled() {
+    const form = document.getElementById('donation-form');
+    if (!form) return false;
+    
+    const firstName = form.querySelector('[name="first_name"]')?.value.trim();
+    const lastName = form.querySelector('[name="last_name"]')?.value.trim();
+    const email = form.querySelector('[name="email"]')?.value.trim();
+    
+    return firstName && lastName && email;
+}
+
+/**
  * Update Payment Request Button amount
  */
 function updatePaymentRequestAmount(newAmount) {
+    const requiredFieldsFilled = areRequiredFieldsFilled();
+    const shouldEnable = newAmount > 0 && requiredFieldsFilled;
+    
     if (paymentRequest) {
         if (newAmount > 0) {
             console.log('🔄 Updating Payment Request amount to:', newAmount);
@@ -264,14 +281,18 @@ function updatePaymentRequestAmount(newAmount) {
                     amount: Math.round(newAmount * 100),
                 },
             });
-            enablePaymentRequestButton();
+            if (shouldEnable) {
+                enablePaymentRequestButton();
+            } else {
+                disablePaymentRequestButton();
+            }
         } else {
             console.log('⚠️ Amount is 0, disabling Payment Request button');
             disablePaymentRequestButton();
         }
     } else {
         // If payment request isn't available, still enable/disable PayPal
-        if (newAmount > 0) {
+        if (shouldEnable) {
             enablePaymentRequestButton();
         } else {
             disablePaymentRequestButton();
@@ -510,6 +531,13 @@ function setupFormValidation() {
         field.addEventListener('input', function() {
             if (this.classList.contains('is-invalid')) {
                 validateField(this);
+            }
+            
+            // Check if required fields for PayPal are filled
+            const fieldName = this.getAttribute('name');
+            if (fieldName === 'first_name' || fieldName === 'last_name' || fieldName === 'email') {
+                // Re-check if buttons should be enabled/disabled
+                updatePaymentRequestAmount(selectedAmount);
             }
         });
     });
@@ -872,42 +900,8 @@ function initializePayPal() {
                 return false;
             }
             
-            // Check for required fields without triggering validation UI
-            const form = document.getElementById('donation-form');
-            const firstName = form.querySelector('input[name="first_name"]');
-            const lastName = form.querySelector('input[name="last_name"]');
-            const email = form.querySelector('input[name="email"]');
-            
-            if (!firstName || !firstName.value.trim()) {
-                showError('Please enter your first name.');
-                firstName.focus();
-                return false;
-            }
-            
-            if (!lastName || !lastName.value.trim()) {
-                showError('Please enter your last name.');
-                lastName.focus();
-                return false;
-            }
-            
-            if (!email || !email.value.trim()) {
-                showError('Please enter your email address.');
-                email.focus();
-                return false;
-            }
-            
-            // Validate email format
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email.value)) {
-                showError('Please enter a valid email address.');
-                email.focus();
-                return false;
-            }
-            
-            // Check if there are any visible error messages on screen
-            const errorMessages = document.querySelectorAll('.error-message, .is-invalid');
-            if (errorMessages.length > 0) {
-                showError('Please fix the errors in the form before proceeding.');
+            if (!areRequiredFieldsFilled()) {
+                showError('Please fill in your first name, last name, and email before using PayPal.');
                 return false;
             }
         },
