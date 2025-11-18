@@ -209,10 +209,6 @@ $show_onetime = in_array('onetime', $frequency_display);
         <h3>Other donation options</h3>
         
         <div class="option-list">
-            <p><strong>Debit Cards:</strong> If you have a Visa or Mastercard debit card you can use it to make a donation using the Credit Card Information form above.</p>
-            
-            <p><strong>PayPal:</strong> <a href="https://www.taxpayer.com/utilities/paypal?Id=1&IdCampaigns=18519" target="_blank" rel="noopener">Click here to donate via PayPal</a></p>
-            
             <p><strong>By calling:</strong> 1-800-667-7933</p>
             
             <p><strong>E-transfer:</strong> Send to admin@taxpayer.com</p>
