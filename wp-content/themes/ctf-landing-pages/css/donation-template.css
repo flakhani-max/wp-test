@@ -694,6 +694,121 @@ body:not(.frequency-monthly):not(.frequency-once) .onetime-mag-text {
   max-height: 45px !important;
 }
 
+/* ========================================
+ * Notification Toast
+ * ======================================== */
+
+.notification-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 320px;
+  max-width: 500px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  z-index: 10000;
+  opacity: 0;
+  transform: translateX(400px);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.notification-toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.notification-toast.error {
+  border-left: 4px solid #dd230f;
+}
+
+.notification-toast.success {
+  border-left: 4px solid #28a745;
+}
+
+.notification-toast.warning {
+  border-left: 4px solid #ffc107;
+}
+
+.notification-toast.info {
+  border-left: 4px solid #17a2b8;
+}
+
+.notification-icon {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.notification-toast.error .notification-icon {
+  color: #dd230f;
+}
+
+.notification-toast.success .notification-icon {
+  color: #28a745;
+}
+
+.notification-toast.warning .notification-icon {
+  color: #ffc107;
+}
+
+.notification-toast.info .notification-icon {
+  color: #17a2b8;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1a2a3a;
+  margin-bottom: 5px;
+}
+
+.notification-message {
+  font-size: 14px;
+  color: #6c757d;
+  line-height: 1.5;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  color: #6c757d;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.notification-close:hover {
+  color: #1a2a3a;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .notification-toast {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+    max-width: none;
+    transform: translateY(-100px);
+  }
+  
+  .notification-toast.show {
+    transform: translateY(0);
+  }
+}
+
 /* Show divider only when payment request button is visible */
 .payment-divider {
   display: none;

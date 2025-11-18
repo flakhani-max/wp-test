@@ -824,18 +824,107 @@ function validateExpiry() {
     return isValid;
 }
 
-function showError(message) {
-    // Simple alert for now - could be enhanced with modal or toast
-    alert('Error: ' + message);
+/**
+ * Show notification toast
+ * @param {string} message - The message to display
+ * @param {string} type - Type of notification: 'error', 'success', 'warning', 'info'
+ * @param {string} title - Optional title for the notification
+ */
+function showNotification(message, type = 'info', title = '') {
+    // Remove any existing notifications
+    const existingToast = document.querySelector('.notification-toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    // Set default titles based on type
+    if (!title) {
+        switch(type) {
+            case 'error':
+                title = 'Error';
+                break;
+            case 'success':
+                title = 'Success';
+                break;
+            case 'warning':
+                title = 'Warning';
+                break;
+            default:
+                title = 'Notice';
+        }
+    }
+    
+    // Choose icon based on type
+    let icon = '';
+    switch(type) {
+        case 'error':
+            icon = '⚠️';
+            break;
+        case 'success':
+            icon = '✓';
+            break;
+        case 'warning':
+            icon = '⚡';
+            break;
+        default:
+            icon = 'ℹ️';
+    }
+    
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = `notification-toast ${type}`;
+    toast.innerHTML = `
+        <div class="notification-icon">${icon}</div>
+        <div class="notification-content">
+            <div class="notification-title">${title}</div>
+            <div class="notification-message">${message}</div>
+        </div>
+        <button class="notification-close" aria-label="Close">&times;</button>
+    `;
+    
+    // Add to page
+    document.body.appendChild(toast);
+    
+    // Show toast with animation
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+    
+    // Add close button handler
+    const closeBtn = toast.querySelector('.notification-close');
+    closeBtn.addEventListener('click', () => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    });
+    
+    // Auto-hide after 5 seconds (errors stay longer - 7 seconds)
+    const autoHideTime = type === 'error' ? 7000 : 5000;
+    setTimeout(() => {
+        if (toast.classList.contains('show')) {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }
+    }, autoHideTime);
 }
 
-function showSuccess(message) {
-    // Show success message and redirect or reset form
-    alert(message);
-    // Could redirect to a thank you page:
-    // window.location.href = '/thank-you';
-    // Or reload the page to show a fresh form:
-    // window.location.reload();
+function showError(message, title = 'Error') {
+    showNotification(message, 'error', title);
+}
+
+function showSuccess(message, title = 'Success') {
+    showNotification(message, 'success', title);
+}
+
+function showWarning(message, title = 'Warning') {
+    showNotification(message, 'warning', title);
+}
+
+function showInfo(message, title = 'Notice') {
+    showNotification(message, 'info', title);
 }
 
 // Utility function to trim whitespace and clean currency input
