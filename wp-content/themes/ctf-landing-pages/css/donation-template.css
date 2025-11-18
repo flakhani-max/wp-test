@@ -727,11 +727,12 @@ body:not(.frequency-monthly):not(.frequency-once) .onetime-mag-text {
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  padding: 40px;
+  padding: 0;
   z-index: 10000;
   opacity: 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: center;
+  overflow: hidden;
 }
 
 .notification-toast.show {
@@ -739,31 +740,36 @@ body:not(.frequency-monthly):not(.frequency-once) .onetime-mag-text {
   transform: translate(-50%, -50%) scale(1);
 }
 
-.notification-icon {
-  font-size: 48px;
-  line-height: 1;
-  margin-bottom: 20px;
+.notification-toast::before {
+  content: '';
   display: block;
+  height: 8px;
+  background: #dd230f;
 }
 
-.notification-toast.error .notification-icon {
-  color: #dd230f;
+.notification-toast.error::before {
+  background: #dd230f;
 }
 
-.notification-toast.success .notification-icon {
-  color: #dd230f;
+.notification-toast.success::before {
+  background: #dd230f;
 }
 
-.notification-toast.warning .notification-icon {
-  color: #dd230f;
+.notification-toast.warning::before {
+  background: #dd230f;
 }
 
-.notification-toast.info .notification-icon {
-  color: #dd230f;
+.notification-toast.info::before {
+  background: #dd230f;
+}
+
+.notification-icon {
+  display: none;
 }
 
 .notification-content {
   width: 100%;
+  padding: 32px 40px 40px;
 }
 
 .notification-title {
@@ -811,12 +817,10 @@ body:not(.frequency-monthly):not(.frequency-once) .onetime-mag-text {
   .notification-toast {
     min-width: 280px;
     max-width: 90%;
-    padding: 32px 24px;
   }
   
-  .notification-icon {
-    font-size: 40px;
-    margin-bottom: 16px;
+  .notification-content {
+    padding: 24px;
   }
   
   .notification-title {
