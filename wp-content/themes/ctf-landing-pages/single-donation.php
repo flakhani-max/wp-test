@@ -188,6 +188,9 @@ $show_onetime = in_array('onetime', $frequency_display);
             <!-- Payment Request Button (Google Pay, Apple Pay, etc.) -->
             <div id="payment-request-button" class="payment-request-button-container"></div>
             
+            <!-- PayPal Button -->
+            <div id="paypal-button-container" class="paypal-button-container"></div>
+            
             <div class="payment-divider">
                 <span>or pay with card</span>
             </div>
@@ -239,4 +242,7 @@ window.donationAmounts = {
 
 // Pass Stripe publishable key to JavaScript
 window.stripePublishableKey = '<?php echo esc_js(getenv('STRIPE_PUBLISHABLE_KEY')); ?>';
+
+// Pass PayPal client ID to JavaScript  
+window.paypalClientId = '<?php echo esc_js(getenv('PAYPAL_CLIENT_ID')); ?>';
 </script>

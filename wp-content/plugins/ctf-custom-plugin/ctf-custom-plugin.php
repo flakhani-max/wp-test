@@ -20,6 +20,7 @@ require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/logging.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/logging-admin.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/secret-manager.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/stripe-payment-handler.php';
+require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/paypal-payment-handler.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/petitions.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/mailchimp.php';
 

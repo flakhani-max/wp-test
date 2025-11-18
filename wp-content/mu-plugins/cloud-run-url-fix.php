@@ -17,11 +17,9 @@ function cloudrun_fix_url($url) {
     }
     
     // Check if we have forwarded headers from Cloud Run
-    // Prefer X-Forwarded-Host (set by Cloudflare) over HTTP_HOST
-    $host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST'] ?? null;
-    $protocol = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? 'https';
-    
-    if ($host) {
+    if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && isset($_SERVER['HTTP_HOST'])) {
+        $protocol = $_SERVER['HTTP_X_FORWARDED_PROTO'];
+        $host = $_SERVER['HTTP_HOST'];
         $detected_url = $protocol . '://' . $host;
         
         // Only update if it's different and valid
@@ -46,11 +44,9 @@ function cloudrun_fix_asset_url($url) {
     }
     
     // Get the correct hostname from headers
-    // Prefer X-Forwarded-Host (set by Cloudflare) over HTTP_HOST
-    $correct_host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST'] ?? null;
-    $correct_protocol = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? 'https';
-    
-    if ($correct_host) {
+    if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && isset($_SERVER['HTTP_HOST'])) {
+        $correct_protocol = $_SERVER['HTTP_X_FORWARDED_PROTO'];
+        $correct_host = $_SERVER['HTTP_HOST'];
         
         // Parse the URL
         $parsed = parse_url($url);
@@ -79,11 +75,9 @@ function cloudrun_fix_redirect($location, $status) {
         return $location;
     }
     
-    // Prefer X-Forwarded-Host (set by Cloudflare) over HTTP_HOST
-    $host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST'] ?? null;
-    $protocol = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? 'https';
-    
-    if ($host) {
+    if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && isset($_SERVER['HTTP_HOST'])) {
+        $protocol = $_SERVER['HTTP_X_FORWARDED_PROTO'];
+        $host = $_SERVER['HTTP_HOST'];
         $correct_base = $protocol . '://' . $host;
         
         // Replace any incorrect base URL in the redirect location

@@ -36,7 +36,15 @@ function ctf_enqueue_assets() {
             'https://js.stripe.com/v3/', 
             [], null, true
         );
-        // Donation template scripts (depends on Stripe.js)
+        // Load PayPal SDK
+        $paypal_client_id = getenv('PAYPAL_CLIENT_ID');
+        if (!empty($paypal_client_id)) {
+            wp_enqueue_script('paypal-sdk', 
+                'https://www.paypal.com/sdk/js?client-id=' . $paypal_client_id . '&currency=CAD&intent=capture&components=buttons', 
+                [], null, true
+            );
+        }
+        // Donation template scripts (depends on Stripe.js and PayPal SDK)
         wp_enqueue_script('donation-template', 
             get_template_directory_uri() . '/js/donation-template.js', 
             ['stripe-js'], '1.0', true

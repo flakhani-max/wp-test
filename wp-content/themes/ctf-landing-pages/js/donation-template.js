@@ -795,3 +795,122 @@ function cleanCurrencyInput(input) {
         input.value = input.value.trim().replace(/[^0-9.]/g, '');
     }
 }
+
+/**
+ * Initialize PayPal Buttons
+ */
+function initializePayPal() {
+    // Check if PayPal SDK is loaded and client ID is available
+    if (typeof paypal === 'undefined' || !window.paypalClientId) {
+        console.log('ℹ️ PayPal not configured or SDK not loaded');
+        return;
+    }
+    
+    console.log('🔄 Initializing PayPal buttons...');
+    
+    paypal.Buttons({
+        style: {
+            layout: 'horizontal',
+            color: 'gold',
+            shape: 'rect',
+            label: 'paypal',
+            height: 45
+        },
+        
+        // Called when button is clicked
+        createOrder: function(data, actions) {
+            // Validate form fields
+            const form = document.getElementById('donation-form');
+            const formData = new FormData(form);
+            
+            const firstName = formData.get('first_name');
+            const lastName = formData.get('last_name');
+            const email = formData.get('email');
+            
+            if (!firstName || !lastName || !email || selectedAmount <= 0) {
+                showError('Please fill in your name, email, and select a donation amount.');
+                return Promise.reject();
+            }
+            
+            console.log('💰 Creating PayPal order for $', selectedAmount);
+            
+            // Create the order
+            return actions.order.create({
+                purchase_units: [{
+                    description: isRecurring ? 
+                        `Monthly Donation - Canadian Taxpayers Federation` : 
+                        `One-time Donation - Canadian Taxpayers Federation`,
+                    amount: {
+                        currency_code: 'CAD',
+                        value: selectedAmount.toFixed(2)
+                    }
+                }],
+                application_context: {
+                    shipping_preference: 'NO_SHIPPING'
+                }
+            });
+        },
+        
+        // Called when payment is approved
+        onApprove: async function(data, actions) {
+            console.log('✅ PayPal payment approved:', data.orderID);
+            
+            // Capture the order
+            const order = await actions.order.capture();
+            console.log('📦 PayPal order captured:', order);
+            
+            // Get form data
+            const form = document.getElementById('donation-form');
+            const formData = new FormData(form);
+            
+            // Add PayPal data to form submission
+            formData.append('action', 'process_paypal_donation');
+            formData.append('paypal_order_id', data.orderID);
+            formData.append('payment_source', 'paypal');
+            formData.append('amount', selectedAmount.toFixed(2));
+            formData.append('donation_frequency', isRecurring ? 'monthly' : 'once');
+            
+            try {
+                // Send to backend
+                const response = await fetch('/wp-admin/admin-ajax.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                console.log('📡 Backend response:', result);
+                
+                if (!result.success) {
+                    throw new Error(result.data.message || 'Failed to process donation');
+                }
+                
+                // Redirect to thank you page
+                window.location.href = '/thank-you-for-your-donation/';
+                
+            } catch (error) {
+                console.error('❌ Error processing PayPal donation:', error);
+                showError(error.message || 'An error occurred processing your donation.');
+            }
+        },
+        
+        // Called when payment is cancelled
+        onCancel: function(data) {
+            console.log('⚠️ PayPal payment cancelled');
+            showError('Payment was cancelled. Please try again.');
+        },
+        
+        // Called when an error occurs
+        onError: function(err) {
+            console.error('❌ PayPal error:', err);
+            showError('An error occurred with PayPal. Please try another payment method.');
+        }
+    }).render('#paypal-button-container');
+    
+    console.log('✅ PayPal buttons initialized');
+}
+
+// Initialize PayPal after DOM is loaded and after amount selection is available
+document.addEventListener('DOMContentLoaded', function() {
+    // Delay PayPal initialization slightly to ensure everything else is ready
+    setTimeout(initializePayPal, 500);
+});

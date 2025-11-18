@@ -678,6 +678,12 @@ body:not(.frequency-monthly):not(.frequency-once) .onetime-mag-text {
   height: 44px;
 }
 
+/* PayPal Button Container */
+.paypal-button-container {
+  margin-bottom: 1.5rem;
+  min-height: 45px;
+}
+
 /* Show divider only when payment request button is visible */
 .payment-divider {
   display: none;
