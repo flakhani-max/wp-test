@@ -269,18 +269,18 @@ function updatePaymentRequestAmount(newAmount) {
             console.log('⚠️ Amount is 0, disabling Payment Request button');
             disablePaymentRequestButton();
         }
-    }
-    
-    // Also update PayPal button state
-    if (newAmount > 0) {
-        enablePayPalButton();
     } else {
-        disablePayPalButton();
+        // If payment request isn't available, still enable/disable PayPal
+        if (newAmount > 0) {
+            enablePaymentRequestButton();
+        } else {
+            disablePaymentRequestButton();
+        }
     }
 }
 
 /**
- * Disable Payment Request Button (Apple Pay, Google Pay, Link)
+ * Disable Payment Request Button (Apple Pay, Google Pay, Link) and PayPal Button
  */
 function disablePaymentRequestButton() {
     const prButtonContainer = document.getElementById('payment-request-button');
@@ -289,24 +289,7 @@ function disablePaymentRequestButton() {
         prButtonContainer.style.opacity = '0.5';
         console.log('🔒 Payment Request Button disabled');
     }
-}
-
-/**
- * Enable Payment Request Button (Apple Pay, Google Pay, Link)
- */
-function enablePaymentRequestButton() {
-    const prButtonContainer = document.getElementById('payment-request-button');
-    if (prButtonContainer) {
-        prButtonContainer.style.pointerEvents = 'auto';
-        prButtonContainer.style.opacity = '1';
-        console.log('🔓 Payment Request Button enabled');
-    }
-}
-
-/**
- * Disable PayPal Button
- */
-function disablePayPalButton() {
+    
     const paypalContainer = document.getElementById('paypal-button-container');
     if (paypalContainer) {
         paypalContainer.style.pointerEvents = 'none';
@@ -316,9 +299,16 @@ function disablePayPalButton() {
 }
 
 /**
- * Enable PayPal Button
+ * Enable Payment Request Button (Apple Pay, Google Pay, Link) and PayPal Button
  */
-function enablePayPalButton() {
+function enablePaymentRequestButton() {
+    const prButtonContainer = document.getElementById('payment-request-button');
+    if (prButtonContainer) {
+        prButtonContainer.style.pointerEvents = 'auto';
+        prButtonContainer.style.opacity = '1';
+        console.log('🔓 Payment Request Button enabled');
+    }
+    
     const paypalContainer = document.getElementById('paypal-button-container');
     if (paypalContainer) {
         paypalContainer.style.pointerEvents = 'auto';
@@ -976,7 +966,7 @@ function initializePayPal() {
     
     // Disable button initially if no amount is selected
     if (selectedAmount <= 0) {
-        disablePayPalButton();
+        disablePaymentRequestButton();
     }
 }
 
