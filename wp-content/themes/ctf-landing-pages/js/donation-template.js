@@ -801,8 +801,18 @@ function cleanCurrencyInput(input) {
  */
 function initializePayPal() {
     // Check if PayPal SDK is loaded and client ID is available
-    if (typeof paypal === 'undefined' || !window.paypalClientId) {
-        console.log('ℹ️ PayPal not configured or SDK not loaded');
+    console.log('🔍 PayPal Check:');
+    console.log('  - PayPal SDK loaded:', typeof paypal !== 'undefined');
+    console.log('  - PayPal Client ID:', window.paypalClientId ? 'Present' : 'Missing');
+    console.log('  - Full Client ID:', window.paypalClientId);
+    
+    if (typeof paypal === 'undefined') {
+        console.error('❌ PayPal SDK not loaded. Check if PAYPAL_CLIENT_ID is set.');
+        return;
+    }
+    
+    if (!window.paypalClientId) {
+        console.error('❌ PayPal Client ID not found in window.paypalClientId');
         return;
     }
     

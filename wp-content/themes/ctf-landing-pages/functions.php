@@ -36,18 +36,23 @@ function ctf_enqueue_assets() {
             'https://js.stripe.com/v3/', 
             [], null, true
         );
+        
         // Load PayPal SDK
         $paypal_client_id = getenv('PAYPAL_CLIENT_ID');
+        $script_dependencies = ['stripe-js'];
+        
         if (!empty($paypal_client_id)) {
             wp_enqueue_script('paypal-sdk', 
                 'https://www.paypal.com/sdk/js?client-id=' . $paypal_client_id . '&currency=CAD&intent=capture&components=buttons', 
                 [], null, true
             );
+            $script_dependencies[] = 'paypal-sdk';
         }
-        // Donation template scripts (depends on Stripe.js and PayPal SDK)
+        
+        // Donation template scripts (depends on Stripe.js and optionally PayPal SDK)
         wp_enqueue_script('donation-template', 
             get_template_directory_uri() . '/js/donation-template.js', 
-            ['stripe-js'], '1.0', true
+            $script_dependencies, '1.0', true
         );
     }
     

@@ -15,6 +15,8 @@ STRIPE_SECRET_KEY=$(gcloud secrets versions access latest --secret=STRIPE_SECRET
 WP_ADMIN_USER=$(gcloud secrets versions access latest --secret=WP_ADMIN_USER --project=$PROJECT_ID)
 WP_ADMIN_PASS=$(gcloud secrets versions access latest --secret=WP_ADMIN_PASS --project=$PROJECT_ID)
 WP_ADMIN_EMAIL=$(gcloud secrets versions access latest --secret=WP_ADMIN_EMAIL --project=$PROJECT_ID)
+PAYPAL_CLIENT_ID=$(gcloud secrets versions access latest --secret=PAYPAL_CLIENT_ID --project=$PROJECT_ID)
+PAYPAL_SECRET=$(gcloud secrets versions access latest --secret=PAYPAL_SECRET --project=$PROJECT_ID)
 
 # Write to .env (gitignored)
 cat > .env << EOF
@@ -30,6 +32,8 @@ STRIPE_SECRET_KEY=$STRIPE_SECRET_KEY
 WP_ADMIN_USER=$WP_ADMIN_USER
 WP_ADMIN_PASS=$WP_ADMIN_PASS
 WP_ADMIN_EMAIL=$WP_ADMIN_EMAIL
+PAYPAL_CLIENT_ID=$PAYPAL_CLIENT_ID
+PAYPAL_SECRET=$PAYPAL_SECRET
 EOF
 
 echo "✅ All secrets saved to .env"
