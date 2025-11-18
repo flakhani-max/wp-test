@@ -684,6 +684,16 @@ body:not(.frequency-monthly):not(.frequency-once) .onetime-mag-text {
   min-height: 45px;
 }
 
+/* Hide PayPal tagline */
+.paypal-button-container .paypal-button-tagline {
+  display: none !important;
+}
+
+.paypal-button-container iframe {
+  /* Force hide any PayPal tagline/text below button */
+  max-height: 45px !important;
+}
+
 /* Show divider only when payment request button is visible */
 .payment-divider {
   display: none;
