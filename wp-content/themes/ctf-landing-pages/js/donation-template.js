@@ -832,6 +832,10 @@ function validateExpiry() {
  */
 function showNotification(message, type = 'info', title = '') {
     // Remove any existing notifications
+    const existingOverlay = document.querySelector('.notification-overlay');
+    if (existingOverlay) {
+        existingOverlay.remove();
+    }
     const existingToast = document.querySelector('.notification-toast');
     if (existingToast) {
         existingToast.remove();
@@ -870,6 +874,11 @@ function showNotification(message, type = 'info', title = '') {
             icon = 'ℹ️';
     }
     
+    // Create overlay backdrop
+    const overlay = document.createElement('div');
+    overlay.className = 'notification-overlay';
+    document.body.appendChild(overlay);
+    
     // Create toast element
     const toast = document.createElement('div');
     toast.className = `notification-toast ${type}`;
@@ -885,28 +894,34 @@ function showNotification(message, type = 'info', title = '') {
     // Add to page
     document.body.appendChild(toast);
     
-    // Show toast with animation
+    // Function to close notification
+    const closeNotification = () => {
+        overlay.classList.remove('show');
+        toast.classList.remove('show');
+        setTimeout(() => {
+            overlay.remove();
+            toast.remove();
+        }, 300);
+    };
+    
+    // Show toast and overlay with animation
     setTimeout(() => {
+        overlay.classList.add('show');
         toast.classList.add('show');
     }, 10);
     
     // Add close button handler
     const closeBtn = toast.querySelector('.notification-close');
-    closeBtn.addEventListener('click', () => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-            toast.remove();
-        }, 300);
-    });
+    closeBtn.addEventListener('click', closeNotification);
+    
+    // Close when clicking overlay
+    overlay.addEventListener('click', closeNotification);
     
     // Auto-hide after 5 seconds (errors stay longer - 7 seconds)
     const autoHideTime = type === 'error' ? 7000 : 5000;
     setTimeout(() => {
         if (toast.classList.contains('show')) {
-            toast.classList.remove('show');
-            setTimeout(() => {
-                toast.remove();
-            }, 300);
+            closeNotification();
         }
     }, autoHideTime);
 }
