@@ -747,19 +747,19 @@ body:not(.frequency-monthly):not(.frequency-once) .onetime-mag-text {
 }
 
 .notification-toast.error .notification-icon {
-  color: #dd230f;
+  color: #FF6B6B;
 }
 
 .notification-toast.success .notification-icon {
-  color: #28a745;
+  color: #51CF66;
 }
 
 .notification-toast.warning .notification-icon {
-  color: #ffc107;
+  color: #FFD93D;
 }
 
 .notification-toast.info .notification-icon {
-  color: #17a2b8;
+  color: #4DABF7;
 }
 
 .notification-content {
