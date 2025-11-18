@@ -845,16 +845,16 @@ function showNotification(message, type = 'info', title = '') {
     if (!title) {
         switch(type) {
             case 'error':
-                title = 'Oops!';
+                title = 'Just a moment';
                 break;
             case 'success':
-                title = 'Success!';
+                title = 'All set!';
                 break;
             case 'warning':
-                title = 'Just a heads up';
+                title = 'Heads up';
                 break;
             default:
-                title = 'Hey there';
+                title = 'Notice';
         }
     }
     
@@ -862,16 +862,16 @@ function showNotification(message, type = 'info', title = '') {
     let icon = '';
     switch(type) {
         case 'error':
-            icon = '💡';
+            icon = '✋';
             break;
         case 'success':
-            icon = '🎉';
+            icon = '✓';
             break;
         case 'warning':
             icon = '👋';
             break;
         default:
-            icon = '💬';
+            icon = 'ℹ️';
     }
     
     // Create overlay backdrop
