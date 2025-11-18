@@ -872,17 +872,42 @@ function initializePayPal() {
                 return false;
             }
             
-            // Check if there are any error messages on screen
-            const errorMessages = document.querySelectorAll('.error-message, .is-invalid, #card-errors:not(:empty)');
-            if (errorMessages.length > 0) {
-                showError('Please fix the errors in the form before proceeding.');
+            // Check for required fields without triggering validation UI
+            const form = document.getElementById('donation-form');
+            const firstName = form.querySelector('input[name="first_name"]');
+            const lastName = form.querySelector('input[name="last_name"]');
+            const email = form.querySelector('input[name="email"]');
+            
+            if (!firstName || !firstName.value.trim()) {
+                showError('Please enter your first name.');
+                firstName.focus();
                 return false;
             }
             
-            // Validate required form fields
-            const form = document.getElementById('donation-form');
-            if (!validateForm()) {
-                showError('Please fill in all required fields (name and email).');
+            if (!lastName || !lastName.value.trim()) {
+                showError('Please enter your last name.');
+                lastName.focus();
+                return false;
+            }
+            
+            if (!email || !email.value.trim()) {
+                showError('Please enter your email address.');
+                email.focus();
+                return false;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value)) {
+                showError('Please enter a valid email address.');
+                email.focus();
+                return false;
+            }
+            
+            // Check if there are any visible error messages on screen
+            const errorMessages = document.querySelectorAll('.error-message, .is-invalid');
+            if (errorMessages.length > 0) {
+                showError('Please fix the errors in the form before proceeding.');
                 return false;
             }
         },
