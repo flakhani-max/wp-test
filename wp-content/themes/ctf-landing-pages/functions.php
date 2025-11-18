@@ -43,7 +43,7 @@ function ctf_enqueue_assets() {
         
         if (!empty($paypal_client_id)) {
             wp_enqueue_script('paypal-sdk', 
-                'https://www.paypal.com/sdk/js?client-id=' . $paypal_client_id . '&currency=CAD&intent=capture&components=buttons', 
+                'https://www.paypal.com/sdk/js?client-id=' . $paypal_client_id . '&currency=CAD&intent=capture&components=buttons&disable-funding=paylater,credit', 
                 [], null, true
             );
             $script_dependencies[] = 'paypal-sdk';
