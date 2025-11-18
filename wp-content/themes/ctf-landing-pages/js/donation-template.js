@@ -270,6 +270,13 @@ function updatePaymentRequestAmount(newAmount) {
             disablePaymentRequestButton();
         }
     }
+    
+    // Also update PayPal button state
+    if (newAmount > 0) {
+        enablePayPalButton();
+    } else {
+        disablePayPalButton();
+    }
 }
 
 /**
@@ -293,6 +300,30 @@ function enablePaymentRequestButton() {
         prButtonContainer.style.pointerEvents = 'auto';
         prButtonContainer.style.opacity = '1';
         console.log('🔓 Payment Request Button enabled');
+    }
+}
+
+/**
+ * Disable PayPal Button
+ */
+function disablePayPalButton() {
+    const paypalContainer = document.getElementById('paypal-button-container');
+    if (paypalContainer) {
+        paypalContainer.style.pointerEvents = 'none';
+        paypalContainer.style.opacity = '0.5';
+        console.log('🔒 PayPal Button disabled');
+    }
+}
+
+/**
+ * Enable PayPal Button
+ */
+function enablePayPalButton() {
+    const paypalContainer = document.getElementById('paypal-button-container');
+    if (paypalContainer) {
+        paypalContainer.style.pointerEvents = 'auto';
+        paypalContainer.style.opacity = '1';
+        console.log('🔓 PayPal Button enabled');
     }
 }
 
@@ -827,6 +858,31 @@ function initializePayPal() {
             height: 45
         },
         
+        // Disable button if no amount selected
+        onInit: function(data, actions) {
+            // Disable button initially if no amount is selected
+            if (selectedAmount <= 0) {
+                actions.disable();
+            }
+            
+            // Re-check whenever amount changes (this runs on each render)
+            const checkAmount = setInterval(function() {
+                if (selectedAmount > 0) {
+                    actions.enable();
+                } else {
+                    actions.disable();
+                }
+            }, 100);
+        },
+        
+        onClick: function() {
+            // Extra validation before PayPal opens
+            if (selectedAmount <= 0) {
+                showError('Please select a donation amount first.');
+                return false;
+            }
+        },
+        
         // Called when button is clicked
         createOrder: function(data, actions) {
             // Validate form fields
@@ -917,6 +973,11 @@ function initializePayPal() {
     }).render('#paypal-button-container');
     
     console.log('✅ PayPal buttons initialized');
+    
+    // Disable button initially if no amount is selected
+    if (selectedAmount <= 0) {
+        disablePayPalButton();
+    }
 }
 
 // Initialize PayPal after DOM is loaded and after amount selection is available
