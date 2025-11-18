@@ -883,12 +883,12 @@ function showNotification(message, type = 'info', title = '') {
     const toast = document.createElement('div');
     toast.className = `notification-toast ${type}`;
     toast.innerHTML = `
+        <button class="notification-close" aria-label="Close">&times;</button>
         <div class="notification-icon">${icon}</div>
         <div class="notification-content">
             <div class="notification-title">${title}</div>
             <div class="notification-message">${message}</div>
         </div>
-        <button class="notification-close" aria-label="Close">&times;</button>
     `;
     
     // Add to page
