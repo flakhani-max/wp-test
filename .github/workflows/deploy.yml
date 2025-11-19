@@ -53,6 +53,8 @@ jobs:
             acf_pro_key:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/ACF_PRO_KEY
             stripe_publishable_key:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/STRIPE_PUBLISHABLE_KEY
             stripe_secret_key:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/STRIPE_SECRET_KEY
+            paypal_client_id:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/PAYPAL_CLIENT_ID
+            paypal_secret:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/PAYPAL_SECRET
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -233,6 +235,8 @@ jobs:
           WP_MEDIA_SA_KEY=$(echo -n '${{ steps.secrets.outputs.wp_media_sa_key }}' | base64 | tr -d '\n')
           STRIPE_PUBLISHABLE_KEY='${{ steps.secrets.outputs.stripe_publishable_key }}'
           STRIPE_SECRET_KEY='${{ steps.secrets.outputs.stripe_secret_key }}'
+          PAYPAL_CLIENT_ID='${{ steps.secrets.outputs.paypal_client_id }}'
+          PAYPAL_SECRET='${{ steps.secrets.outputs.paypal_secret }}'
 
           # Build environment variables safely
           ENV_VARS="WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}"
@@ -248,6 +252,8 @@ jobs:
           ENV_VARS="${ENV_VARS},ACF_PRO_KEY=${ACF_PRO_KEY}"
           ENV_VARS="${ENV_VARS},STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}"
           ENV_VARS="${ENV_VARS},STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}"
+          ENV_VARS="${ENV_VARS},PAYPAL_CLIENT_ID=${PAYPAL_CLIENT_ID}"
+          ENV_VARS="${ENV_VARS},PAYPAL_SECRET=${PAYPAL_SECRET}"
 
           # Add optional variables if set
           if [ -n "${WP_URL}" ]; then
