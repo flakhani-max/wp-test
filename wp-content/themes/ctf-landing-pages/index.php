@@ -38,6 +38,26 @@ get_header('custom');
                 )
             )
         ));
+
+        $recent_donations= new WP_Query(array(
+            'post_type' => 'donation',
+            'posts_per_page' => 4,
+            'post_status' => 'publish',
+            'meta_query' => array(
+                'relation' => 'OR',
+                array(
+                    'key' => 'donation_active',
+                    'value' => '1',
+                    'compare' => '='
+                ),
+                array(
+                    'key' => 'donation_active',
+                    'compare' => 'NOT EXISTS'
+                )
+            )
+        ));
+
+        
         ?>
 
         <?php if ($recent_petitions->have_posts()) : ?>
@@ -46,7 +66,7 @@ get_header('custom');
                     <h2>Petitions</h2>
                 </div>
                 
-                <div class="petition-grid">
+                <div class="petition-archive-grid">
                     <?php while ($recent_petitions->have_posts()) : $recent_petitions->the_post(); ?>
                         <?php 
                         // Set context for petition card template part
@@ -65,7 +85,42 @@ get_header('custom');
                         View All Petitions
                     </a>
                 </div>
-        </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($recent_donations->have_posts()) : ?>
+            <div class="content-block">
+                <div class="section-header">
+                    <h2>Campaigns</h2>
+                </div>
+                
+                <div class="donation-archive-grid">
+                    <?php while ($recent_donations->have_posts()) : $recent_donations->the_post(); ?>
+                        <?php 
+                        // Get the post slug
+                        $post_slug = get_post_field('post_name', get_the_ID());
+                        // Skip if it's the donate page
+                        if ($post_slug === 'donate' ) {
+                            continue;
+                        }
+                        
+                        // Set context for petition card template part
+                        $context = 'featured';
+                        $show_excerpt_length = 20;
+                        $show_category = false;
+                        
+                        get_template_part('template-parts/donation-card', null, compact('context', 'show_excerpt_length', 'show_category'));
+                        ?>
+                    <?php endwhile; ?>
+                    <?php wp_reset_postdata(); ?>
+                </div>
+                
+                <div class="donation-archive-link">
+                    <a href="<?php echo get_post_type_archive_link('donation'); ?>" class="btn btn-secondary">
+                        View All Donations
+                    </a>
+                </div>
+            </div>
         <?php endif; ?>
 
 

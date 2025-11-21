@@ -13,7 +13,18 @@ defined('ABSPATH') || exit;
 </head>
 <body <?php body_class(); ?>>
 <header class="site-header">
-    <div class="header-container">
-        <img src="https://www.taxpayer.com/media/Taxpayer.comVectorStandUpBeHeard.png">
+    <div class="header-content">
+        <a href="<?php echo esc_url(home_url('/')); ?>">
+            <img src="http://taxpayer-media-bucket.storage.googleapis.com/uploads/2025/11/21173106/Taxpayer.comVectorStandUpBeHeard-scaled.png" alt="Taxpayer.com">
+        </a>
+        <nav class="main-navigation">
+            <ul>
+                <li><a href="<?php echo esc_url(home_url('/newsroom/')); ?>">Newsroom</a></li>
+                <li><a href="<?php echo esc_url(home_url('/petitions/')); ?>">Petitions</a></li>
+                <li><a href="<?php echo esc_url(home_url('/donation/')); ?>">Campaigns</a></li>
+                <li><a href="<?php echo esc_url(home_url('/about/')); ?>">About</a></li>
+                <li><a href="<?php echo esc_url(home_url('/donation/donate')); ?>" class="donate-btn">Donate</a></li>
+            </ul>
+        </nav>
     </div>
 </header>

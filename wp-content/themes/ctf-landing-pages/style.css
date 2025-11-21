@@ -71,9 +71,11 @@ a:hover {
 
 /* Site Header */
 .site-header {
-  color:#dd230f;
-  padding: 0.5em 0 1em 0;
+  background: #ffffff;
+  color: #fff;
+  padding: 1rem 0;
   text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .header-container {
@@ -93,6 +95,7 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 3rem;
 }
 
 .header-content a {
@@ -120,7 +123,7 @@ a:hover {
 }
 
 .main-navigation a {
-  color: #fff;
+  color: #000;
   text-decoration: none;
   font-size: 1rem;
   font-weight: 500;
@@ -131,8 +134,21 @@ a:hover {
 }
 
 .main-navigation a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.05);
   text-decoration: none;
+}
+
+.main-navigation a.donate-btn {
+  background: #fff;
+  color: #dd230f;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+}
+
+.main-navigation a.donate-btn:hover {
+  background: #f0f0f0;
+  color: #c41f0d;
 }
 
 .site-header .container {
@@ -351,7 +367,9 @@ a:hover {
   padding: 0 1rem;
 }
 
-.petition-card.featured {
+.petition-card.featured,
+.donation-card.featured,
+.newsroom-card.featured {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -359,20 +377,9 @@ a:hover {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.donation-card.featured {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.petition-card.featured:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.donation-card.featured:hover {
+.petition-card.featured:hover,
+.donation-card.featured:hover,
+.newsroom-card.featured:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
@@ -453,6 +460,12 @@ a:hover {
   line-height: 1.6;
 }
 
+.card-date {
+  color: #6a7a8a;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
 .petition-stats {
   margin: 1rem 0;
   padding: 1rem;
@@ -525,14 +538,17 @@ a:hover {
   font-weight: bold;
 }
 
-.petition-archive-link {
+.petition-archive-link,
+.donation-archive-link {
   text-align: center;
   margin-top: 2rem;
   padding: 0 1rem;
 }
 
-/* Petition Archive Page */
-.petition-archive {
+/* Petition, Donation & Newsroom Archive Pages */
+.petition-archive,
+.donation-archive,
+.newsroom-archive {
   max-width: 1200px;
   margin: 2rem auto;
 }
@@ -557,14 +573,18 @@ a:hover {
   color: #fff;
 }
 
-.petition-archive-grid {
+.petition-archive-grid,
+.donation-archive-grid,
+.newsroom-archive-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2rem;
   margin: 2rem 0;
 }
 
-.petition-card.archive {
+.petition-card.archive,
+.donation-card.archive,
+.newsroom-card.archive {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -572,20 +592,9 @@ a:hover {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.donation-card.archive {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.petition-card.archive:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-.donation-card.archive:hover {
+.petition-card.archive:hover,
+.donation-card.archive:hover,
+.newsroom-card.archive:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
@@ -625,7 +634,9 @@ a:hover {
   font-size: 0.8rem;
 }
 
-.no-petitions {
+.no-petitions,
+.no-donations,
+.no-newsroom {
   text-align: center;
   padding: 3rem 1rem;
   color: #6c757d;
@@ -822,6 +833,7 @@ a:hover {
     gap: 1rem;
     padding: 0;
   }
+  
   
   .petition-content {
     padding: 1rem;

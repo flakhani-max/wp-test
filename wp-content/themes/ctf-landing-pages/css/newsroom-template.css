@@ -1,0 +1,75 @@
+/* ========================================
+   NEWSROOM TEMPLATE STYLES
+   Template-specific styles for newsroom pages
+======================================== */
+
+/* Main Newsroom Container */
+.newsroom-template {
+  max-width: 900px;
+  margin: 2em auto;
+}
+.newsroom-content {
+  display: inline-block;
+}
+
+.newsroom-template h1 {
+  font-size: 2em;
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+
+/* Newsroom Content */
+.newsroom-intro p {
+  font-size: 1.1em;
+  margin: 0.5em 0;
+}
+
+.newsroom-cta {
+  font-weight: 500;
+}
+
+/* Newsroom Image Styles */
+.newsroom-image img {
+  max-width: 300px;
+  height: auto;
+  float: left;
+  margin-right: 2em;
+  border-radius: 6px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+}
+
+/* Footer Content */
+.newsroom-privacy {
+  margin-top: 1em;
+  font-size: 0.95em;
+  color: #6a7a8a;
+  text-align: center;
+}
+
+/* Newsroom Meta Info */
+.newsroom-meta {
+  text-align: center;
+  color: #6a7a8a;
+  font-size: 0.9em;
+  margin-bottom: 1.5em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.newsroom-meta .date,
+.newsroom-meta .category {
+  display: inline-block;
+  margin: 0 0.5em;
+}
+
+/* Responsive Overrides */
+@media (max-width: 700px) {
+  .newsroom-template {
+    padding: 1em 0.5em;
+  }
+  .newsroom-image img {
+    max-width: 100%;
+    margin: auto;
+  }
+}
+

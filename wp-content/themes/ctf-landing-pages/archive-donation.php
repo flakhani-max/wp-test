@@ -4,7 +4,7 @@
  * Displays all donations in a grid layout
  */
 
-get_header();
+get_header('custom');
 ?>
 
 <div class="donation-archive card">
@@ -25,6 +25,12 @@ get_header();
             <div class="donation-archive-grid">
                 <?php while (have_posts()) : the_post(); ?>
                     <?php 
+                    $post_slug = get_post_field('post_name', get_the_ID());
+                    // Skip if it's the donate page or matches the title
+                    if ($post_slug === 'donate' ) {
+                        continue;
+                    }
+                    
                     // Set context for donation card template part
                     $context = 'archive';
                     $show_excerpt_length = 25;

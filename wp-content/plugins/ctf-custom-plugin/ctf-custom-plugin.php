@@ -27,6 +27,7 @@ require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/mailchimp.php';
 // Load custom post types
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/donations-custom_post_type.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/petition-custom_post_type.php';
+require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/newsroom-custom_post_type.php';
 
 // Legacy constants for backward compatibility
 if (!defined('CTF_MAILCHIMP_API_KEY')) {
@@ -57,6 +58,9 @@ function ctf_custom_plugin_activate() {
     }
     if (function_exists('ctf_register_petition_post_type')) {
         ctf_register_petition_post_type();
+    }
+    if (function_exists('ctf_register_newsroom_post_type')) {
+        ctf_register_newsroom_post_type();
     }
     
     // Flush rewrite rules to register new post types
