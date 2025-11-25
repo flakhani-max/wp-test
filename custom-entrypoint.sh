@@ -212,6 +212,11 @@ fi
 if wp plugin is-installed ctf-custom-plugin --path="$DOCROOT" --allow-root; then
   echo "Activating CTF Custom Plugin..."
   wp plugin activate ctf-custom-plugin --path="$DOCROOT" --allow-root || true
+  
+  # Flush rewrite rules to register custom post types (petition, donation, newsroom)
+  echo "Flushing rewrite rules to register custom post types..."
+  wp rewrite flush --path="$DOCROOT" --allow-root
+  echo "✓ Rewrite rules flushed!"
 else
   echo "⚠️ CTF Custom Plugin not found"
 fi
