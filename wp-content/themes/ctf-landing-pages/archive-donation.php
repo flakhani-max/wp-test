@@ -10,12 +10,12 @@ get_header('custom');
 <div class="donation-archive card">
     <div class="archive-header">
         <?php if (is_tax('donation_category')) : ?>
-            <h1><?php single_term_title(); ?> Campaigns</h1>
+            <h1><?php single_term_title(); ?>Campaigns</h1>
             <?php if (term_description()) : ?>
                 <p class="archive-subtitle"><?php echo term_description(); ?></p>
             <?php endif; ?>
         <?php else : ?>
-            <h1>Donations</h1>
+            <h1>Campaigns</h1>
             <p class="archive-subtitle">Support important causes and make a difference for Canadian taxpayers</p>
         <?php endif; ?>
     </div>

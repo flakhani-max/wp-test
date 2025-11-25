@@ -71,13 +71,13 @@ $province_labels = array(
                 <?php echo get_the_date('F j, Y'); ?>
             </div>
             <?php if ($newsroom_type) : ?>
-                <span class="newsroom-type"><?php echo esc_html($type_labels[$newsroom_type] ?? $newsroom_type); ?></span>
+                <div class="newsroom-type"><?php echo esc_html($type_labels[$newsroom_type] ?? $newsroom_type); ?></div>
             <?php endif; ?>
             <?php if ($newsroom_province) : ?>
-                <span class="newsroom-province"><?php echo esc_html($province_labels[$newsroom_province] ?? $newsroom_province); ?></span>
+                <div class="newsroom-province"><?php echo esc_html($province_labels[$newsroom_province] ?? $newsroom_province); ?></div>
             <?php endif; ?>
             <?php if ($newsroom_author) : ?>
-                <span class="newsroom-author">By <?php echo esc_html($newsroom_author); ?></span>
+                <div class="newsroom-author"><?php echo esc_html($newsroom_author); ?></div>
             <?php endif; ?>
         </div>
         

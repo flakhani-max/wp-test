@@ -31,5 +31,8 @@ Thumbs.db
 #Secrets
 gcs-key.json
 
+# Deployment scripts (contain production credentials)
+sync-local-to-production.sh
+
 
 

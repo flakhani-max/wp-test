@@ -20,6 +20,107 @@ get_header('custom');
         <?php endif; ?>
     </div>
 
+    <!-- Pinned Posts Section -->
+    <?php
+    // Query for pinned posts (max 3)
+    $pinned_posts = new WP_Query(array(
+        'post_type'      => 'newsroom',
+        'posts_per_page' => 3,
+        'post_status'    => 'publish',
+        'meta_query'     => array(
+            array(
+                'key'   => 'newsroom_pinned',
+                'value' => '1',
+                'compare' => '='
+            )
+        ),
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+        'ignore_sticky_posts' => true,
+    ));
+
+    if ($pinned_posts->have_posts()) :
+    ?>
+        <div class="newsroom-pinned-section">
+            <h2 class="pinned-section-title">Featured</h2>
+            <div class="newsroom-pinned-grid">
+                <?php 
+                while ($pinned_posts->have_posts()) : $pinned_posts->the_post(); 
+                    $context = 'pinned';
+                    $show_excerpt_length = 30;
+                    $show_category = false;
+                    
+                    get_template_part('template-parts/newsroom-card', null, compact('context', 'show_excerpt_length', 'show_category'));
+                endwhile; 
+                wp_reset_postdata();
+                ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <!-- Filter Pane -->
+    <div class="newsroom-filters">
+        <form method="GET" action="<?php echo esc_url(home_url('/newsroom/')); ?>" class="filter-form">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="filter-type">Type</label>
+                    <select name="news_type" id="filter-type">
+                        <option value="">All Types</option>
+                        <option value="news_release" <?php selected(get_query_var('news_type'), 'news_release'); ?>>News Release</option>
+                        <option value="commentary" <?php selected(get_query_var('news_type'), 'commentary'); ?>>Commentary</option>
+                        <option value="blog" <?php selected(get_query_var('news_type'), 'blog'); ?>>Blog</option>
+                        <option value="video" <?php selected(get_query_var('news_type'), 'video'); ?>>Video</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filter-province">Province</label>
+                    <select name="news_province" id="filter-province">
+                        <option value="">All Provinces</option>
+                        <option value="federal" <?php selected(get_query_var('news_province'), 'federal'); ?>>Federal</option>
+                        <option value="ab" <?php selected(get_query_var('news_province'), 'ab'); ?>>Alberta</option>
+                        <option value="bc" <?php selected(get_query_var('news_province'), 'bc'); ?>>British Columbia</option>
+                        <option value="mb" <?php selected(get_query_var('news_province'), 'mb'); ?>>Manitoba</option>
+                        <option value="nb" <?php selected(get_query_var('news_province'), 'nb'); ?>>New Brunswick</option>
+                        <option value="nl" <?php selected(get_query_var('news_province'), 'nl'); ?>>Newfoundland and Labrador</option>
+                        <option value="ns" <?php selected(get_query_var('news_province'), 'ns'); ?>>Nova Scotia</option>
+                        <option value="on" <?php selected(get_query_var('news_province'), 'on'); ?>>Ontario</option>
+                        <option value="pe" <?php selected(get_query_var('news_province'), 'pe'); ?>>Prince Edward Island</option>
+                        <option value="qc" <?php selected(get_query_var('news_province'), 'qc'); ?>>Quebec</option>
+                        <option value="sk" <?php selected(get_query_var('news_province'), 'sk'); ?>>Saskatchewan</option>
+                        <option value="nt" <?php selected(get_query_var('news_province'), 'nt'); ?>>Northwest Territories</option>
+                        <option value="nu" <?php selected(get_query_var('news_province'), 'nu'); ?>>Nunavut</option>
+                        <option value="yt" <?php selected(get_query_var('news_province'), 'yt'); ?>>Yukon</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filter-author">Author</label>
+                    <input type="text" name="news_author" id="filter-author" 
+                           value="<?php echo esc_attr(get_query_var('news_author')); ?>" 
+                           placeholder="Search by author">
+                </div>
+
+                <div class="filter-group">
+                    <label for="filter-date-start">Date From</label>
+                    <input type="date" name="date_start" id="filter-date-start" 
+                           value="<?php echo esc_attr(get_query_var('date_start')); ?>">
+                </div>
+
+                <div class="filter-group">
+                    <label for="filter-date-end">Date To</label>
+                    <input type="date" name="date_end" id="filter-date-end" 
+                           value="<?php echo esc_attr(get_query_var('date_end')); ?>">
+                </div>
+
+                <div class="filter-actions">
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    <a href="<?php echo esc_url(home_url('/newsroom/')); ?>" class="btn btn-secondary">Clear</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <div class="archive-content">
         <?php if (have_posts()) : ?>
             <div class="newsroom-archive-grid">
