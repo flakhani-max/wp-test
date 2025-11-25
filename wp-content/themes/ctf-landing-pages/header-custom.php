@@ -14,9 +14,14 @@ defined('ABSPATH') || exit;
 <body <?php body_class(); ?>>
 <header class="site-header">
     <div class="header-content">
-        <a href="<?php echo esc_url(home_url('/')); ?>">
+        <a href="<?php echo esc_url(home_url('/')); ?>" class="site-logo">
             <img src="http://taxpayer-media-bucket.storage.googleapis.com/uploads/2025/11/21173106/Taxpayer.comVectorStandUpBeHeard-scaled.png" alt="Taxpayer.com">
         </a>
+        <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+            <span class="hamburger"></span>
+            <span class="hamburger"></span>
+            <span class="hamburger"></span>
+        </button>
         <nav class="main-navigation">
             <ul>
                 <li><a href="<?php echo esc_url(home_url('/newsroom/')); ?>">Newsroom</a></li>

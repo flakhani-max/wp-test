@@ -96,6 +96,40 @@ a:hover {
   justify-content: space-between;
   align-items: center;
   gap: 3rem;
+  position: relative;
+}
+
+/* Hamburger Menu Button - Hidden on Desktop */
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 1001;
+}
+
+.mobile-menu-toggle .hamburger {
+  width: 25px;
+  height: 3px;
+  background-color: #000;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+/* Hamburger Animation when Menu is Open */
+.mobile-menu-toggle.active .hamburger:nth-child(1) {
+  transform: rotate(45deg) translate(4px, 4px);
+}
+
+.mobile-menu-toggle.active .hamburger:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-toggle.active .hamburger:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
 }
 
 .header-content a {
@@ -577,7 +611,7 @@ a:hover {
 .donation-archive-grid,
 .newsroom-archive-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   margin: 2rem 0;
 }
@@ -804,6 +838,112 @@ a:hover {
     padding: 0 0.5rem;
   }
   
+  /* Mobile navigation styles */
+  .site-header {
+    padding: 0.5rem 0;
+  }
+  
+  .header-content {
+    gap: 1rem !important;
+    padding: 0 1rem;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+  
+  .site-header img {
+    max-width: 120px;
+  }
+  
+  /* Show hamburger menu on mobile */
+  .mobile-menu-toggle {
+    display: flex !important;
+    order: 2;
+  }
+  
+  .site-logo {
+    order: 1;
+  }
+  
+  .main-navigation {
+    order: 3;
+  }
+  
+  /* Hide navigation by default on mobile */
+  .main-navigation {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: #ffffff;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease;
+    z-index: 1000;
+    padding-top: 80px;
+    overflow-y: auto;
+  }
+  
+  /* Show navigation when active */
+  .main-navigation.active {
+    right: 0;
+  }
+  
+  .main-navigation ul {
+    flex-direction: column;
+    gap: 0;
+    align-items: stretch;
+    padding: 1rem 0;
+  }
+  
+  .main-navigation li {
+    width: 100%;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .main-navigation a {
+    display: block;
+    padding: 1rem 1.5rem;
+    text-align: left;
+    color: #000;
+    transition: background-color 0.2s ease;
+  }
+  
+  .main-navigation a:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+  
+  .btn-donate {
+    background: #dd230f !important;
+    color: #fff !important;
+    margin: 1rem 1.5rem;
+    width: calc(100% - 3rem);
+    text-align: center;
+    border-radius: 6px;
+  }
+  
+  .btn-donate:hover {
+    background: #c41f0d !important;
+  }
+  
+  /* Mobile menu overlay */
+  .mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .mobile-menu-overlay.active {
+    display: block;
+    opacity: 1;
+  }
+  
   .home-template {
     margin: 1rem auto;
     padding: 1rem;
@@ -877,7 +1017,9 @@ a:hover {
     font-size: 1.8rem;
   }
   
-  .petition-archive-grid {
+  .petition-archive-grid,
+  .donation-archive-grid,
+  .newsroom-archive-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }

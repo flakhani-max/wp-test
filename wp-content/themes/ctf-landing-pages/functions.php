@@ -85,6 +85,15 @@ function ctf_enqueue_assets() {
         }
     }
     
+    // Load mobile menu JavaScript
+    wp_enqueue_script(
+        'mobile-menu',
+        get_template_directory_uri() . '/js/mobile-menu.js',
+        [],
+        '1.0',
+        true
+    );
+    
     // Load main theme JavaScript only if the file exists. Do not depend on jQuery by default.
     $main_js_path = get_template_directory() . '/js/main.js';
     if ( file_exists( $main_js_path ) ) {
