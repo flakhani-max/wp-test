@@ -17,6 +17,9 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+# Copy custom PHP configuration for upload limits
+COPY uploads.ini /usr/local/etc/php/conf.d/uploads.ini
+
 # Copy custom themes
 COPY wp-content/themes/ctf-landing-pages /var/www/html/wp-content/themes/ctf-landing-pages
 
