@@ -10,7 +10,7 @@ get_header('custom');
 <div class="donation-archive card">
     <div class="archive-header">
         <?php if (is_tax('donation_category')) : ?>
-            <h1><?php single_term_title(); ?> Donations</h1>
+            <h1><?php single_term_title(); ?> Campaigns</h1>
             <?php if (term_description()) : ?>
                 <p class="archive-subtitle"><?php echo term_description(); ?></p>
             <?php endif; ?>

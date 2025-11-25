@@ -14,6 +14,35 @@ $show_category = isset($show_category) ? $show_category : ($context === 'archive
 $newsroom_image = get_field('newsroom_image');
 $newsroom_title = get_the_title();
 $newsroom_intro = get_the_excerpt();
+$newsroom_type = get_field('newsroom_type');
+$newsroom_province = get_field('newsroom_province');
+$newsroom_author = get_field('newsroom_author');
+
+// Type labels mapping
+$type_labels = array(
+    'news_release' => 'News Release',
+    'commentary' => 'Commentary',
+    'blog' => 'Blog',
+    'video' => 'Video',
+);
+
+// Province labels mapping
+$province_labels = array(
+    'federal' => 'Federal',
+    'ab' => 'Alberta',
+    'bc' => 'British Columbia',
+    'mb' => 'Manitoba',
+    'nb' => 'New Brunswick',
+    'nl' => 'Newfoundland and Labrador',
+    'ns' => 'Nova Scotia',
+    'on' => 'Ontario',
+    'pe' => 'Prince Edward Island',
+    'qc' => 'Quebec',
+    'sk' => 'Saskatchewan',
+    'nt' => 'Northwest Territories',
+    'nu' => 'Nunavut',
+    'yt' => 'Yukon',
+);
 ?>
 
 <article class="newsroom-card <?php echo esc_attr($context); ?>">
@@ -37,8 +66,19 @@ $newsroom_intro = get_the_excerpt();
             </a>
         </h3>
         
-        <div class="card-date">
-            <?php echo get_the_date('F j, Y'); ?>
+        <div class="newsroom-meta">
+            <div class="card-date">
+                <?php echo get_the_date('F j, Y'); ?>
+            </div>
+            <?php if ($newsroom_type) : ?>
+                <span class="newsroom-type"><?php echo esc_html($type_labels[$newsroom_type] ?? $newsroom_type); ?></span>
+            <?php endif; ?>
+            <?php if ($newsroom_province) : ?>
+                <span class="newsroom-province"><?php echo esc_html($province_labels[$newsroom_province] ?? $newsroom_province); ?></span>
+            <?php endif; ?>
+            <?php if ($newsroom_author) : ?>
+                <span class="newsroom-author">By <?php echo esc_html($newsroom_author); ?></span>
+            <?php endif; ?>
         </div>
         
         <div class="card-excerpt">

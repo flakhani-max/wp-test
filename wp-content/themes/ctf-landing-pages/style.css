@@ -500,6 +500,41 @@ a:hover {
   margin-bottom: 0.75rem;
 }
 
+/* Newsroom meta information */
+.newsroom-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.newsroom-type,
+.newsroom-province,
+.newsroom-author {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.newsroom-type {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.newsroom-province {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.newsroom-author {
+  background: #fff3e0;
+  color: #e65100;
+}
+
 .petition-stats {
   margin: 1rem 0;
   padding: 1rem;
