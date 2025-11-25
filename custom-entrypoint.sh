@@ -212,11 +212,6 @@ fi
 if wp plugin is-installed ctf-custom-plugin --path="$DOCROOT" --allow-root; then
   echo "Activating CTF Custom Plugin..."
   wp plugin activate ctf-custom-plugin --path="$DOCROOT" --allow-root || true
-  
-  # Flush rewrite rules to register custom post types (petition, donation, newsroom)
-  echo "Flushing rewrite rules to register custom post types..."
-  wp rewrite flush --path="$DOCROOT" --allow-root
-  echo "✓ Rewrite rules flushed!"
 else
   echo "⚠️ CTF Custom Plugin not found"
 fi
@@ -282,6 +277,15 @@ echo "Activating ACF Pro..."
 else
   echo "⚠️ ACF Pro not found (should be pre-installed in image)"
 fi
+
+# ---------------------------------------------
+# Force flush rewrite rules on every container start
+# This ensures custom post types (petition, donation, newsroom) are accessible
+# ---------------------------------------------
+echo "Flushing rewrite rules to ensure custom post types are registered..."
+wp rewrite flush --path="$DOCROOT" --allow-root
+wp rewrite list --path="$DOCROOT" --allow-root | grep -E "newsroom|petition|donation" || echo "⚠️ Custom post type rewrites not found"
+echo "✓ Rewrite rules flushed!"
 
 
 # ---------------------------------------------
