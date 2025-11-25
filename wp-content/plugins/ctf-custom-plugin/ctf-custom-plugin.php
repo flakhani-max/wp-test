@@ -3,7 +3,7 @@
 Plugin Name: CTF Custom Plugin
 Plugin URI: https://taxpayer.com
 Description: Custom functionality for Canadian Taxpayers Federation including petitions, donations, and Mailchimp integration.
-Version: 2.1
+Version: 2.0
 Author: Canadian Taxpayers Federation
 Text Domain: ctf-custom
 */
@@ -11,7 +11,7 @@ Text Domain: ctf-custom
 if (!defined('ABSPATH')) exit;
 
 // Plugin constants
-define('CTF_CUSTOM_PLUGIN_VERSION', '2.1');
+define('CTF_CUSTOM_PLUGIN_VERSION', '2.0');
 define('CTF_CUSTOM_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('CTF_CUSTOM_PLUGIN_PATH', plugin_dir_path(__FILE__));
 

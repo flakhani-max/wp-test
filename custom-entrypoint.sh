@@ -200,6 +200,9 @@ else
   fi
 fi
 
+# WP Offload Media is configured via must-use plugin (wp-content/mu-plugins/wp-offload-media-config.php)
+echo "✓ WP Offload Media configuration handled by must-use plugin"
+
 # WP Offload Media Lite is pre-installed in Docker image, just activate it
 if wp plugin is-installed amazon-s3-and-cloudfront --path="$DOCROOT" --allow-root; then
   wp plugin activate amazon-s3-and-cloudfront --path="$DOCROOT" --allow-root || true
@@ -278,15 +281,6 @@ else
   echo "⚠️ ACF Pro not found (should be pre-installed in image)"
 fi
 
-# ---------------------------------------------
-# Force flush rewrite rules on every container start
-# This ensures custom post types (petition, donation, newsroom) are accessible
-# ---------------------------------------------
-echo "Flushing rewrite rules to ensure custom post types are registered..."
-wp rewrite flush --path="$DOCROOT" --allow-root
-wp rewrite list --path="$DOCROOT" --allow-root | grep -E "newsroom|petition|donation" || echo "⚠️ Custom post type rewrites not found"
-echo "✓ Rewrite rules flushed!"
-
 
 # ---------------------------------------------
 # WP Offload Media Lite Configuration
@@ -330,31 +324,6 @@ chown www-data:www-data "${UPLOADS_PATH}/gcs-key.json" 2>/dev/null || true
 
 echo "✓ WP Offload Media Lite setup complete"
 echo "==================================================="
-
-# ---------------------------------------------
-# Inject WP Offload Media configuration into wp-config.php
-# ---------------------------------------------
-WP_CONFIG_PATH="/var/www/html/wp-config.php"
-
-if [ -f "$WP_CONFIG_PATH" ]; then
-  if ! grep -q "AS3CF_SETTINGS" "$WP_CONFIG_PATH"; then
-    echo "🔧 Adding AS3CF_SETTINGS to wp-config.php..."
-    # Escape slashes for safe insertion
-    GCS_KEY_PATH_ESCAPED=$(echo "/var/www/html/wp-content/uploads/gcs-key.json" | sed 's_/_\\/_g')
-    GCS_BUCKET_ESCAPED=$(echo "${GCS_BUCKET:-taxpayer-media-bucket}" | sed 's_/_\\/_g')
-    sed -i "/Happy publishing/i \
-define( 'AS3CF_SETTINGS', serialize( array(\
-'provider' => 'gcp',\
-'key-file-path' => '${GCS_KEY_PATH_ESCAPED}',\
-'bucket' => '${GCS_BUCKET_ESCAPED}',\
-) ) );" "$WP_CONFIG_PATH"
-  else
-    echo "✅ AS3CF_SETTINGS already defined in wp-config.php"
-  fi
-else
-  echo "⚠️ wp-config.php not found — cannot inject AS3CF_SETTINGS (WordPress not initialized yet)."
-fi
-
 
 # Remove default plugins
 for plugin in akismet hello; do
