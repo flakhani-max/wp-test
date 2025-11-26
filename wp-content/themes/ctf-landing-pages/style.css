@@ -353,6 +353,134 @@ a:hover {
   }
 }
 
+/* Sign Up Prompt Section */
+.signup-prompt-section {
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 0 1rem;
+}
+
+.signup-prompt-content {
+  background: linear-gradient(135deg, #1a2a3a 0%, #2d3a4a 100%);
+  border-radius: 12px;
+  padding: 3rem 2.5rem;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.signup-prompt-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #dd230f 0%, #b81d0c 100%);
+}
+
+.signup-prompt-title {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+.signup-prompt-description {
+  color: #e9ecef;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin: 0 0 2rem 0;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.signup-prompt-button {
+  display: inline-block;
+  background-color: #dd230f;
+  color: #fff;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  border: 2px solid #dd230f;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.signup-prompt-button:hover {
+  background-color: #b81d0c;
+  border-color: #b81d0c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(221, 35, 15, 0.3);
+  text-decoration: none;
+  color: #fff;
+}
+
+.signup-prompt-button:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(221, 35, 15, 0.3);
+}
+
+/* Responsive styles for signup prompt */
+@media (max-width: 768px) {
+  .signup-prompt-section {
+    margin: 3rem auto;
+    padding: 0 0.75rem;
+  }
+
+  .signup-prompt-content {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .signup-prompt-title {
+    font-size: 1.75rem;
+  }
+
+  .signup-prompt-description {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .signup-prompt-button {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-prompt-section {
+    margin: 2rem auto;
+  }
+
+  .signup-prompt-content {
+    padding: 2rem 1rem;
+    border-radius: 8px;
+  }
+
+  .signup-prompt-title {
+    font-size: 1.5rem;
+  }
+
+  .signup-prompt-description {
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .signup-prompt-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
+
 .home-content {
   margin-top: 2rem;
 }

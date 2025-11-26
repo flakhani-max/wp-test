@@ -252,6 +252,148 @@
     margin-bottom: 1rem;
 }
 
+/* Forms */
+.static-page-content form {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e9ecef;
+}
+
+.static-page-content center {
+    display: block;
+    text-align: center;
+}
+
+.static-page-content center form {
+    margin: 2rem auto;
+}
+
+.static-page-content label {
+    display: block;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    text-align: left;
+}
+
+.static-page-content input[type="text"],
+.static-page-content input[type="email"],
+.static-page-content input[type="tel"],
+.static-page-content input[type="number"],
+.static-page-content input[type="password"],
+.static-page-content input[type="url"],
+.static-page-content textarea,
+.static-page-content select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    border: 2px solid #dee2e6;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.static-page-content input[type="text"]:focus,
+.static-page-content input[type="email"]:focus,
+.static-page-content input[type="tel"]:focus,
+.static-page-content input[type="number"]:focus,
+.static-page-content input[type="password"]:focus,
+.static-page-content input[type="url"]:focus,
+.static-page-content textarea:focus,
+.static-page-content select:focus {
+    outline: none;
+    border-color: #dd230f;
+    box-shadow: 0 0 0 3px rgba(221, 35, 15, 0.1);
+}
+
+.static-page-content input[type="text"]:hover,
+.static-page-content input[type="email"]:hover,
+.static-page-content input[type="tel"]:hover,
+.static-page-content input[type="number"]:hover,
+.static-page-content input[type="password"]:hover,
+.static-page-content input[type="url"]:hover,
+.static-page-content textarea:hover,
+.static-page-content select:hover {
+    border-color: #adb5bd;
+}
+
+.static-page-content input[type="text"]::placeholder,
+.static-page-content input[type="email"]::placeholder,
+.static-page-content input[type="tel"]::placeholder,
+.static-page-content input[type="number"]::placeholder,
+.static-page-content input[type="password"]::placeholder,
+.static-page-content input[type="url"]::placeholder,
+.static-page-content textarea::placeholder {
+    color: #6c757d;
+    opacity: 1;
+}
+
+.static-page-content textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.static-page-content button[type="submit"],
+.static-page-content input[type="submit"] {
+    background-color: #dd230f;
+    color: #fff;
+    border: 2px solid #dd230f;
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    text-transform: none;
+    letter-spacing: normal;
+    display: inline-block;
+    margin-top: 1rem;
+    min-width: 150px;
+}
+
+.static-page-content button[type="submit"]:hover,
+.static-page-content input[type="submit"]:hover {
+    background-color: #b81d0c;
+    border-color: #b81d0c;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(221, 35, 15, 0.2);
+}
+
+.static-page-content button[type="submit"]:active,
+.static-page-content input[type="submit"]:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(221, 35, 15, 0.2);
+}
+
+.static-page-content button[type="submit"]:focus,
+.static-page-content input[type="submit"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(221, 35, 15, 0.2);
+}
+
+/* Form field groups */
+.static-page-content form > br {
+    display: none;
+}
+
+.static-page-content .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.static-page-content .form-group:last-of-type {
+    margin-bottom: 0;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .static-page-container {
@@ -302,6 +444,30 @@
         padding: 1rem;
         margin: 1.5rem 0;
         border-radius: 4px;
+    }
+
+    .static-page-content form {
+        padding: 1.5rem;
+        margin: 1.5rem auto;
+    }
+
+    .static-page-content input[type="text"],
+    .static-page-content input[type="email"],
+    .static-page-content input[type="tel"],
+    .static-page-content input[type="number"],
+    .static-page-content input[type="password"],
+    .static-page-content input[type="url"],
+    .static-page-content textarea,
+    .static-page-content select {
+        padding: 0.65rem 0.875rem;
+        font-size: 0.95rem;
+    }
+
+    .static-page-content button[type="submit"],
+    .static-page-content input[type="submit"] {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+        width: 100%;
     }
 
     .static-page-footer {
@@ -360,6 +526,30 @@
         padding: 0.8rem;
         margin: 1.2rem 0;
         border-radius: 4px;
+    }
+
+    .static-page-content form {
+        padding: 1rem;
+        margin: 1rem auto;
+    }
+
+    .static-page-content input[type="text"],
+    .static-page-content input[type="email"],
+    .static-page-content input[type="tel"],
+    .static-page-content input[type="number"],
+    .static-page-content input[type="password"],
+    .static-page-content input[type="url"],
+    .static-page-content textarea,
+    .static-page-content select {
+        padding: 0.6rem 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    .static-page-content button[type="submit"],
+    .static-page-content input[type="submit"] {
+        padding: 0.7rem 1.25rem;
+        font-size: 0.9rem;
+        width: 100%;
     }
 
     .static-page-footer {

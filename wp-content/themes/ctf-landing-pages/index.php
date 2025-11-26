@@ -88,6 +88,15 @@ get_header('custom');
         </div>
     <?php endif; ?>
 
+    <!-- Sign Up Prompt Section -->
+    <div class="signup-prompt-section">
+        <div class="signup-prompt-content">
+            <h2 class="signup-prompt-title">Stay Informed & Take Action</h2>
+            <p class="signup-prompt-description">Join and be the first to take action on important issues!</p>
+            <a href="<?php echo esc_url(home_url('/signup/')); ?>" class="signup-prompt-button">Sign Up Now</a>
+        </div>
+    </div>
+
     <div class="home-content">
 
         <?php
