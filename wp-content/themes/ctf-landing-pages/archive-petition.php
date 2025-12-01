@@ -20,6 +20,39 @@ get_header('custom');
         <?php endif; ?>
     </div>
 
+    <!-- Filter Pane -->
+    <div class="petition-filters">
+        <form method="GET" action="<?php echo esc_url(home_url('/petitions/')); ?>" class="filter-form">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="filter-province">Province</label>
+                    <select name="petition_province" id="filter-province">
+                        <option value="">All Provinces</option>
+                        <option value="federal" <?php selected(get_query_var('petition_province') ?: 'federal', 'federal'); ?>>Federal</option>
+                        <option value="ab" <?php selected(get_query_var('petition_province'), 'ab'); ?>>Alberta</option>
+                        <option value="bc" <?php selected(get_query_var('petition_province'), 'bc'); ?>>British Columbia</option>
+                        <option value="mb" <?php selected(get_query_var('petition_province'), 'mb'); ?>>Manitoba</option>
+                        <option value="nb" <?php selected(get_query_var('petition_province'), 'nb'); ?>>New Brunswick</option>
+                        <option value="nl" <?php selected(get_query_var('petition_province'), 'nl'); ?>>Newfoundland and Labrador</option>
+                        <option value="ns" <?php selected(get_query_var('petition_province'), 'ns'); ?>>Nova Scotia</option>
+                        <option value="on" <?php selected(get_query_var('petition_province'), 'on'); ?>>Ontario</option>
+                        <option value="pe" <?php selected(get_query_var('petition_province'), 'pe'); ?>>Prince Edward Island</option>
+                        <option value="qc" <?php selected(get_query_var('petition_province'), 'qc'); ?>>Quebec</option>
+                        <option value="sk" <?php selected(get_query_var('petition_province'), 'sk'); ?>>Saskatchewan</option>
+                        <option value="nt" <?php selected(get_query_var('petition_province'), 'nt'); ?>>Northwest Territories</option>
+                        <option value="nu" <?php selected(get_query_var('petition_province'), 'nu'); ?>>Nunavut</option>
+                        <option value="yt" <?php selected(get_query_var('petition_province'), 'yt'); ?>>Yukon</option>
+                    </select>
+                </div>
+
+                <div class="filter-actions">
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    <a href="<?php echo esc_url(home_url('/petitions/')); ?>" class="btn btn-secondary">Clear</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <div class="archive-content">
         <?php if (have_posts()) : ?>
             <div class="petition-archive-grid">

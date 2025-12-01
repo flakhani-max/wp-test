@@ -153,6 +153,7 @@
   background: linear-gradient(135deg, #f8fafb 0%, #e1e8ed 100%);
   padding: 1rem;
   margin: 1.5rem 0;
+  border-radius: 12px;
 }
 
 .content-block.warning {

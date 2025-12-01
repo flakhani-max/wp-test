@@ -151,15 +151,6 @@ acf_add_local_field_group(array(
             'placeholder' => 'e.g., John Smith, Communications Director',
             'default_value' => '',
         ),
-        array(
-            'key' => 'field_newsroom_pinned',
-            'label' => 'Pin to Top',
-            'name' => 'newsroom_pinned',
-            'type' => 'true_false',
-            'instructions' => 'Pin this post to the top of the newsroom archive (max 3 pinned posts)',
-            'default_value' => 0,
-            'ui' => 1,
-        ),
     ),
     'location' => array(
         array(
@@ -184,26 +175,12 @@ function ctf_newsroom_filter_query($query) {
     // Only modify newsroom archive queries on the frontend
     if (!is_admin() && $query->is_main_query() && is_post_type_archive('newsroom')) {
         
-        // Exclude pinned posts from main query
-        $pinned_query = new WP_Query(array(
-            'post_type'      => 'newsroom',
-            'posts_per_page' => 3,
-            'post_status'    => 'publish',
-            'fields'         => 'ids', // Only get IDs for performance
-            'meta_query'     => array(
-                array(
-                    'key'   => 'newsroom_pinned',
-                    'value' => '1',
-                    'compare' => '='
-                )
-            ),
-        ));
+        // Explicitly clear any post__not_in to ensure pinned posts are included
+        //$query->set('post__not_in', array());
         
-        $pinned_ids = $pinned_query->posts;
-        wp_reset_postdata();
-        
-        if (!empty($pinned_ids)) {
-            $query->set('post__not_in', $pinned_ids);
+        // Handle text search
+        if (!empty($_GET['s'])) {
+            $query->set('s', sanitize_text_field($_GET['s']));
         }
         
         $meta_query = array('relation' => 'AND');
@@ -217,23 +194,23 @@ function ctf_newsroom_filter_query($query) {
             );
         }
         
-        // Filter by Province
-        if (!empty($_GET['news_province'])) {
+        // Filter by Province (default to federal if not specified)
+        if (!isset($_GET['news_province'])) {
+            // First visit - default to federal
+            $meta_query[] = array(
+                'key' => 'newsroom_province',
+                'value' => 'federal',
+                'compare' => '='
+            );
+        } elseif ($_GET['news_province'] !== '') {
+            // User selected a specific province
             $meta_query[] = array(
                 'key' => 'newsroom_province',
                 'value' => sanitize_text_field($_GET['news_province']),
                 'compare' => '='
             );
         }
-        
-        // Filter by Author (partial match)
-        if (!empty($_GET['news_author'])) {
-            $meta_query[] = array(
-                'key' => 'newsroom_author',
-                'value' => sanitize_text_field($_GET['news_author']),
-                'compare' => 'LIKE'
-            );
-        }
+        // If $_GET['news_province'] === '', user selected "All Provinces" - don't filter
         
         // Apply meta query if we have filters
         if (count($meta_query) > 1) {
@@ -274,7 +251,6 @@ add_action('pre_get_posts', 'ctf_newsroom_filter_query');
 function ctf_newsroom_query_vars($vars) {
     $vars[] = 'news_type';
     $vars[] = 'news_province';
-    $vars[] = 'news_author';
     $vars[] = 'date_start';
     $vars[] = 'date_end';
     return $vars;

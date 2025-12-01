@@ -12,10 +12,6 @@ get_header('custom');
         <h1>Canadian Taxpayers Federation</h1>
         <p class="home-subtitle">Fighting for lower taxes, less government waste, and more accountability.</p>
     </div>
-    <div class="content-block">
-            <h2>Join the Fight</h2>
-            <p>Join thousands of Canadians taking action on the issues that matter most to taxpayers.</p>
-        </div>
 
 
     <!-- Featured Images Section -->
@@ -90,9 +86,8 @@ get_header('custom');
 
     <!-- Sign Up Prompt Section -->
     <div class="signup-prompt-section">
-        <div class="signup-prompt-content">
-            <h2 class="signup-prompt-title">Stay Informed & Take Action</h2>
-            <p class="signup-prompt-description">Join and be the first to take action on important issues!</p>
+        <div class="signup-prompt-content content-block">
+            <h2 class="signup-prompt-title">Join thousands of Canadians taking action on the issues that matter most to taxpayers</h2>
             <a href="<?php echo esc_url(home_url('/signup/')); ?>" class="signup-prompt-button">Sign Up Now</a>
         </div>
     </div>
@@ -238,11 +233,6 @@ get_header('custom');
                 </div>
             </div>
         <?php endif; ?>
-
-
-        <div class="content-block">
-            <a href="<?php echo esc_url(home_url('/about/')); ?>" class="btn btn-secondary">Learn More About CTF</a>
-        </div>
     </div>
 </div>
 

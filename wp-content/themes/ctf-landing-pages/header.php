@@ -16,7 +16,7 @@
         </a>
         <nav class="main-navigation">
             <ul>
-                <li><a href="<?php echo esc_url(home_url('/newsroom/')); ?>">Home</a></li>
+                <li><a href="<?php echo esc_url(home_url('/')); ?>">Home</a></li>
                 <li><a href="<?php echo esc_url(home_url('/petition/')); ?>">Petitions</a></li>
                 <li><a href="<?php echo esc_url(home_url('/donation/')); ?>">Donations</a></li>
             </ul>

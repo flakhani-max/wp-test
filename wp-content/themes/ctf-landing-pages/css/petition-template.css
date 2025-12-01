@@ -55,6 +55,9 @@
 
 .petition-form button[type="submit"] {
   margin-top: 0.5em;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 /* Petition Image Styles */
 .petition-image img {
