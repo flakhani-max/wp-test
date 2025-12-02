@@ -19,30 +19,31 @@ get_header('custom');
     // Get featured images from ACF options, or use default images from theme directory
     $featured_images = get_field('homepage_featured_images', 'option');
     
-    // If no ACF images set, use default images from theme directory
+    // If no ACF images set, use default images from GCS bucket
     if (!$featured_images || empty($featured_images)) {
+        $gcs_base_url = 'https://taxpayer-media-bucket.storage.googleapis.com/uploads/';
         $default_images = array(
             array(
-                'image' => get_template_directory_uri() . '/images/axing_the_tax.jpg',
+                'image' => $gcs_base_url . 'axing_the_tax.jpg',
                 'link' => 'https://www.amazon.ca/Axing-Tax-Rise-Canadas-Carbon/dp/1998365654?crid=2OONCZL11NVYE&dib=eyJ2IjoiMSJ9.hXsYzImbI3wNjTz8giJ_PxLTufLv15gW6GRrs9WvlwxnKtL1dOqMWxEv9MlnMJ6ECk-faGv5DyN2ITKfHB6HYw01ows02BI55xgVX-5bedY.CDs9QXtFXipToK01qNjW9FuYJiL5VdA_70_s-1-omjY&dib_tag=se&keywords=axing+the+tax+book&qid=1744722373&sprefix=axing%2Caps%2C89&sr=8-1&linkCode=ll1&tag=ctf07-web-20&linkId=404ae4a1ed233542e2e678533e938614&language=en_CA&ref_=as_li_ss_tl', // Update this URL in WordPress admin: Homepage Settings
                 'title' => 'Order Now: Axing the Tax', // Add title here
                 'alt_text' => 'Axing the Tax'
             ),
             
             array(
-                'image' => get_template_directory_uri() . '/images/Main Podcast Logo Rectangle.jpg',
+                'image' => $gcs_base_url . 'Main-Podcast-Logo-Rectangle.jpg',
                 'link' => 'https://canadian-taxpayers-podcast.castos.com', // Update this URL in WordPress admin: Homepage Settings
                 'title' => 'Canadian Taxpayers Podcast', // Add title here
                 'alt_text' => 'Main Podcast'
             ),
             array(
-                'image' => get_template_directory_uri() . '/images/cameras.png',
+                'image' => $gcs_base_url . 'cameras.png',
                 'link' => esc_url(home_url('/petitions/defund-the-cbc-and-end-media-bailout/')), // Update this URL in WordPress admin: Homepage Settings
                 'title' => 'Petition: Defund the CBC and End Media Bailout', // Add title here
                 'alt_text' => 'Cameras'
             ),
             array(
-                'image' => get_template_directory_uri() . '/images/store.jpg',
+                'image' => $gcs_base_url . 'store.jpg',
                 'link' => 'https://shop.taxpayer.com', // Update this URL in WordPress admin: Homepage Settings
                 'title' => 'Taxpayers Federation T-Shirt Store', // Add title here
                 'alt_text' => 'Store'

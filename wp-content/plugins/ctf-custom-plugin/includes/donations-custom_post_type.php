@@ -491,21 +491,6 @@ function ctf_get_donation_show_title_safe($post_id = null) {
 }
 
 /**
- * Get donation show navigation setting
- * 
- * @param int $post_id Optional post ID, defaults to current post
- * @return bool
- */
-function ctf_get_donation_show_navigation($post_id = null) {
-    if (!$post_id) {
-        $post_id = get_the_ID();
-    }
-    $show_nav = get_field('show_navigation', $post_id);
-    // Default to true if field doesn't exist or is null
-    return $show_nav !== false;
-}
-
-/**
  * Generate donation amount options HTML
  * 
  * @param array $amounts Array of donation amounts

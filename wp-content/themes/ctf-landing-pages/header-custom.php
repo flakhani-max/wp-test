@@ -27,7 +27,7 @@ $header_class = $show_navigation ? 'site-header' : 'site-header no-navigation';
 <header class="<?php echo esc_attr($header_class); ?>">
     <div class="header-content">
         <a href="<?php echo esc_url(home_url('/')); ?>" class="site-logo">
-            <img src="http://taxpayer-media-bucket.storage.googleapis.com/uploads/2025/11/21173106/Taxpayer.comVectorStandUpBeHeard-scaled.png" alt="Taxpayer.com">
+            <img src="https://taxpayer-media-bucket.storage.googleapis.com/uploads/Taxpayer.comVectorStandUpBeHeard-scaled.png" alt="Taxpayer.com">
         </a>
         <?php if ($show_navigation) : ?>
         <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">

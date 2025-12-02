@@ -63,11 +63,6 @@ a:hover {
   padding: 0 1rem;
 }
 
-.content-wrapper {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
 
 /* Site Header */
 .site-header {
@@ -78,11 +73,6 @@ a:hover {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.header-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
 
 .site-header img{
   max-width: 150px;
@@ -190,22 +180,6 @@ a:hover {
   color: #c41f0d;
 }
 
-.site-header .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.site-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0;
-}
-
-.site-title a {
-  color: #1a2a3a;
-  text-decoration: none;
-}
 
 /* Site Footer */
 .site-footer {
@@ -463,71 +437,6 @@ a:hover {
   margin-top: 2rem;
 }
 
-.posts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin: 2rem 0;
-}
-
-.post-card {
-  background: #f8fafb;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.post-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-}
-
-.post-image img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.post-content {
-  padding: 1.5rem;
-}
-
-.post-content h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.25rem;
-}
-
-.post-content h3 a {
-  color: #1a2a3a;
-  text-decoration: none;
-}
-
-.post-content h3 a:hover {
-  color: #1a8cff;
-}
-
-.post-excerpt {
-  margin: 1rem 0;
-  color: #2d3a4a;
-}
-
-.post-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 1rem 0;
-  font-size: 0.9rem;
-  color: #6c757d;
-}
-
-.post-type {
-  background: #1a8cff;
-  color: #fff;
-  padding: 0.25rem 0.5rem;
-  border-radius: 3px;
-  font-size: 0.8rem;
-}
 
 .pagination {
   text-align: center;
@@ -562,73 +471,7 @@ a:hover {
   color: #6c757d;
 }
 
-.home-cta {
-  text-align: center;
-  margin-top: 3rem;
-}
 
-/* Petition Highlights Section */
-.petition-highlights {
-  margin: 3rem 0;
-  padding: 2rem 0;
-  background: #f8fafb;
-}
-
-.petition-highlights .section-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.petition-highlights .section-header h2 {
-  color: #1a2a3a;
-  margin-bottom: 0.5rem;
-}
-
-.petition-highlights .section-header p {
-  color: #6c757d;
-  font-size: 1.1rem;
-}
-
-.petition-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin: 2rem 0;
-  padding: 0 1rem;
-}
-
-.petition-card.featured,
-.donation-card.featured,
-.newsroom-card.featured {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.petition-card.featured:hover,
-.donation-card.featured:hover,
-.newsroom-card.featured:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.petition-image {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-}
-
-.petition-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.petition-content {
-  padding: 1.5rem;
-}
 
 /* Generic card classes (for new card system) */
 .card-image {
@@ -662,27 +505,6 @@ a:hover {
   color: #1a8cff;
 }
 
-.petition-content h3 {
-  margin: 0 0 1rem 0;
-  font-size: 1.3rem;
-  line-height: 1.4;
-}
-
-.petition-content h3 a {
-  color: #1a2a3a;
-  text-decoration: none;
-}
-
-.petition-content h3 a:hover {
-  color: #1a8cff;
-}
-
-.petition-excerpt {
-  color: #2d3a4a;
-  margin-bottom: 1rem;
-  line-height: 1.6;
-}
-
 /* Generic card class */
 .card-excerpt {
   color: #2d3a4a;
@@ -696,62 +518,6 @@ a:hover {
   margin-bottom: 0.75rem;
 }
 
-/* ========================================
-   NEWSROOM PINNED SECTION
-======================================== */
-.newsroom-pinned-section {
-  margin-bottom: 2.5rem;
-}
-
-.pinned-section-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #212529;
-  margin-bottom: 1.25rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-size: 1.125rem;
-}
-
-.newsroom-pinned-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.newsroom-card.pinned {
-  position: relative;
-  border: 2px solid #dd230f;
-  box-shadow: 0 4px 12px rgba(221, 35, 15, 0.15);
-}
-
-.newsroom-card.pinned::before {
-  content: "Featured";
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background-color: #dd230f;
-  color: #fff;
-  padding: 0.25rem 0.75rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  z-index: 10;
-}
-
-@media (max-width: 768px) {
-  .newsroom-pinned-grid {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-  }
-  
-  .pinned-section-title {
-    font-size: 1rem;
-  }
-}
 
 /* ========================================
    NEWSROOM FILTERS
@@ -972,27 +738,6 @@ a:hover {
   margin: 0 0.5rem;
 }
 
-.petition-stats {
-  margin: 1rem 0;
-  padding: 1rem;
-  background: #f8fafb;
-  border-radius: 6px;
-}
-
-.signature-count {
-  display: block;
-  font-weight: bold;
-  color: #1a8cff;
-  font-size: 1.1rem;
-  margin-bottom: 0.25rem;
-}
-
-.signature-goal {
-  display: block;
-  color: #6c757d;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}
 
 .progress-bar {
   width: 100%;
@@ -1010,14 +755,6 @@ a:hover {
   transition: width 0.3s ease;
 }
 
-.petition-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 1rem 0;
-  font-size: 0.9rem;
-  color: #6c757d;
-}
 
 /* Generic card class */
 .card-meta {
@@ -1029,12 +766,6 @@ a:hover {
   color: #6c757d;
 }
 
-.petition-cta {
-  width: 100%;
-  text-align: center;
-  padding: 0.75rem 1rem;
-  font-weight: bold;
-}
 
 /* Generic card class */
 .card-cta {
@@ -1106,31 +837,6 @@ a:hover {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.petition-status {
-  padding: 0.25rem 0.5rem;
-  border-radius: 3px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.petition-status.active {
-  background: #d4edda;
-  color: #155724;
-}
-
-.petition-status.inactive {
-  background: #f8d7da;
-  color: #721c24;
-}
-
-.petition-category {
-  background: #e2e3e5;
-  color: #383d41;
-  padding: 0.25rem 0.5rem;
-  border-radius: 3px;
-  font-size: 0.8rem;
-}
 
 /* Generic card class */
 .card-category {
@@ -1149,158 +855,7 @@ a:hover {
   color: #6c757d;
 }
 
-.archive-cta {
-  text-align: center;
-  margin-top: 3rem;
-  padding: 2rem;
-  background: #f8fafb;
-  border-radius: 8px;
-}
 
-/* ========================================
-   GENERALIZED CAMPAIGN CARDS
-   Styles for petition, donation, and other campaign cards
-======================================== */
-
-.campaign-card {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.campaign-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.campaign-image {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-}
-
-.campaign-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.campaign-content {
-  padding: 1.5rem;
-}
-
-.campaign-content h3 {
-  margin: 0 0 1rem 0;
-  font-size: 1.3rem;
-  line-height: 1.4;
-}
-
-.campaign-content h3 a {
-  color: #1a2a3a;
-  text-decoration: none;
-}
-
-.campaign-content h3 a:hover {
-  color: #1a8cff;
-}
-
-.campaign-excerpt {
-  color: #6c757d;
-  margin-bottom: 1rem;
-  line-height: 1.6;
-}
-
-.campaign-stats {
-  margin: 1rem 0;
-  padding: 1rem;
-  background: #f8fafb;
-  border-radius: 6px;
-}
-
-.stat-count {
-  display: block;
-  font-weight: bold;
-  color: #1a8cff;
-  font-size: 1.1rem;
-  margin-bottom: 0.25rem;
-}
-
-.stat-goal {
-  display: block;
-  color: #6c757d;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}
-
-.stat-meta {
-  display: block;
-  color: #6c757d;
-  font-size: 0.9rem;
-  margin-top: 0.25rem;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 8px;
-  background: #e9ecef;
-  border-radius: 4px;
-  overflow: hidden;
-  margin-top: 0.5rem;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #1a8cff 0%, #0056b3 100%);
-  transition: width 0.3s ease;
-}
-
-.campaign-meta {
-  margin: 1rem 0 0.5rem 0;
-}
-
-.campaign-category {
-  display: inline-block;
-  background: #e9ecef;
-  color: #495057;
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: 500;
-}
-
-.campaign-cta {
-  width: 100%;
-  text-align: center;
-  margin-top: 1rem;
-}
-
-/* Campaign type specific styling */
-.campaign-card.petition .stat-count {
-  color: #28a745;
-}
-
-.campaign-card.petition .progress-fill {
-  background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
-}
-
-.campaign-card.donation .stat-count {
-  color: #dc3545;
-}
-
-.campaign-card.donation .progress-fill {
-  background: linear-gradient(90deg, #dc3545 0%, #c82333 100%);
-}
-
-/* Context specific styling */
-.campaign-card.featured {
-  border: 2px solid #1a8cff;
-}
-
-.campaign-card.archive {
-  margin-bottom: 1.5rem;
-}
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -1425,42 +980,6 @@ a:hover {
   .home-header h1 {
     font-size: 2rem;
   }
-  
-  .posts-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  .post-content {
-    padding: 1rem;
-  }
-  
-  /* Petition section mobile styles */
-  .petition-highlights {
-    margin: 2rem 0;
-    padding: 1rem;
-  }
-  
-  .petition-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    padding: 0;
-  }
-  
-  
-  .petition-content {
-    padding: 1rem;
-  }
-
-  .petition-content h3 {
-    font-size: 1.2rem;
-  }
-
-  .petition-meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
 
   /* Generic card responsive styles */
   .card-content {
@@ -1495,9 +1014,5 @@ a:hover {
   .newsroom-archive-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
-  }
-  
-  .archive-cta {
-    padding: 1.5rem 1rem;
   }
 }
