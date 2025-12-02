@@ -117,6 +117,25 @@ function ctf_add_donation_acf_fields() {
                 'ui_off_text' => 'Hide',
             ),
             array(
+                'key' => 'field_donation_show_navigation',
+                'label' => 'Show Top Navigation',
+                'name' => 'show_navigation',
+                'type' => 'true_false',
+                'instructions' => 'Display the top navigation bar on this donation page',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'message' => 'Show top navigation bar',
+                'default_value' => 1,
+                'ui' => 1,
+                'ui_on_text' => 'Show',
+                'ui_off_text' => 'Hide',
+            ),
+            array(
                 'key' => 'field_donation_frequency_display',
                 'label' => 'Frequency Display Options',
                 'name' => 'frequency_display',
@@ -469,6 +488,21 @@ function ctf_get_donation_show_title_safe($post_id = null) {
     }
     
     return ctf_get_donation_show_title($post_id);
+}
+
+/**
+ * Get donation show navigation setting
+ * 
+ * @param int $post_id Optional post ID, defaults to current post
+ * @return bool
+ */
+function ctf_get_donation_show_navigation($post_id = null) {
+    if (!$post_id) {
+        $post_id = get_the_ID();
+    }
+    $show_nav = get_field('show_navigation', $post_id);
+    // Default to true if field doesn't exist or is null
+    return $show_nav !== false;
 }
 
 /**

@@ -99,6 +99,11 @@ a:hover {
   position: relative;
 }
 
+/* When navigation is hidden, center the logo */
+.site-header.no-navigation .header-content {
+  justify-content: center;
+}
+
 /* Hamburger Menu Button - Hidden on Desktop */
 .mobile-menu-toggle {
   display: none;
@@ -385,8 +390,8 @@ a:hover {
   display: inline-block;
   background-color: #dd230f;
   color: #fff;
-  padding: 1rem 2.5rem;
-  font-size: 1.1rem;
+  padding: 0.75rem 1.875rem;
+  font-size: 0.95rem;
   font-weight: 600;
   text-decoration: none;
   border-radius: 6px;
@@ -427,8 +432,8 @@ a:hover {
 
 
   .signup-prompt-button {
-    padding: 0.875rem 2rem;
-    font-size: 1rem;
+    padding: 0.75rem 1.75rem;
+    font-size: 0.9rem;
     width: 100%;
     max-width: 300px;
   }
@@ -449,8 +454,8 @@ a:hover {
   }
 
   .signup-prompt-button {
-    padding: 0.75rem 1.5rem;
-    font-size: 0.95rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
   }
 }
 

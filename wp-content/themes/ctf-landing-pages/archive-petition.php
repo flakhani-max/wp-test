@@ -27,8 +27,16 @@ get_header('custom');
                 <div class="filter-group">
                     <label for="filter-province">Province</label>
                     <select name="petition_province" id="filter-province">
-                        <option value="">All Provinces</option>
-                        <option value="federal" <?php selected(get_query_var('petition_province') ?: 'federal', 'federal'); ?>>Federal</option>
+                        <?php 
+                        $current_province = get_query_var('petition_province');
+                        $has_province_param = isset($_GET['petition_province']);
+                        // If parameter exists but is empty, user selected "All Provinces"
+                        // If parameter doesn't exist, it's first visit (default to federal)
+                        $is_all_provinces = $has_province_param && $current_province === '';
+                        $is_federal = !$has_province_param || ($has_province_param && $current_province === 'federal');
+                        ?>
+                        <option value="" <?php selected($is_all_provinces, true); ?>>All Provinces</option>
+                        <option value="federal" <?php selected($is_federal, true); ?>>Federal</option>
                         <option value="ab" <?php selected(get_query_var('petition_province'), 'ab'); ?>>Alberta</option>
                         <option value="bc" <?php selected(get_query_var('petition_province'), 'bc'); ?>>British Columbia</option>
                         <option value="mb" <?php selected(get_query_var('petition_province'), 'mb'); ?>>Manitoba</option>

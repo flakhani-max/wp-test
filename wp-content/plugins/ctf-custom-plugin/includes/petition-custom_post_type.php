@@ -73,72 +73,73 @@ add_action('init', 'ctf_register_petition_category');
 
 /**
  * ACF Field Group for Petition Pages
- * Add this to functions.php or use ACF UI to create these fields
  */
+function ctf_add_petition_acf_fields() {
+    if (!function_exists('acf_add_local_field_group')) {
+        return;
+    }
 
-if( function_exists('acf_add_local_field_group') ):
-
-acf_add_local_field_group(array(
-    'key' => 'group_petition_fields',
-    'title' => 'Petition Content',
-    'fields' => array(
-        array(
-            'key' => 'field_petition_image',
-            'label' => 'Petition Image URL',
-            'name' => 'petition_image',
-            'type' => 'url',
-            'instructions' => 'URL of the main petition image',
-            'placeholder' => 'https://www.taxpayer.com/media/image.jpg',
-        ),
-        array(
-            'key' => 'petition_tag',
-            'label' => 'Mailchimp Petition Tag',
-            'name' => 'petition_tag',
-            'type' => 'textarea',
-            'instructions' => 'Mailchimp petition tag'
-        ),
-        array(
-            'key' => 'field_petition_province',
-            'label' => 'Province',
-            'name' => 'petition_province',
-            'type' => 'select',
-            'instructions' => 'Select the province this petition relates to',
-            'choices' => array(
-                'federal' => 'Federal',
-                'ab' => 'Alberta',
-                'bc' => 'British Columbia',
-                'mb' => 'Manitoba',
-                'nb' => 'New Brunswick',
-                'nl' => 'Newfoundland and Labrador',
-                'ns' => 'Nova Scotia',
-                'on' => 'Ontario',
-                'pe' => 'Prince Edward Island',
-                'qc' => 'Quebec',
-                'sk' => 'Saskatchewan',
-                'nt' => 'Northwest Territories',
-                'nu' => 'Nunavut',
-                'yt' => 'Yukon',
-            ),
-            'default_value' => 'federal',
-            'allow_null' => 0,
-            'multiple' => 0,
-        )
-    ),
-    'location' => array(
-        array(
+    acf_add_local_field_group(array(
+        'key' => 'group_petition_fields',
+        'title' => 'Petition Content',
+        'fields' => array(
             array(
-                'param' => 'post_type',
-                'operator' => '==',
-                'value' => 'petition',
+                'key' => 'field_petition_image',
+                'label' => 'Petition Image URL',
+                'name' => 'petition_image',
+                'type' => 'url',
+                'instructions' => 'URL of the main petition image',
+                'placeholder' => 'https://www.taxpayer.com/media/image.jpg',
+            ),
+            array(
+                'key' => 'petition_tag',
+                'label' => 'Mailchimp Petition Tag',
+                'name' => 'petition_tag',
+                'type' => 'textarea',
+                'instructions' => 'Mailchimp petition tag'
+            ),
+            array(
+                'key' => 'field_petition_province',
+                'label' => 'Province',
+                'name' => 'petition_province',
+                'type' => 'select',
+                'instructions' => 'Select the province this petition relates to',
+                'choices' => array(
+                    'federal' => 'Federal',
+                    'ab' => 'Alberta',
+                    'bc' => 'British Columbia',
+                    'mb' => 'Manitoba',
+                    'nb' => 'New Brunswick',
+                    'nl' => 'Newfoundland and Labrador',
+                    'ns' => 'Nova Scotia',
+                    'on' => 'Ontario',
+                    'pe' => 'Prince Edward Island',
+                    'qc' => 'Quebec',
+                    'sk' => 'Saskatchewan',
+                    'nt' => 'Northwest Territories',
+                    'nu' => 'Nunavut',
+                    'yt' => 'Yukon',
+                ),
+                'default_value' => 'federal',
+                'allow_null' => 0,
+                'multiple' => 0,
+            )
+        ),
+        'location' => array(
+            array(
+                array(
+                    'param' => 'post_type',
+                    'operator' => '==',
+                    'value' => 'petition',
+                ),
             ),
         ),
-    ),
-    'menu_order' => 0,
-    'position' => 'normal',
-    'style' => 'default',
-));
-
-endif;
+        'menu_order' => 0,
+        'position' => 'normal',
+        'style' => 'default',
+    ));
+}
+add_action('acf/init', 'ctf_add_petition_acf_fields');
 
 /**
  * Handle petition archive filtering by province
