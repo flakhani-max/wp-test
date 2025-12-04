@@ -27,7 +27,8 @@ get_header('custom');
         </div>
     </div>
     <form class="petition-form" method="post" id="petition-form">
-        <?php wp_nonce_field('ctf_petition_form', 'petition_nonce'); ?>
+        <?php // Correct nonce to match handler expectations
+        wp_nonce_field('ctf_petition_nonce', 'ctf_petition_nonce'); ?>
         <input type="hidden" name="action" value="ctf_submit_petition" />
         <input type="hidden" name="petition_id" value="<?= esc_attr(get_the_ID()) ?>" />
         <input type="hidden" name="tag_id" value="<?= esc_attr($content['tag_id']) ?>" />
