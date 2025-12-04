@@ -16,6 +16,8 @@ wp-content/upgrade/
 # Environment files
 .env
 # .env.local is committed with safe defaults only
+.env.local.secrets
+*.secrets
 
 # OS files
 .DS_Store
