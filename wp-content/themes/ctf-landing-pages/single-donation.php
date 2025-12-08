@@ -4,7 +4,7 @@
  * Template for displaying donation pages
  */
 
-get_header('custom');
+get_header();
 
 // Get all donation data from plugin (with fallbacks if plugin is inactive)
 if (function_exists('ctf_get_donation_data')) {
@@ -225,7 +225,7 @@ $show_onetime = in_array('onetime', $frequency_display);
     </div>
 </div>
 
-<?php get_footer('custom'); ?>
+<?php get_footer(); ?>
 
 <script>
 // Pass donation amounts and Stripe key to JavaScript

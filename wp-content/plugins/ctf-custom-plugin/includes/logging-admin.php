@@ -8,29 +8,29 @@
 if (!defined('ABSPATH')) exit;
 
 // Add admin menu
-add_action('admin_menu', 'ctf_add_logging_admin_page');
+add_action('admin_menu', 'add_logging_admin_page');
 
 /**
  * Add logging admin page
  */
-function ctf_add_logging_admin_page() {
+function add_logging_admin_page() {
     add_management_page(
         'CTF Logs',
         'CTF Logs', 
         'manage_options',
         'ctf-logs',
-        'ctf_logging_admin_page'
+        'logging_admin_page'
     );
 }
 
 /**
  * Logging admin page content
  */
-function ctf_logging_admin_page() {
+function logging_admin_page() {
     // Handle log cleanup
     if (isset($_POST['cleanup_logs']) && wp_verify_nonce($_POST['_wpnonce'], 'ctf_cleanup_logs')) {
         $days = intval($_POST['days_to_keep'] ?? 30);
-        $deleted = ctf_cleanup_old_logs($days);
+        $deleted = cleanup_old_logs($days);
         echo '<div class="notice notice-success"><p>Cleaned up ' . $deleted . ' old log entries.</p></div>';
     }
     
@@ -56,7 +56,7 @@ function ctf_logging_admin_page() {
     }
     
     // Get logs
-    $logs = ctf_get_logs($filter_args);
+    $logs = get_logs($filter_args);
     
     // Get available components and levels for filters
     global $wpdb;

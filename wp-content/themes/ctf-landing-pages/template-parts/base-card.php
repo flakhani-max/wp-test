@@ -36,7 +36,7 @@ if (!isset($card_data)) {
 <article class="<?php echo esc_attr($card_type); ?>-card <?php echo esc_attr($context); ?>">
     <?php if ($card_data['image'] || has_post_thumbnail()) : ?>
         <div class="card-image">
-            <a href="<?php the_permalink(); ?>">
+            <a href="<?php echo esc_url( wp_make_link_relative( get_permalink() ) ); ?>">
                 <?php if ($card_data['image']) : ?>
                     <img src="<?php echo esc_url($card_data['image']); ?>" 
                          alt="<?php echo esc_attr($card_data['title']); ?>" />
@@ -49,7 +49,7 @@ if (!isset($card_data)) {
     
     <div class="card-content">
         <h3>
-            <a href="<?php the_permalink(); ?>">
+            <a href="<?php echo esc_url( wp_make_link_relative( get_permalink() ) ); ?>">
                 <?php echo esc_html($card_data['title']); ?>
             </a>
         </h3>
@@ -77,7 +77,7 @@ if (!isset($card_data)) {
             </div>
         <?php endif; ?>
         
-        <a href="<?php the_permalink(); ?>" class="btn btn-primary card-cta">
+        <a href="<?php echo esc_url( wp_make_link_relative( get_permalink() ) ); ?>" class="btn btn-primary card-cta">
             <?php echo esc_html($card_data['cta_text']); ?>
         </a>
     </div>

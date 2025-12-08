@@ -19,7 +19,7 @@ $petition_intro = get_field('petition_intro');
 <article class="petition-card <?php echo esc_attr($context); ?>">
     <?php if ($petition_image || has_post_thumbnail()) : ?>
         <div class="card-image">
-            <a href="<?php the_permalink(); ?>">
+            <a href="<?php echo esc_url( wp_make_link_relative( get_permalink() ) ); ?>">
                 <?php if ($petition_image) : ?>
                     <img src="<?php echo esc_url($petition_image); ?>" 
                          alt="<?php echo esc_attr($petition_title); ?>" />
@@ -32,7 +32,7 @@ $petition_intro = get_field('petition_intro');
     
     <div class="card-content">
         <h3>
-            <a href="<?php the_permalink(); ?>">
+            <a href="<?php echo esc_url( wp_make_link_relative( get_permalink() ) ); ?>">
                 <?php echo esc_html($petition_title); ?>
             </a>
         </h3>
@@ -60,7 +60,7 @@ $petition_intro = get_field('petition_intro');
             </div>
         <?php endif; ?>
         
-        <a href="<?php the_permalink(); ?>" class="btn btn-primary card-cta">
+        <a href="<?php echo esc_url( wp_make_link_relative( get_permalink() ) ); ?>" class="btn btn-primary card-cta">
             Sign This Petition
         </a>
     </div>

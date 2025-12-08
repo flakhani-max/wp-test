@@ -55,6 +55,7 @@ jobs:
             stripe_secret_key:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/STRIPE_SECRET_KEY
             paypal_client_id:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/PAYPAL_CLIENT_ID
             paypal_secret:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/PAYPAL_SECRET
+            ctf_mailchimp_api_key:projects/${{ secrets.GCP_PROJECT_ID }}/secrets/ctf_mailchimp_api_key
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -237,6 +238,7 @@ jobs:
           STRIPE_SECRET_KEY='${{ steps.secrets.outputs.stripe_secret_key }}'
           PAYPAL_CLIENT_ID='${{ steps.secrets.outputs.paypal_client_id }}'
           PAYPAL_SECRET='${{ steps.secrets.outputs.paypal_secret }}'
+          CTF_MAILCHIMP_API_KEY='${{ steps.secrets.outputs.ctf_mailchimp_api_key }}'
 
           # Build environment variables safely
           ENV_VARS="WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}"
@@ -254,6 +256,7 @@ jobs:
           ENV_VARS="${ENV_VARS},STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}"
           ENV_VARS="${ENV_VARS},PAYPAL_CLIENT_ID=${PAYPAL_CLIENT_ID}"
           ENV_VARS="${ENV_VARS},PAYPAL_SECRET=${PAYPAL_SECRET}"
+          ENV_VARS="${ENV_VARS},CTF_MAILCHIMP_API_KEY=${CTF_MAILCHIMP_API_KEY}"
 
           # Add optional variables if set
           if [ -n "${WP_URL}" ]; then
@@ -311,4 +314,3 @@ jobs:
           echo "**Region:** ${REGION}" >> $GITHUB_STEP_SUMMARY
           echo "**Image:** ${IMAGE_BASE}:${GITHUB_SHA}" >> $GITHUB_STEP_SUMMARY
           echo "**URL:** ${SERVICE_URL}" >> $GITHUB_STEP_SUMMARY
-

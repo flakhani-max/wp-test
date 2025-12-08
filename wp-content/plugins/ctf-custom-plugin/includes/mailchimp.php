@@ -13,6 +13,16 @@ if (!defined('ABSPATH')) exit;
 // ========================================
 
 /**
+ * Resolve and cache the Mailchimp API key for this request.
+ *
+ * @return string|null
+ */
+function ctf_get_mailchimp_api_key() {
+    static $cached;
+    return $cached ?? ($cached = getenv('CTF_MAILCHIMP_API_KEY') ?: null);
+}
+
+/**
  * Subscribe email to Mailchimp list
  * 
  * @param string $email Email address
@@ -26,15 +36,13 @@ if (!defined('ABSPATH')) exit;
 function ctf_subscribe_to_mailchimp($email, $first_name = '', $last_name = '', $zip_code = '', $phone = '', $tags = array()) {
     $api_key = ctf_get_mailchimp_api_key();
     $list_id = ctf_get_mailchimp_list_id();
-    
     if (!$api_key || !$list_id) {
+        log_error('Mailchimp configuration missing', 'mailchimp', array('api_key' => strlen($api_key), 'list_id' => strlen($list_id)));
         return array(
             'success' => false,
             'error' => 'Mailchimp configuration missing'
         );
     }
-    
-    // Extract datacenter from API key
     $datacenter = explode('-', $api_key)[1] ?? '';
     if (!$datacenter) {
         return array(
@@ -86,6 +94,7 @@ function ctf_subscribe_to_mailchimp($email, $first_name = '', $last_name = '', $
     $response = wp_remote_request($url, $args);
     
     if (is_wp_error($response)) {
+        log_error('HTTP request failed', 'mailchimp', array('error' => $response->get_error_message(), 'email' => $email));
         return array(
             'success' => false,
             'error' => 'HTTP request failed: ' . $response->get_error_message()
@@ -97,14 +106,17 @@ function ctf_subscribe_to_mailchimp($email, $first_name = '', $last_name = '', $
     $data = json_decode($response_body, true);
     
     if ($response_code === 200) {
+        log_info('Mailchimp subscribe OK', 'mailchimp', array('email' => $email, 'tags' => $tags));
         return array(
             'success' => true,
             'data' => $data
         );
     } elseif ($response_code === 400 && isset($data['title']) && $data['title'] === 'Member Exists') {
+        log_info('Mailchimp member exists, updating', 'mailchimp', array('email' => $email));
         // Update existing member
         return ctf_update_mailchimp_subscriber($email, $first_name, $last_name, $zip_code, $phone, $tags);
     } else {
+        log_error('Mailchimp subscribe failed', 'mailchimp', array('email' => $email, 'response_code' => $response_code, 'detail' => $data['detail'] ?? 'Unknown'));
         return array(
             'success' => false,
             'error' => isset($data['detail']) ? $data['detail'] : 'Unknown Mailchimp error',
@@ -183,6 +195,7 @@ function ctf_update_mailchimp_subscriber($email, $first_name = '', $last_name = 
     $response = wp_remote_request($url, $args);
     
     if (is_wp_error($response)) {
+        log_error('HTTP request failed (update)', 'mailchimp', array('error' => $response->get_error_message(), 'email' => $email));
         return array(
             'success' => false,
             'error' => 'HTTP request failed: ' . $response->get_error_message()
@@ -198,6 +211,7 @@ function ctf_update_mailchimp_subscriber($email, $first_name = '', $last_name = 
             'success' => true,
             'data' => $data
         );
+        log_info('Mailchimp update OK', 'mailchimp', array('email' => $email));
         
         // Add tags if provided
         if (!empty($tags) && is_array($tags)) {
@@ -206,6 +220,7 @@ function ctf_update_mailchimp_subscriber($email, $first_name = '', $last_name = 
         
         return $result;
     } else {
+        log_error('Mailchimp update failed', 'mailchimp', array('email' => $email, 'response_code' => $response_code, 'detail' => $data['detail'] ?? 'Unknown'));
         return array(
             'success' => false,
             'error' => isset($data['detail']) ? $data['detail'] : 'Unknown Mailchimp error',
@@ -275,6 +290,7 @@ function ctf_add_mailchimp_tags($email, $tags) {
     $response = wp_remote_request($url, $args);
     
     if (is_wp_error($response)) {
+        log_error('HTTP request failed (tags)', 'mailchimp', array('error' => $response->get_error_message(), 'email' => $email));
         return array(
             'success' => false,
             'error' => 'HTTP request failed: ' . $response->get_error_message()
@@ -284,10 +300,12 @@ function ctf_add_mailchimp_tags($email, $tags) {
     $response_code = wp_remote_retrieve_response_code($response);
     
     if ($response_code === 204) {
+        log_info('Mailchimp tags OK', 'mailchimp', array('email' => $email, 'tags' => $tags));
         return array('success' => true);
     } else {
         $response_body = wp_remote_retrieve_body($response);
         $data = json_decode($response_body, true);
+        log_error('Mailchimp tags failed', 'mailchimp', array('email' => $email, 'response_code' => $response_code, 'detail' => $data['detail'] ?? 'Unknown'));
         
         return array(
             'success' => false,
@@ -303,21 +321,13 @@ function ctf_add_mailchimp_tags($email, $tags) {
  * @return string|false List ID or false if not found
  */
 function ctf_get_mailchimp_list_id() {
-    // Try to get from Secret Manager first
-    $list_id = ctf_get_secret('mailchimp-list-id');
-    
-    if ($list_id) {
-        return $list_id;
-    }
-    
-    // Fallback to environment variable
-    $list_id = getenv('MAILCHIMP_LIST_ID');
-    if ($list_id) {
-        return $list_id;
-    }
-    
-    // Fallback to WordPress option (for local development)
-    return get_option('ctf_mailchimp_list_id', false);
+
+    // Final fallback: static mapping (edit as needed)
+    $mailchimpListIds = array(
+        'ActionUpdates' => '59605796e2',
+        'miseajour' => '32d82681d8',
+    );
+    return $mailchimpListIds['ActionUpdates'];
 }
 
 /**
@@ -363,23 +373,55 @@ function ctf_subscribe_donation_to_mailchimp($email, $first_name, $last_name, $z
 /**
  * Handle petition subscription
  * 
- * @param string $email Email address
- * @param string $first_name First name
- * @param string $last_name Last name
- * @param string $zip_code ZIP code
- * @param string $phone Phone number
- * @param string $petition_id Petition identifier
+ * @param array|string $data Petition data (recommended) or legacy params for backward compatibility
  * @return array Result array with success/error information
  */
-function ctf_subscribe_petition_to_mailchimp($email, $first_name, $last_name, $zip_code, $phone, $petition_id = '') {
-    $tags = array('Petition Signer');
-    
-    // Add petition-specific tag if ID provided
-    if (!empty($petition_id)) {
-        $tags[] = 'Petition: ' . sanitize_text_field($petition_id);
+function ctf_subscribe_petition_to_mailchimp($data, $first_name = '', $last_name = '', $zip_code = '', $phone = '', $petition_id = '') {
+    // Support legacy call signature by normalizing into an array
+    if (!is_array($data)) {
+        $data = array(
+            'email' => $data,
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'zip_code' => $zip_code,
+            'phone' => $phone,
+            'petition_id' => $petition_id,
+        );
     }
-    
-    return ctf_subscribe_to_mailchimp($email, $first_name, $last_name, $zip_code, $phone, $tags);
+
+    $defaults = array(
+        'email' => '',
+        'first_name' => '',
+        'last_name' => '',
+        'zip_code' => '',
+        'phone' => '',
+        'petition_id' => '',
+        'tags' => array(),
+        'tag_id' => null,
+    );
+
+    $petition = array_merge($defaults, $data);
+
+    $tags = array_merge(array('Petition Signer'), is_array($petition['tags']) ? $petition['tags'] : array());
+
+    // Add petition-specific tag if ID provided
+    if (!empty($petition['petition_id'])) {
+        $tags[] = 'Petition: ' . sanitize_text_field($petition['petition_id']);
+    }
+
+    // Add explicit tag_id if provided
+    if (!empty($petition['tag_id'])) {
+        $tags[] = sanitize_text_field($petition['tag_id']);
+    }
+
+    return ctf_subscribe_to_mailchimp(
+        $petition['email'],
+        $petition['first_name'],
+        $petition['last_name'],
+        $petition['zip_code'],
+        $petition['phone'],
+        $tags
+    );
 }
 
 // ========================================

@@ -6,11 +6,15 @@ set -euo pipefail
 # ---------------------------------------------
 if [ -f /var/www/html/.env ]; then
   echo "📄 Loading environment from .env file..."
-  export $(grep -v '^#' /var/www/html/.env | xargs)
+  set -a
+  . /var/www/html/.env
+  set +a
 fi
 if [ -f /var/www/html/.env.secrets ]; then
   echo "📄 Loading production secrets..."
-  export $(grep -v '^#' /var/www/html/.env.secrets | xargs)
+  set -a
+  . /var/www/html/.env.secrets
+  set +a
 fi
 
 # ---------------------------------------------
@@ -351,4 +355,3 @@ echo "======================================"
 
 # Keep Apache in foreground
 wait "$pid"
-

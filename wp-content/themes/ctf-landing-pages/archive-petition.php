@@ -4,7 +4,7 @@
  * Displays all petitions in a grid layout
  */
 
-get_header('custom');
+get_header();
 ?>
 
 <div class="petition-archive card">
@@ -22,10 +22,9 @@ get_header('custom');
 
     <!-- Filter Pane -->
     <div class="petition-filters">
-        <form method="GET" action="<?php echo esc_url(home_url('/petitions/')); ?>" class="filter-form">
+        <form method="GET" action="/petitions/" class="filter-form">
             <div class="filter-row">
                 <div class="filter-group">
-                    <label for="filter-province">Province</label>
                     <select name="petition_province" id="filter-province">
                         <?php 
                         $current_province = get_query_var('petition_province');
@@ -35,7 +34,7 @@ get_header('custom');
                         $is_all_provinces = $has_province_param && $current_province === '';
                         $is_federal = !$has_province_param || ($has_province_param && $current_province === 'federal');
                         ?>
-                        <option value="" <?php selected($is_all_provinces, true); ?>>All Provinces</option>
+                        <option value="" <?php selected($is_all_provinces, true); ?>>All</option>
                         <option value="federal" <?php selected($is_federal, true); ?>>Federal</option>
                         <option value="ab" <?php selected(get_query_var('petition_province'), 'ab'); ?>>Alberta</option>
                         <option value="bc" <?php selected(get_query_var('petition_province'), 'bc'); ?>>British Columbia</option>
@@ -53,12 +52,21 @@ get_header('custom');
                     </select>
                 </div>
 
-                <div class="filter-actions">
-                    <button type="submit" class="btn btn-primary">Apply Filters</button>
-                    <a href="<?php echo esc_url(home_url('/petitions/')); ?>" class="btn btn-secondary">Clear</a>
-                </div>
+                <!-- Auto-apply: no buttons needed -->
             </div>
         </form>
+            <script>
+            (function(){
+                const form = document.querySelector('.filter-form');
+                const select = document.getElementById('filter-province');
+                if (form && select) {
+                    select.addEventListener('change', function(){
+                        // Submit immediately on selection change
+                        form.submit();
+                    });
+                }
+            })();
+            </script>
     </div>
 
     <div class="archive-content">
@@ -89,7 +97,6 @@ get_header('custom');
             <div class="no-petitions">
                 <h2>No petitions found</h2>
                 <p>There are currently no petitions available. Check back soon for new campaigns!</p>
-                <a href="<?php echo esc_url(home_url('/')); ?>" class="btn btn-primary">Return to Home</a>
             </div>
         <?php endif; ?>
     </div>

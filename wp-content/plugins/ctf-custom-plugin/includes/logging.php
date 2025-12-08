@@ -6,12 +6,14 @@
  * with easy querying and filtering capabilities.
  */
 
-if (!defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 /**
  * Initialize logging table on plugin activation
  */
-function ctf_create_logging_table() {
+function create_logging_table() {
     global $wpdb;
     
     $table_name = $wpdb->prefix . 'ctf_logs';
@@ -47,19 +49,19 @@ function ctf_create_logging_table() {
  * 
  * @param string $message The log message
  * @param string $level Log level: 'debug', 'info', 'warning', 'error', 'critical'
- * @param string $component Component name: 'petition', 'donation', 'mailchimp', 'secret-manager'
+ * @param string $component Component name: 'petition', 'donation', 'mailchimp', 'general'
  * @param array $context Additional context data
  */
-function ctf_log($message, $level = 'info', $component = 'general', $context = null) {
+function log_message($message, $level = 'info', $component = 'general', $context = null) {
     global $wpdb;
     
     // Also log to WordPress debug log for immediate visibility
-    error_log("CTF Plugin [{$level}] [{$component}]: {$message}");
+    error_log("CTF Plugin [{$level}] [{$component}]: {$message}, Context: " . ($context ? print_r($context, true) : 'None'));
     
     $table_name = $wpdb->prefix . 'ctf_logs';
     
     $user_id = get_current_user_id();
-    $ip_address = ctf_get_client_ip();
+    $ip_address = get_client_ip();
     $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
     
     $context_json = null;
@@ -96,7 +98,7 @@ function ctf_log($message, $level = 'info', $component = 'general', $context = n
  * @param array $args Query arguments
  * @return array Log entries
  */
-function ctf_get_logs($args = array()) {
+function get_logs($args = array()) {
     global $wpdb;
     
     $defaults = array(
@@ -151,7 +153,7 @@ function ctf_get_logs($args = array()) {
         $sql = $wpdb->prepare($sql, $where_values);
     }
     
-    return $wpdb->get_results($sql, ARRAY_A);
+    return $wpdb->get_results($sql, 'ARRAY_A');
 }
 
 /**
@@ -159,7 +161,7 @@ function ctf_get_logs($args = array()) {
  * 
  * @param int $days_to_keep Number of days to keep logs (default: 30)
  */
-function ctf_cleanup_old_logs($days_to_keep = 30) {
+function cleanup_old_logs($days_to_keep = 30) {
     global $wpdb;
     
     $table_name = $wpdb->prefix . 'ctf_logs';
@@ -172,7 +174,7 @@ function ctf_cleanup_old_logs($days_to_keep = 30) {
         )
     );
     
-    ctf_log("Cleaned up {$deleted} old log entries", 'info', 'logging');
+    log_message("Cleaned up {$deleted} old log entries", 'info', 'logging');
     
     return $deleted;
 }
@@ -182,7 +184,7 @@ function ctf_cleanup_old_logs($days_to_keep = 30) {
  * 
  * @return string IP address
  */
-function ctf_get_client_ip() {
+function get_client_ip() {
     $ip_keys = array(
         'HTTP_CF_CONNECTING_IP',     // Cloudflare
         'HTTP_CLIENT_IP',
@@ -213,24 +215,24 @@ function ctf_get_client_ip() {
 /**
  * Shorthand logging functions
  */
-function ctf_log_debug($message, $component = 'general', $context = null) {
-    ctf_log($message, 'debug', $component, $context);
+function log_debug($message, $component = 'general', $context = null) {
+    log_message($message, 'debug', $component, $context);
 }
 
-function ctf_log_info($message, $component = 'general', $context = null) {
-    ctf_log($message, 'info', $component, $context);
+function log_info($message, $component = 'general', $context = null) {
+    log_message($message, 'info', $component, $context);
 }
 
-function ctf_log_warning($message, $component = 'general', $context = null) {
-    ctf_log($message, 'warning', $component, $context);
+function log_warning($message, $component = 'general', $context = null) {
+    log_message($message, 'warning', $component, $context);
 }
 
-function ctf_log_error($message, $component = 'general', $context = null) {
-    ctf_log($message, 'error', $component, $context);
+function log_error($message, $component = 'general', $context = null) {
+    log_message($message, 'error', $component, $context);
 }
 
-function ctf_log_critical($message, $component = 'general', $context = null) {
-    ctf_log($message, 'critical', $component, $context);
+function log_critical($message, $component = 'general', $context = null) {
+    log_message($message, 'critical', $component, $context);
 }
 
 // Schedule log cleanup (daily)
@@ -239,7 +241,7 @@ if (!wp_next_scheduled('ctf_cleanup_logs_hook')) {
 }
 
 add_action('ctf_cleanup_logs_hook', function() {
-    ctf_cleanup_old_logs(30); // Keep 30 days
+    cleanup_old_logs(30); // Keep 30 days
 });
 
 ?>

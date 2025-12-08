@@ -4,7 +4,7 @@
  * The main template file for the CTF Landing Pages theme
  */
 
-get_header('custom');
+get_header();
 ?>
 
 <div class="home-template card">
@@ -26,26 +26,26 @@ get_header('custom');
             array(
                 'image' => $gcs_base_url . 'axing_the_tax.jpg',
                 'link' => 'https://www.amazon.ca/Axing-Tax-Rise-Canadas-Carbon/dp/1998365654?crid=2OONCZL11NVYE&dib=eyJ2IjoiMSJ9.hXsYzImbI3wNjTz8giJ_PxLTufLv15gW6GRrs9WvlwxnKtL1dOqMWxEv9MlnMJ6ECk-faGv5DyN2ITKfHB6HYw01ows02BI55xgVX-5bedY.CDs9QXtFXipToK01qNjW9FuYJiL5VdA_70_s-1-omjY&dib_tag=se&keywords=axing+the+tax+book&qid=1744722373&sprefix=axing%2Caps%2C89&sr=8-1&linkCode=ll1&tag=ctf07-web-20&linkId=404ae4a1ed233542e2e678533e938614&language=en_CA&ref_=as_li_ss_tl', // Update this URL in WordPress admin: Homepage Settings
-                'title' => 'Order Now: Axing the Tax', // Add title here
+                'title' => 'Order Now: Axing the Tax',
                 'alt_text' => 'Axing the Tax'
             ),
             
             array(
                 'image' => $gcs_base_url . 'Main-Podcast-Logo-Rectangle.jpg',
-                'link' => 'https://canadian-taxpayers-podcast.castos.com', // Update this URL in WordPress admin: Homepage Settings
-                'title' => 'Canadian Taxpayers Podcast', // Add title here
+                'link' => 'https://canadian-taxpayers-podcast.castos.com',
+                'title' => 'Canadian Taxpayers Podcast',
                 'alt_text' => 'Main Podcast'
             ),
             array(
                 'image' => $gcs_base_url . 'cameras.png',
-                'link' => esc_url(home_url('/petitions/defund-the-cbc-and-end-media-bailout/')), // Update this URL in WordPress admin: Homepage Settings
-                'title' => 'Petition: Defund the CBC and End Media Bailout', // Add title here
+                'link' => '/petitions/defund-the-cbc-and-end-media-bailout/',
+                'title' => 'Petition: Defund the CBC and End Media Bailout',
                 'alt_text' => 'Cameras'
             ),
             array(
                 'image' => $gcs_base_url . 'store.jpg',
-                'link' => 'https://shop.taxpayer.com', // Update this URL in WordPress admin: Homepage Settings
-                'title' => 'Taxpayers Federation T-Shirt Store', // Add title here
+                'link' => 'https://shop.taxpayer.com',
+                'title' => 'Taxpayers Federation T-Shirt Store', 
                 'alt_text' => 'Store'
             ),
         );
@@ -89,7 +89,7 @@ get_header('custom');
     <div class="signup-prompt-section">
         <div class="signup-prompt-content content-block">
             <h2 class="signup-prompt-title">Join thousands of Canadians taking action on the issues that matter most to taxpayers</h2>
-            <a href="<?php echo esc_url(home_url('/signup/')); ?>" class="signup-prompt-button">Sign Up Now</a>
+            <a href="/signup/" class="signup-prompt-button">Sign Up Now</a>
         </div>
     </div>
 
@@ -237,4 +237,4 @@ get_header('custom');
     </div>
 </div>
 
-<?php get_footer('custom'); ?>
+<?php get_footer(); ?>

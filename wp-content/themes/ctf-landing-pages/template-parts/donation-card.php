@@ -19,7 +19,7 @@ $donation_intro = get_field('donation_intro');
 <article class="donation-card <?php echo esc_attr($context); ?>">
     <?php if ($donation_image || has_post_thumbnail()) : ?>
         <div class="card-image">
-            <a href="<?php the_permalink(); ?>">
+            <a href="<?php echo esc_url( wp_make_link_relative( get_permalink() ) ); ?>">
                 <?php if ($donation_image) : ?>
                     <img src="<?php echo esc_url($donation_image); ?>" 
                          alt="<?php echo esc_attr($donation_title); ?>" />
@@ -32,7 +32,7 @@ $donation_intro = get_field('donation_intro');
     
     <div class="card-content">
         <h3>
-            <a href="<?php the_permalink(); ?>">
+            <a href="<?php echo esc_url( wp_make_link_relative( get_permalink() ) ); ?>">
                 <?php echo esc_html($donation_title); ?>
             </a>
         </h3>
@@ -60,7 +60,7 @@ $donation_intro = get_field('donation_intro');
             </div>
         <?php endif; ?>
         
-        <a href="<?php the_permalink(); ?>" class="btn btn-primary card-cta">
+        <a href="<?php echo esc_url( wp_make_link_relative( get_permalink() ) ); ?>" class="btn btn-primary card-cta">
             Donate Now
         </a>
     </div>

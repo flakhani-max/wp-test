@@ -68,7 +68,7 @@ a:hover {
 .site-header {
   background: #ffffff;
   color: #fff;
-  padding: 1rem 0;
+  padding: .4rem 0;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -85,7 +85,7 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 3rem;
+  gap: 1rem;
   position: relative;
 }
 
@@ -223,12 +223,12 @@ a:hover {
 /* Home Page Styles */
 .home-template {
   max-width: 1200px;
-  margin: 2em auto;
+  margin: 1.5em auto;
 }
 
 .home-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .home-header h1 {
@@ -237,7 +237,7 @@ a:hover {
 }
 
 .home-subtitle {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: #6c757d;
   margin: 0;
 }
@@ -543,6 +543,92 @@ a:hover {
   align-items: flex-end;
 }
 
+/* One-line newsroom filters layout */
+.filter-row.one-line {
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.filter-group.compact {
+  flex: 0 0 auto;
+  min-width: 180px;
+}
+
+.filter-group.search-compact {
+  flex: 1 1 auto;
+  min-width: 160px;
+}
+
+.filter-group.search-compact input[type="text"] {
+  width: 100%;
+  max-width: 220px;
+  transition: max-width 0.2s ease;
+  color: #212529;
+}
+
+.filter-group.search-compact input[type="text"]:focus {
+  max-width: 420px;
+}
+
+/* Ensure placeholder matches other controls */
+.filter-group.search-compact input[type="text"]::placeholder {
+  color: #495057;
+  opacity: 1; /* Safari/iOS */
+}
+
+.filter-group.date-collapsible details {
+  position: relative;
+}
+
+.filter-group.date-collapsible summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 0.875rem;
+  border: 1.5px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  color: #212529;
+  gap: 0.5rem;
+  min-width: 160px;
+  justify-content: center;
+}
+
+.filter-group.date-collapsible summary::-webkit-details-marker { display: none; }
+
+.filter-group.date-collapsible[open] summary {
+  border-color: #dd230f;
+  box-shadow: 0 0 0 3px rgba(221, 35, 15, 0.1);
+}
+
+.filter-group.date-collapsible .date-range {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  padding: 0.75rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  z-index: 20;
+  min-width: 320px;
+}
+
+.filter-group.date-collapsible .date-field label {
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Ensure actions stay tight and on one line */
+.filter-actions {
+  margin-left: auto;
+}
+
 .filter-group {
   display: flex;
   flex-direction: column;
@@ -659,10 +745,8 @@ a:hover {
 
 /* Tablet responsiveness for filters */
 @media (max-width: 992px) {
-  .filter-group {
-    flex: 1 1 calc(50% - 0.3125rem);
-    min-width: 140px;
-  }
+  .filter-row.one-line { flex-wrap: wrap; }
+  .filter-group { flex: 1 1 calc(50% - 0.3125rem); min-width: 140px; }
   
   .filter-group:first-child {
     flex: 1 1 100%;
@@ -793,22 +877,20 @@ a:hover {
 
 .archive-header {
   text-align: center;
-  margin-bottom: 3rem;
-  padding: 2rem 1rem;
-  background: #dd230f;
-  color: white;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
 }
 
 .archive-header h1 {
   margin: 0 0 0.5rem 0;
-  color: white;
+  color: #1a2a3a;
 }
 
 .archive-subtitle {
   margin: 0;
   opacity: 0.9;
   font-size: 1.1rem;
-  color: #fff;
+  color: #6c757d;
 }
 
 .petition-archive-grid,
@@ -868,7 +950,7 @@ a:hover {
   
   /* Mobile navigation styles */
   .site-header {
-    padding: 0.5rem 0;
+    padding: 0.2rem 0;
   }
   
   .header-content {

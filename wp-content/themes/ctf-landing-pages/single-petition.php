@@ -64,6 +64,11 @@ get_header('custom');
         <button type="submit" class="btn btn-primary btn-large">Sign the petition</button>
         <div class="form-messages" style="display: none; margin-top: 1rem;"></div>
     </form>
+    <noscript>
+        <div class="petition-error" role="alert" style="margin-top:1rem;">
+            <p>JavaScript is required to sign this petition. Please enable JavaScript in your browser settings.</p>
+        </div>
+    </noscript>
     <div class="petition-privacy">
         <p>We take data security and privacy seriously. Your information will be kept safe, and will be used to sign your petition.</p>
     </div>

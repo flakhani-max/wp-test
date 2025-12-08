@@ -16,11 +16,11 @@ add_action('wp_ajax_nopriv_ctf_submit_petition', 'ctf_handle_petition_submission
  * Handle petition form submission
  */
 function ctf_handle_petition_submission() {
-    ctf_log_info('Processing petition submission', 'petition');
+    //log_info('Processing petition submission', 'petition');
     
     // Verify nonce for security
     if (!isset($_POST['ctf_petition_nonce']) || !wp_verify_nonce($_POST['ctf_petition_nonce'], 'ctf_petition_nonce')) {
-        ctf_log_warning('Nonce verification failed', 'petition', array('ip' => ctf_get_client_ip()));
+        log_warning('Nonce verification failed', 'petition', array('ip' => get_client_ip()));
         wp_send_json_error(array('message' => 'Security check failed'));
     }
 
@@ -31,14 +31,24 @@ function ctf_handle_petition_submission() {
     $zip_code = sanitize_text_field($_POST['zip_code'] ?? '');
     $phone = sanitize_text_field($_POST['phone'] ?? '');
     $petition_id = sanitize_text_field($_POST['petition_id'] ?? '');
-
-    ctf_log_info('Form data received', 'petition', array(
+    // Extended fields from template
+    $street_address = sanitize_text_field($_POST['street_address'] ?? '');
+    $city = sanitize_text_field($_POST['city'] ?? '');
+    $sms_optin = isset($_POST['sms_optin']) && $_POST['sms_optin'] === '1' ? 1 : 0;
+    $tag_id = sanitize_text_field($_POST['tag_id'] ?? '');
+    //error_log('Tag ID: ' . $tag_id);
+    $data =     array(
         'name' => $first_name . ' ' . $last_name,
         'email' => $email,
         'zip_code' => $zip_code,
-        'petition_id' => $petition_id
-    ));
-
+        'phone' => $phone,
+        'petition_id' => $petition_id,
+        'street_address' => $street_address,
+        'city' => $city,
+        'sms_optin' => $sms_optin,
+        'tag_id' => $tag_id
+    );
+    //log_info('Form data received', 'petition', $data);
     // Validate required fields
     $errors = array();
     
@@ -59,7 +69,7 @@ function ctf_handle_petition_submission() {
     }
 
     if (!empty($errors)) {
-        ctf_log_warning('Validation errors', 'petition', array('errors' => $errors));
+        log_warning('Validation errors', 'petition', array('errors' => $errors));
         wp_send_json_error(array(
             'message' => 'Please fix the following errors:',
             'errors' => $errors
@@ -67,10 +77,23 @@ function ctf_handle_petition_submission() {
     }
 
     // Add to Mailchimp - this is the main goal
-    $mailchimp_result = ctf_subscribe_petition_to_mailchimp($email, $first_name, $last_name, $zip_code, $phone, $petition_id);
+    // Bundle form data for a single helper call
+    $mailchimp_result = ctf_subscribe_petition_to_mailchimp(array(
+        'email' => $email,
+        'first_name' => $first_name,
+        'last_name' => $last_name,
+        'zip_code' => $zip_code,
+        'phone' => $phone,
+        'petition_id' => $petition_id,
+        'tags' => array(),
+        'tag_id' => $tag_id,
+        'street_address' => $street_address,
+        'city' => $city,
+        'sms_optin' => $sms_optin
+    ));
     
     if ($mailchimp_result['success']) {
-        ctf_log_info('Successfully added to Mailchimp', 'petition', array(
+        log_info('Successfully added to Mailchimp', 'petition', array(
             'email' => $email,
             'petition_id' => $petition_id
         ));
@@ -78,7 +101,7 @@ function ctf_handle_petition_submission() {
             'message' => 'Thank you for signing the petition! You have been added to our mailing list.'
         ));
     } else {
-        ctf_log_error('Mailchimp subscription failed', 'petition', array(
+        log_error('Mailchimp subscription failed', 'petition', array(
             'email' => $email,
             'error' => $mailchimp_result['error'],
             'petition_id' => $petition_id

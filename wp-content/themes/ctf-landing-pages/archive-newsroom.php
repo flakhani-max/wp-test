@@ -4,7 +4,7 @@
  * Displays all newsroom items in a grid layout
  */
 
-get_header('custom');
+get_header();
 ?>
 
 <div class="newsroom-archive card">
@@ -22,18 +22,11 @@ get_header('custom');
 
     <!-- Filter Pane -->
     <div class="newsroom-filters">
-        <form method="GET" action="<?php echo esc_url(home_url('/newsroom/')); ?>" class="filter-form">
-            <div class="filter-row">
-                <div class="filter-group">
-                    <label for="filter-search">Search</label>
-                    <input type="text" name="s" id="filter-search" 
-                           value="<?php echo esc_attr(get_query_var('s')); ?>" 
-                           placeholder="Search newsroom...">
-                </div>
-
-                <div class="filter-group">
-                    <label for="filter-type">Type</label>
-                    <select name="news_type" id="filter-type">
+        <form method="GET" action="/newsroom/" class="filter-form">
+            <div class="filter-row one-line">
+                <!-- Type first -->
+                <div class="filter-group compact">
+                    <select name="news_type" id="filter-type" aria-label="Type">
                         <option value="">All Types</option>
                         <option value="news_release" <?php selected(get_query_var('news_type'), 'news_release'); ?>>News Release</option>
                         <option value="commentary" <?php selected(get_query_var('news_type'), 'commentary'); ?>>Commentary</option>
@@ -42,14 +35,12 @@ get_header('custom');
                     </select>
                 </div>
 
-                <div class="filter-group">
-                    <label for="filter-province">Province</label>
-                    <select name="news_province" id="filter-province">
+                <!-- Province second -->
+                <div class="filter-group compact">
+                    <select name="news_province" id="filter-province" aria-label="Province">
                         <?php 
                         $current_province = get_query_var('news_province');
                         $has_province_param = isset($_GET['news_province']);
-                        // If parameter exists but is empty, user selected "All Provinces"
-                        // If parameter doesn't exist, it's first visit (default to federal)
                         $is_all_provinces = $has_province_param && $current_province === '';
                         $is_federal = !$has_province_param || ($has_province_param && $current_province === 'federal');
                         ?>
@@ -71,21 +62,41 @@ get_header('custom');
                     </select>
                 </div>
 
-                <div class="filter-group">
-                    <label for="filter-date-start">Date From</label>
-                    <input type="date" name="date_start" id="filter-date-start" 
-                           value="<?php echo esc_attr(get_query_var('date_start')); ?>">
+                <!-- Collapsible Date range -->
+                <div class="filter-group date-collapsible">
+                    <details>
+                        <summary>
+                            <span class="summary-icon" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <rect x="3" y="5" width="18" height="16" rx="2" stroke="#495057" stroke-width="1.5"/>
+                                  <path d="M8 3v4M16 3v4" stroke="#495057" stroke-width="1.5" stroke-linecap="round"/>
+                                  <path d="M3 9h18" stroke="#495057" stroke-width="1.5"/>
+                                </svg>
+                            </span>
+                            <span class="summary-text">Date Range</span>
+                        </summary>
+                        <div class="date-range">
+                            <div class="date-field">
+                                <input type="date" name="date_start" id="filter-date-start" aria-label="Date From"
+                                       value="<?php echo esc_attr(get_query_var('date_start')); ?>">
+                            </div>
+                            <div class="date-field">
+                                <input type="date" name="date_end" id="filter-date-end" aria-label="Date To"
+                                       value="<?php echo esc_attr(get_query_var('date_end')); ?>">
+                            </div>
+                        </div>
+                    </details>
                 </div>
 
-                <div class="filter-group">
-                    <label for="filter-date-end">Date To</label>
-                    <input type="date" name="date_end" id="filter-date-end" 
-                           value="<?php echo esc_attr(get_query_var('date_end')); ?>">
+                <!-- Compact search that expands on focus -->
+                <div class="filter-group search-compact">
+                    <input type="text" name="s" id="filter-search" aria-label="Search"
+                           value="<?php echo esc_attr(get_query_var('s')); ?>"
+                           placeholder="Search newsroom">
                 </div>
 
                 <div class="filter-actions">
                     <button type="submit" class="btn btn-primary">Apply Filters</button>
-                    <a href="<?php echo esc_url(home_url('/newsroom/')); ?>" class="btn btn-secondary">Clear</a>
                 </div>
             </div>
         </form>
@@ -108,10 +119,17 @@ get_header('custom');
 
             <nav class="pagination">
                 <?php
-                echo paginate_links(array(
+                /** @var string|string[]|false $pagination */
+                $pagination = paginate_links(array(
                     'prev_text' => '&laquo; Previous',
-                    'next_text' => 'Next &raquo;'
+                    'next_text' => 'Next &raquo;',
+                    'echo' => false
                 ));
+                if ($pagination) {
+                    $site_url = home_url();
+                    // Convert absolute site URLs to relative paths
+                    echo str_replace($site_url, '', $pagination);
+                }
                 ?>
             </nav>
 
@@ -119,7 +137,7 @@ get_header('custom');
             <div class="no-newsroom">
                 <h2>No news found</h2>
                 <p>There are currently no news articles available. Check back soon for updates!</p>
-                <a href="<?php echo esc_url(home_url('/')); ?>" class="btn btn-primary">Return to Home</a>
+                <a href="/" class="btn btn-primary">Return to Home</a>
             </div>
         <?php endif; ?>
     </div>
@@ -127,4 +145,3 @@ get_header('custom');
 </div>
 
 <?php get_footer(); ?>
-

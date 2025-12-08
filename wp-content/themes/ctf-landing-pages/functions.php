@@ -23,6 +23,11 @@ function ctf_enqueue_assets() {
             get_template_directory_uri() . '/js/petition-template.js', 
             [], '1.0', true
         );
+        // Provide admin-ajax URL and nonce refresh action to JS
+        wp_localize_script('petition-template', 'wp_petition', [
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce_action' => 'ctf_get_petition_nonce'
+        ]);
     }
     
     if (is_singular('newsroom')) {
