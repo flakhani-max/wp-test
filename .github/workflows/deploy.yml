@@ -254,6 +254,7 @@ jobs:
           cp service.yaml service-deploy.yaml
           
           # Replace placeholders
+          sed -i "s|SERVICE_NAME_PLACEHOLDER|${SERVICE_NAME}|g" service-deploy.yaml
           sed -i "s|RUNTIME_SA_EMAIL|${RUNTIME_SA_EMAIL}|g" service-deploy.yaml
           sed -i "s|IMAGE_URL|${IMAGE_BASE}:${GITHUB_SHA}|g" service-deploy.yaml
           sed -i "s|DB_HOST_VALUE|${WORDPRESS_DB_HOST}|g" service-deploy.yaml

@@ -1,7 +1,7 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: wp-test
+  name: SERVICE_NAME_PLACEHOLDER
   annotations:
     run.googleapis.com/launch-stage: BETA
 spec:
