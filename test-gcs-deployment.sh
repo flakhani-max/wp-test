@@ -6,8 +6,13 @@ set -e
 echo "=== Testing GCS Mount Deployment ==="
 echo ""
 
+# Get service name from Secret Manager
+SERVICE_NAME=$(gcloud secrets versions access latest --secret="SERVICE_NAME" 2>/dev/null || echo "wordpress-hello-world")
+echo "Testing service: ${SERVICE_NAME}"
+echo ""
+
 # Check if deployed
-SERVICE_URL=$(gcloud run services describe wp-test --region northamerica-northeast1 --format='value(status.url)' 2>/dev/null || echo "")
+SERVICE_URL=$(gcloud run services describe ${SERVICE_NAME} --region northamerica-northeast1 --format='value(status.url)' 2>/dev/null || echo "")
 
 if [ -z "$SERVICE_URL" ]; then
     echo "❌ Service not deployed yet"
@@ -20,7 +25,7 @@ echo ""
 
 # Check if GCS mount is configured
 echo "Checking GCS mount configuration..."
-if gcloud run services describe wp-test --region northamerica-northeast1 --format=yaml | grep -q "gcsfuse.run.googleapis.com"; then
+if gcloud run services describe ${SERVICE_NAME} --region northamerica-northeast1 --format=yaml | grep -q "gcsfuse.run.googleapis.com"; then
     echo "✅ GCS volume mount is configured"
 else
     echo "❌ GCS mount NOT found - deployment may have failed"
