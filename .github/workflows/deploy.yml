@@ -5,7 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'Dockerfile'
+      - 'Dockerfile.gcs-mount'
+      - 'service.yaml'
       - 'docker-compose.yml'
       - 'custom-entrypoint.sh'
       - 'wp-content/**'
@@ -190,7 +191,7 @@ jobs:
           echo "Image will be pushed to:"
           echo "${REGION}-docker.pkg.dev/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPO}/${SERVICE_NAME}"
 
-      - name: Build Docker image
+      - name: Build Docker image with GCS Mount
         run: |
           REGION="${{ steps.secrets.outputs.region }}"
           SERVICE_NAME="${{ steps.secrets.outputs.service_name }}"
@@ -198,12 +199,12 @@ jobs:
           ACF_PRO_KEY="${{ steps.secrets.outputs.acf_pro_key }}"
           IMAGE_BASE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPO}/${SERVICE_NAME}"
           
-          echo "Building Docker image with ACF Pro pre-installed..."
+          echo "Building Docker image with GCS mount (no WP Offload Media)..."
           docker build \
             --build-arg ACF_PRO_KEY="${ACF_PRO_KEY}" \
             -t ${IMAGE_BASE}:${GITHUB_SHA} \
-                       -t ${IMAGE_BASE}:latest \
-                       -f Dockerfile .
+            -t ${IMAGE_BASE}:latest \
+            -f Dockerfile.gcs-mount .
 
       - name: Push Docker image to Artifact Registry
         run: |
@@ -214,9 +215,18 @@ jobs:
           docker push ${IMAGE_BASE}:${GITHUB_SHA}
           docker push ${IMAGE_BASE}:latest
 
-      - name: Deploy to Cloud Run
+      - name: Setup GCS Bucket Permissions
         run: |
-          # Get all values from Secret Manager
+          GCS_BUCKET_NAME='${{ steps.secrets.outputs.gcs_bucket_name }}'
+          RUNTIME_SA_EMAIL='${{ steps.secrets.outputs.runtime_sa_email }}'
+          
+          echo "Ensuring GCS bucket permissions for ${RUNTIME_SA_EMAIL}..."
+          gsutil iam ch serviceAccount:${RUNTIME_SA_EMAIL}:roles/storage.objectAdmin gs://${GCS_BUCKET_NAME}
+          echo "✅ Bucket permissions configured"
+
+      - name: Deploy to Cloud Run with GCS Mount
+        run: |
+          # Get values from Secret Manager
           REGION='${{ steps.secrets.outputs.region }}'
           SERVICE_NAME='${{ steps.secrets.outputs.service_name }}'
           ARTIFACT_REGISTRY_REPO='${{ steps.secrets.outputs.artifact_registry_repo }}'
@@ -232,67 +242,45 @@ jobs:
           CLOUD_SQL_CONNECTION_NAME='${{ steps.secrets.outputs.cloud_sql_connection_name }}'
           GCS_BUCKET_NAME='${{ steps.secrets.outputs.gcs_bucket_name }}'
           ACF_PRO_KEY='${{ steps.secrets.outputs.acf_pro_key }}'
-          # Base64 encode JSON to avoid special character issues
-          WP_MEDIA_SA_KEY=$(echo -n '${{ steps.secrets.outputs.wp_media_sa_key }}' | base64 | tr -d '\n')
           STRIPE_PUBLISHABLE_KEY='${{ steps.secrets.outputs.stripe_publishable_key }}'
           STRIPE_SECRET_KEY='${{ steps.secrets.outputs.stripe_secret_key }}'
           PAYPAL_CLIENT_ID='${{ steps.secrets.outputs.paypal_client_id }}'
           PAYPAL_SECRET='${{ steps.secrets.outputs.paypal_secret }}'
           CTF_MAILCHIMP_API_KEY='${{ steps.secrets.outputs.ctf_mailchimp_api_key }}'
-
-          # Build environment variables safely
-          ENV_VARS="WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}"
-          ENV_VARS="${ENV_VARS},WORDPRESS_DB_USER=${WORDPRESS_DB_USER}"
-          ENV_VARS="${ENV_VARS},WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}"
-          ENV_VARS="${ENV_VARS},WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}"
-          ENV_VARS="${ENV_VARS},WP_ADMIN_USER=${WP_ADMIN_USER}"
-          ENV_VARS="${ENV_VARS},WP_ADMIN_PASS=${WP_ADMIN_PASS}"
-          ENV_VARS="${ENV_VARS},WP_ADMIN_EMAIL=${WP_ADMIN_EMAIL}"
-          ENV_VARS="${ENV_VARS},CLOUD_SQL_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME}"
-          ENV_VARS="${ENV_VARS},GCS_BUCKET_NAME=${GCS_BUCKET_NAME}"
-          ENV_VARS="${ENV_VARS},WP_MEDIA_SA_KEY=${WP_MEDIA_SA_KEY}"
-          ENV_VARS="${ENV_VARS},ACF_PRO_KEY=${ACF_PRO_KEY}"
-          ENV_VARS="${ENV_VARS},STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}"
-          ENV_VARS="${ENV_VARS},STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}"
-          ENV_VARS="${ENV_VARS},PAYPAL_CLIENT_ID=${PAYPAL_CLIENT_ID}"
-          ENV_VARS="${ENV_VARS},PAYPAL_SECRET=${PAYPAL_SECRET}"
-          ENV_VARS="${ENV_VARS},CTF_MAILCHIMP_API_KEY=${CTF_MAILCHIMP_API_KEY}"
-
-          # Add optional variables if set
-          if [ -n "${WP_URL}" ]; then
-            ENV_VARS="${ENV_VARS},WP_URL=${WP_URL}"
-          fi
-          if [ -n "${WP_TITLE}" ]; then
-            ENV_VARS="${ENV_VARS},WP_TITLE=${WP_TITLE}"
-          fi
-          
+          RUNTIME_SA_EMAIL='${{ steps.secrets.outputs.runtime_sa_email }}'
           IMAGE_BASE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPO}/${SERVICE_NAME}"
           
-          # Get RUNTIME_SA from Secret Manager
-          RUNTIME_SA_EMAIL='${{ steps.secrets.outputs.runtime_sa_email }}'
+          echo "Preparing service.yaml for deployment..."
+          cp service.yaml service-deploy.yaml
           
-          # Verify RUNTIME_SA is set
-          if [ -z "${RUNTIME_SA_EMAIL}" ]; then
-            echo "❌ ERROR: RUNTIME_SA_EMAIL secret is not set in Secret Manager!"
-            echo "Please add RUNTIME_SA_EMAIL secret in Secret Manager with your service account email"
-            exit 1
-          fi
+          # Replace placeholders
+          sed -i "s|RUNTIME_SA_EMAIL|${RUNTIME_SA_EMAIL}|g" service-deploy.yaml
+          sed -i "s|IMAGE_URL|${IMAGE_BASE}:${GITHUB_SHA}|g" service-deploy.yaml
+          sed -i "s|DB_HOST_VALUE|${WORDPRESS_DB_HOST}|g" service-deploy.yaml
+          sed -i "s|DB_USER_VALUE|${WORDPRESS_DB_USER}|g" service-deploy.yaml
+          sed -i "s|DB_PASSWORD_VALUE|${WORDPRESS_DB_PASSWORD}|g" service-deploy.yaml
+          sed -i "s|DB_NAME_VALUE|${WORDPRESS_DB_NAME}|g" service-deploy.yaml
+          sed -i "s|taxpayer-media-bucket|${GCS_BUCKET_NAME}|g" service-deploy.yaml
           
-          echo "Using service account: ${RUNTIME_SA_EMAIL}"
+          echo "Deploying to Cloud Run with GCS volume mount..."
+          gcloud run services replace service-deploy.yaml --platform=managed --region=${REGION}
           
-          gcloud run deploy ${SERVICE_NAME} \
-            --image ${IMAGE_BASE}:${GITHUB_SHA} \
-            --region ${REGION} \
-            --platform managed \
-            --allow-unauthenticated \
-            --service-account "${RUNTIME_SA_EMAIL}" \
-            --set-env-vars "${ENV_VARS}" \
-            --add-cloudsql-instances "${CLOUD_SQL_CONNECTION_NAME}" \
-            --memory 1Gi \
-            --cpu 1 \
-            --timeout 300 \
-            --max-instances 10 \
-           --min-instances 1
+          echo "Adding additional environment variables..."
+          gcloud run services update ${SERVICE_NAME} \
+            --region=${REGION} \
+            --update-env-vars="WP_ADMIN_USER=${WP_ADMIN_USER},WP_ADMIN_PASS=${WP_ADMIN_PASS},WP_ADMIN_EMAIL=${WP_ADMIN_EMAIL},WP_URL=${WP_URL},WP_TITLE=${WP_TITLE},ACF_PRO_KEY=${ACF_PRO_KEY},STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY},STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY},PAYPAL_CLIENT_ID=${PAYPAL_CLIENT_ID},PAYPAL_SECRET=${PAYPAL_SECRET},CTF_MAILCHIMP_API_KEY=${CTF_MAILCHIMP_API_KEY},GCS_BUCKET=${GCS_BUCKET_NAME},CLOUD_SQL_CONNECTION_NAME=${CLOUD_SQL_CONNECTION_NAME}" \
+            --add-cloudsql-instances="${CLOUD_SQL_CONNECTION_NAME}" \
+            --timeout=300 \
+            --max-instances=10 \
+            --min-instances=1
+          
+          echo "Setting IAM policy..."
+          gcloud run services add-iam-policy-binding ${SERVICE_NAME} \
+            --region=${REGION} \
+            --member="allUsers" \
+            --role="roles/run.invoker"
+          
+          echo "✅ Deployment complete with GCS bucket mounted!"
 
       - name: Get Service URL
         run: |
