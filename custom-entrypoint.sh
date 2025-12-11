@@ -3,18 +3,14 @@ set -euo pipefail
 
 # ---------------------------------------------
 # Load .env files if they exist (for local development)
+# Note: We use docker-compose env_file which sets env vars directly,
+# so we don't need to source the files anymore
 # ---------------------------------------------
 if [ -f /var/www/html/.env ]; then
-  echo "📄 Loading environment from .env file..."
-  set -a
-  . /var/www/html/.env
-  set +a
+  echo "📄 Environment variables loaded via docker-compose"
 fi
 if [ -f /var/www/html/.env.secrets ]; then
-  echo "📄 Loading production secrets..."
-  set -a
-  . /var/www/html/.env.secrets
-  set +a
+  echo "📄 Production secrets available"
 fi
 
 # ---------------------------------------------

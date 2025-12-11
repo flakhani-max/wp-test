@@ -1,0 +1,45 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: SERVICE_NAME_PLACEHOLDER
+  annotations:
+    run.googleapis.com/launch-stage: BETA
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/execution-environment: gen2
+    spec:
+      serviceAccountName: RUNTIME_SA_EMAIL  # Will be replaced during deployment
+      containers:
+      - image: IMAGE_URL  # Will be replaced during deployment
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            memory: 1Gi
+            cpu: "1"
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: DB_HOST_VALUE
+        - name: WORDPRESS_DB_USER
+          value: DB_USER_VALUE
+        - name: WORDPRESS_DB_PASSWORD
+          value: DB_PASSWORD_VALUE
+        - name: WORDPRESS_DB_NAME
+          value: DB_NAME_VALUE
+        - name: GCS_BUCKET
+          value: taxpayer-media-bucket
+        volumeMounts:
+        - name: gcs-media
+          mountPath: /var/www/html/wp-content/uploads
+      volumes:
+      - name: gcs-media
+        csi:
+          driver: gcsfuse.run.googleapis.com
+          volumeAttributes:
+            bucketName: taxpayer-media-bucket
+            mountOptions: "implicit-dirs"
+  traffic:
+  - percent: 100
+    latestRevision: true
