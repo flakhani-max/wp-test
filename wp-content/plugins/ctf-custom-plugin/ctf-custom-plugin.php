@@ -23,6 +23,7 @@ require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/paypal-payment-handler.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/petitions.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/mailchimp.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/admin-cleanup.php';
+require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/page-sections-taxonomy.php';
 
 // Load shared ACF utilities (before post types so filters are registered)
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/acf-utilities.php';
@@ -31,7 +32,6 @@ require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/acf-utilities.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/donations-custom_post_type.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/petition-custom_post_type.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/newsroom-custom_post_type.php';
-require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/next-step-custom_post_type.php';
 
 // Plugin activation hook
 register_activation_hook(__FILE__, 'ctf_custom_plugin_activate');

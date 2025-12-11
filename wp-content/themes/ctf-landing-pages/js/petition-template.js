@@ -281,7 +281,15 @@ document.addEventListener('DOMContentLoaded', function() {
                             || document.body.getAttribute('data-page-id')
                             || document.querySelector('input[name="page_id"]')?.value
                             || '';
-                        const dest = '/donation/donate/?source=' + encodeURIComponent(sourceId);
+                        const petitionTitle = (window.wp_petition && window.wp_petition.title)
+                            || document.querySelector('input[name="petition_title"]')?.value
+                            || document.querySelector('.petition-title')?.textContent
+                            || document.title;
+                        const params = new URLSearchParams();
+                        if (sourceId) params.set('source', sourceId);
+                        if (petitionTitle) params.set('petition_title', petitionTitle);
+                        const query = params.toString();
+                        const dest = query ? '/donation/donate/?' + query : '/donation/donate/';
                         // small delay to allow analytics to fire
                         setTimeout(function(){ window.location.href = dest; }, 250);
                     } catch (_) {}

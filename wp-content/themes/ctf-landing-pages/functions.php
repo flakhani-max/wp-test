@@ -13,7 +13,7 @@ function ctf_enqueue_assets() {
     wp_enqueue_style('ctf-components', get_template_directory_uri() . '/css/components.css', ['ctf-main'], '1.0');
     
     // Load template-specific styles conditionally
-    if (is_singular('petition')) {
+    if (is_singular('petition') || is_page_template('page-petition.php')) {
         // Petition template styles and scripts
         wp_enqueue_style('petition-template', 
             get_template_directory_uri() . '/css/petition-template.css', 
@@ -26,7 +26,9 @@ function ctf_enqueue_assets() {
         // Provide admin-ajax URL and nonce refresh action to JS
         wp_localize_script('petition-template', 'wp_petition', [
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce_action' => 'ctf_get_petition_nonce'
+            'nonce_action' => 'ctf_get_petition_nonce',
+            'page_id' => get_the_ID(),
+            'title' => get_the_title()
         ]);
     }
     
@@ -38,7 +40,7 @@ function ctf_enqueue_assets() {
         );
     }
     
-    if (is_singular('donation')) {
+    if (is_singular('donation') || is_page_template('page-donation.php')) {
         // Donation template styles
         wp_enqueue_style('donation-template', 
             get_template_directory_uri() . '/css/donation-template.css', 

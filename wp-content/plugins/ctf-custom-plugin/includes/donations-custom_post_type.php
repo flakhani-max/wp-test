@@ -267,9 +267,29 @@ function ctf_add_donation_acf_fields() {
                     'value' => 'donation',
                 ),
             ),
+            array(
+                array(
+                    'param' => 'post_type',
+                    'operator' => '==',
+                    'value' => 'next_step',
+                ),
+            ),
+            array(
+                array(
+                    'param' => 'page_template',
+                    'operator' => '==',
+                    'value' => 'page-donation.php',
+                ),
+                array(
+                    'param' => 'post_type',
+                    'operator' => '==',
+                    'value' => 'page',
+                ),
+            ),
         ),
         'menu_order' => 0,
-        'position' => 'normal',
+        // Surface fields near the top in the editor
+        'position' => 'acf_after_title',
         'style' => 'default',
         'label_placement' => 'top',
         'instruction_placement' => 'label',
@@ -423,8 +443,8 @@ function ctf_get_donation_amounts_safe($post_id = null) {
         $post_id = get_the_ID();
     }
     
-    // Check if this is a donation post type
-    if (get_post_type($post_id) !== 'donation') {
+    // Allow donation settings on donation posts and Next Step posts
+    if (!in_array(get_post_type($post_id), array('donation', 'next_step'), true)) {
         return [25, 50, 100, 200, 500]; // Default amounts
     }
     
@@ -463,8 +483,8 @@ function ctf_get_donation_auto_tag_safe($post_id = null) {
         $post_id = get_the_ID();
     }
     
-    // Check if this is a donation post type
-    if (get_post_type($post_id) !== 'donation') {
+    // Allow donation settings on donation posts and Next Step posts
+    if (!in_array(get_post_type($post_id), array('donation', 'next_step'), true)) {
         return false;
     }
     
@@ -482,9 +502,9 @@ function ctf_get_donation_show_title_safe($post_id = null) {
         $post_id = get_the_ID();
     }
     
-    // Check if this is a donation post type
-    if (get_post_type($post_id) !== 'donation') {
-        return true; // Default to showing title for non-donation posts
+    // Allow donation settings on donation posts and Next Step posts
+    if (!in_array(get_post_type($post_id), array('donation', 'next_step'), true)) {
+        return true; // Default to showing title for other post types
     }
     
     return ctf_get_donation_show_title($post_id);

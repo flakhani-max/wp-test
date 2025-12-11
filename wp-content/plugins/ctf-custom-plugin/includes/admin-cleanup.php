@@ -17,6 +17,42 @@ function ctf_hide_core_admin_bar_items($wp_admin_bar) {
     $wp_admin_bar->remove_node('comments');
 }
 
+/**
+ * Replace "Howdy" greeting with username and optional (Admin).
+ * Runs after core builds the toolbar to overwrite the default label.
+ */
+add_action('admin_bar_menu', 'ctf_replace_howdy_in_toolbar', 11);
+function ctf_replace_howdy_in_toolbar($wp_admin_bar) {
+    $user = wp_get_current_user();
+    if (!$user || !$user->exists()) {
+        return;
+    }
+
+    $node = $wp_admin_bar->get_node('my-account');
+    if (!$node) {
+        return;
+    }
+
+    $is_admin = current_user_can('manage_options');
+    $label = $user->user_login . ($is_admin ? ' (Admin)' : '');
+
+    $wp_admin_bar->add_node(array(
+        'id'    => 'my-account',
+        'title' => esc_html($label),
+        'href'  => $node->href,
+        'meta'  => $node->meta,
+    ));
+}
+
+// Fallback: strip "Howdy, %s" from translations to catch any remaining occurrences.
+add_filter('gettext', 'ctf_remove_howdy_translation', 10, 3);
+function ctf_remove_howdy_translation($translation, $text, $domain) {
+    if ($domain === 'default' && $text === 'Howdy, %s') {
+        return '%s';
+    }
+    return $translation;
+}
+
 // Dashboard cleanup and quick links
 add_action('wp_dashboard_setup', 'ctf_customize_dashboard');
 function ctf_customize_dashboard() {
@@ -45,7 +81,6 @@ function ctf_customize_dashboard() {
 
 function ctf_render_dashboard_links() {
     $links = array(
-        array('label' => 'Next Steps', 'url' => admin_url('edit.php?post_type=next_step')),
         array('label' => 'Donations', 'url' => admin_url('edit.php?post_type=donation')),
         array('label' => 'Petitions', 'url' => admin_url('edit.php?post_type=petition')),
         array('label' => 'Media Library', 'url' => admin_url('upload.php')),
