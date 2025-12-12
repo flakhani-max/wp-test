@@ -23,6 +23,8 @@ require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/stripe-payment-handler.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/paypal-payment-handler.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/petitions.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/mailchimp.php';
+require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/admin-cleanup.php';
+require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/page-sections-taxonomy.php';
 
 // Load shared ACF utilities (before post types so filters are registered)
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/acf-utilities.php';

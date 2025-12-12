@@ -95,8 +95,8 @@ acf_add_local_field_group(array(
             'key' => 'petition_tag',
             'label' => 'Mailchimp Petition Tag',
             'name' => 'petition_tag',
-            'type' => 'textarea',
-            'instructions' => 'Mailchimp petition tag'
+            'type' => 'text',
+            'instructions' => 'Tag used on the backend in Mailchimp. This will be automatically generated when creating a new petition.',
             ),
             array(
                 'key' => 'field_petition_province',
@@ -133,9 +133,29 @@ acf_add_local_field_group(array(
                 'value' => 'petition',
             ),
         ),
+        array(
+            array(
+                'param' => 'post_type',
+                'operator' => '==',
+                'value' => 'next_step',
+            ),
+        ),
+        array(
+            array(
+                'param' => 'page_template',
+                'operator' => '==',
+                'value' => 'page-petition.php',
+            ),
+            array(
+                'param' => 'post_type',
+                'operator' => '==',
+                'value' => 'page',
+            ),
+        ),
     ),
     'menu_order' => 0,
-    'position' => 'normal',
+    // Surface fields near the top in the editor
+    'position' => 'acf_after_title',
     'style' => 'default',
 ));
 }
