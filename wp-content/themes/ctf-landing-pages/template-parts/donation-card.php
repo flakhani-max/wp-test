@@ -11,21 +11,15 @@ $show_excerpt_length = isset($show_excerpt_length) ? $show_excerpt_length : 25;
 $show_category = isset($show_category) ? $show_category : ($context === 'archive');
 
 // Get donation data
-$donation_image = get_field('donation_image');
 $donation_title = get_the_title();
 $donation_intro = get_field('donation_intro');
 ?>
 
 <article class="donation-card <?php echo esc_attr($context); ?>">
-    <?php if ($donation_image || has_post_thumbnail()) : ?>
+    <?php if (has_post_thumbnail()) : ?>
         <div class="card-image">
             <a href="<?php echo esc_url( wp_make_link_relative( get_permalink() ) ); ?>">
-                <?php if ($donation_image) : ?>
-                    <img src="<?php echo esc_url($donation_image); ?>" 
-                         alt="<?php echo esc_attr($donation_title); ?>" />
-                <?php else : ?>
-                    <?php the_post_thumbnail('medium'); ?>
-                <?php endif; ?>
+                <?php the_post_thumbnail('medium', array('alt' => esc_attr($donation_title))); ?>
             </a>
         </div>
     <?php endif; ?>

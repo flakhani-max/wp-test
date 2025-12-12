@@ -26,9 +26,6 @@ require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/mailchimp.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/admin-cleanup.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/page-sections-taxonomy.php';
 
-// Load shared ACF utilities (before post types so filters are registered)
-require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/acf-utilities.php';
-
 // Load custom post types
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/donations-custom_post_type.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/petition-custom_post_type.php';

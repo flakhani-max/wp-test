@@ -41,6 +41,7 @@ if (!defined('AS3CF_SETTINGS')) {
         'provider' => 'gcp',
         'key-file-path' => $gcs_key_path,
         'bucket' => $gcs_bucket,
+        'object-prefix' => 'dev/',
     )));
 }
 

@@ -83,14 +83,6 @@ acf_add_local_field_group(array(
     'title' => 'Newsroom Content',
     'fields' => array(
         array(
-            'key' => 'field_newsroom_image',
-            'label' => 'Newsroom Image URL',
-            'name' => 'newsroom_image',
-            'type' => 'url',
-            'instructions' => 'URL of the main newsroom image',
-            'placeholder' => 'https://www.taxpayer.com/media/image.jpg',
-        ),
-        array(
             'key' => 'field_newsroom_type',
             'label' => 'Type',
             'name' => 'newsroom_type',

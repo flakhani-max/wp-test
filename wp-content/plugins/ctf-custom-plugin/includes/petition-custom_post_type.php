@@ -84,14 +84,6 @@ acf_add_local_field_group(array(
     'title' => 'Petition Content',
     'fields' => array(
         array(
-            'key' => 'field_petition_image',
-            'label' => 'Petition Image URL',
-            'name' => 'petition_image',
-            'type' => 'url',
-            'instructions' => 'URL of the main petition image',
-            'placeholder' => 'https://www.taxpayer.com/media/image.jpg',
-        ),
-        array(
             'key' => 'petition_tag',
             'label' => 'Mailchimp Petition Tag',
             'name' => 'petition_tag',

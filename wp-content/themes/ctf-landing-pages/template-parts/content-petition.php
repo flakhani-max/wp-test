@@ -7,7 +7,7 @@
 // Get content from ACF fields if they exist, otherwise use defaults
 $content = [
     'title' => get_the_title(),
-    'image' => get_field('petition_image') ?: 'https://www.taxpayer.com/media/cars-4-14-2014.jpg',
+    'image' => get_the_post_thumbnail_url(get_the_ID(), 'large') ?: 'https://www.taxpayer.com/media/cars-4-14-2014.jpg',
     'body' => get_the_content(),
     'tag_id' => get_field('petition_tag') ?: 'default_tag',
 ];

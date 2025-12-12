@@ -11,21 +11,15 @@ $show_excerpt_length = isset($show_excerpt_length) ? $show_excerpt_length : 25;
 $show_category = isset($show_category) ? $show_category : ($context === 'archive');
 
 // Get petition data
-$petition_image = get_field('petition_image');
 $petition_title = get_the_title();
 $petition_intro = get_field('petition_intro');
 ?>
 
 <article class="petition-card <?php echo esc_attr($context); ?>">
-    <?php if ($petition_image || has_post_thumbnail()) : ?>
+    <?php if (has_post_thumbnail()) : ?>
         <div class="card-image">
             <a href="<?php echo esc_url( wp_make_link_relative( get_permalink() ) ); ?>">
-                <?php if ($petition_image) : ?>
-                    <img src="<?php echo esc_url($petition_image); ?>" 
-                         alt="<?php echo esc_attr($petition_title); ?>" />
-                <?php else : ?>
-                    <?php the_post_thumbnail('medium'); ?>
-                <?php endif; ?>
+                <?php the_post_thumbnail('medium', array('alt' => esc_attr($petition_title))); ?>
             </a>
         </div>
     <?php endif; ?>

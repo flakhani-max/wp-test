@@ -11,7 +11,6 @@ $show_excerpt_length = isset($show_excerpt_length) ? $show_excerpt_length : 25;
 $show_category = isset($show_category) ? $show_category : ($context === 'archive');
 
 // Get newsroom data
-$newsroom_image = get_field('newsroom_image');
 $newsroom_title = get_the_title();
 $newsroom_intro = get_the_excerpt();
 $newsroom_type = get_field('newsroom_type');
@@ -46,15 +45,10 @@ $province_labels = array(
 ?>
 
 <article class="newsroom-card <?php echo esc_attr($context); ?>">
-    <?php if ($newsroom_image || has_post_thumbnail()) : ?>
+    <?php if (has_post_thumbnail()) : ?>
         <div class="card-image">
             <a href="<?php the_permalink(); ?>">
-                <?php if ($newsroom_image) : ?>
-                    <img src="<?php echo esc_url($newsroom_image); ?>" 
-                         alt="<?php echo esc_attr($newsroom_title); ?>" />
-                <?php else : ?>
-                    <?php the_post_thumbnail('medium'); ?>
-                <?php endif; ?>
+                <?php the_post_thumbnail('medium', array('alt' => esc_attr($newsroom_title))); ?>
             </a>
         </div>
     <?php endif; ?>

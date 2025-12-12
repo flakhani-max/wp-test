@@ -24,7 +24,7 @@ if (!isset($show_excerpt_length)) $show_excerpt_length = 25;
 if (!isset($show_category)) $show_category = true;
 if (!isset($card_data)) {
     $card_data = array(
-        'image' => get_field('petition_image'),
+        'image' => get_the_post_thumbnail_url(get_the_ID(), 'medium'),
         'title' => get_field('petition_title') ?: get_the_title(),
         'intro' => get_field('petition_intro'),
         'cta_text' => 'View Details',
