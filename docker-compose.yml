@@ -14,36 +14,15 @@ services:
       # Mount env files for entrypoint to read
       - ./.env:/var/www/html/.env.secrets:ro
       - ./.env.local:/var/www/html/.env:ro
-      # Mount dev PHP config (enable fast OPCache revalidation)
-      - ./opcache-dev.ini:/usr/local/etc/php/conf.d/opcache-dev.ini:ro
       # Mount custom themes for live editing
       - ./wp-content/themes/ctf-landing-pages:/var/www/html/wp-content/themes/ctf-landing-pages
-      # Mount only custom plugins (not the entire plugins dir to allow ACF installation)
-      - ./wp-content/plugins/ctf-custom-plugin:/var/www/html/wp-content/plugins/ctf-custom-plugin
+      # Mount custom plugins (not the entire plugins dir to allow ACF installation)
+      - ./wp-content/plugins/amazon-s3-and-cloudfront-pro:/var/www/html/wp-content/plugins/amazon-s3-and-cloudfront-pro
+      - ./wp-content/plugins/wp-petition-mailchimp:/var/www/html/wp-content/plugins/wp-petition-mailchimp
       # Mount mu-plugins
       - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
-      # Mount uploads directory for local media files
-      - ./wp-content/uploads:/var/www/html/wp-content/uploads
     depends_on:
       - db
-    healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 8080 || exit 1"]
-      interval: 5s
-      timeout: 3s
-      retries: 20
-
-  browsersync:
-    image: node:18-alpine
-    depends_on:
-      wordpress:
-        condition: service_healthy
-    working_dir: /workspace
-    volumes:
-      - ./:/workspace:ro
-    ports:
-      - "3000:3000"   # BrowserSync proxy
-      - "3001:3001"   # BrowserSync UI
-    command: ["sh", "-lc", "npm i -g browser-sync && browser-sync start --proxy http://wordpress:8080 --files 'wp-content/themes/ctf-landing-pages/**/*.css' --port 3000 --ui-port 3001 --no-open"]
 
   db:
     image: mariadb:10.11
@@ -58,4 +37,5 @@ services:
 
 volumes:
   db_data:
+
 

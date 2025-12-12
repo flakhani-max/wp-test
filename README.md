@@ -40,11 +40,9 @@ gcloud run services logs read wordpress-hello-world --region=northamerica-northe
 ### First Time Setup
 
 ```bash
-# 1. Pull production secrets (GCS, ACF Pro key, Mailchimp, etc.)
-#    Options:
-#    - Write .env (gitignored):        ./pull-secrets.sh
-#    - Export to shell (no file):      eval "$(./pull-secrets.sh --export)"
-#    - Pipe as env-file (no file):     docker compose --env-file <(./pull-secrets.sh --env-file) up
+# 1. Pull production secrets (GCS, ACF Pro key, etc.)
+./pull-secrets.sh
+# This creates .env (gitignored)
 
 # 2. Build Docker image with ACF Pro
 docker-compose build
@@ -74,52 +72,9 @@ git commit -m "Your changes"
 git push
 ```
 
-**Note:**
--`.env.local` has local database settings (safe to commit)
--`.env` has all production secrets (gitignored, auto-created by `pull-secrets.sh`)
-
-### Live CSS Reload (BrowserSync)
-
-To get instant CSS injection while editing theme styles, use the built-in `browsersync` service.
-
-```bash
-# Start WordPress and DB
-docker-compose up -d wordpress db
-
-# Start BrowserSync proxy (auto-injects CSS changes)
-docker-compose up -d browsersync
-```
-
--Visit the proxied site at `http://localhost:3000` (instead of `8080`).
--Edit CSS under `wp-content/themes/ctf-landing-pages/**/*.css` and changes will inject without a full page reload.
--Optional BrowserSync UI: `http://localhost:3001`.
-
-Customize watched files (will trigger a full reload for non-CSS changes):
-
-```text
-wp-content/themes/ctf-landing-pages/**/*.{css,js,php}
-```
-
-Stop BrowserSync or everything:
-
-```bash
-# Stop only BrowserSync
-docker-compose stop browsersync
-
-# Stop all services
-docker-compose down
-```
-
-Alternative (run on host without container):
-
-```bash
-npx browser-sync start \
-  --proxy http://localhost:8080 \
-  --files 'wp-content/themes/ctf-landing-pages/**/*.css' \
-  --port 3000 --ui-port 3001 --no-open
-```
-
-Then browse `http://localhost:3000` for live CSS injection.
+**Note:** 
+- `.env.local` has local database settings (safe to commit)
+- `.env` has all production secrets (gitignored, auto-created by `pull-secrets.sh`)
 
 ---
 

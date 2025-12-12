@@ -18,11 +18,11 @@ define('CTF_CUSTOM_PLUGIN_PATH', plugin_dir_path(__FILE__));
 // Load plugin modules first (before any hooks)
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/logging.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/logging-admin.php';
+// require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/secret-manager.php'; // File doesn't exist - removed
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/stripe-payment-handler.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/paypal-payment-handler.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/petitions.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/mailchimp.php';
-require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/admin-cleanup.php';
 
 // Load shared ACF utilities (before post types so filters are registered)
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/acf-utilities.php';
@@ -31,15 +31,28 @@ require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/acf-utilities.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/donations-custom_post_type.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/petition-custom_post_type.php';
 require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/newsroom-custom_post_type.php';
-require_once CTF_CUSTOM_PLUGIN_PATH . 'includes/next-step-custom_post_type.php';
+
+// Legacy constants for backward compatibility
+if (!defined('CTF_MAILCHIMP_API_KEY')) {
+    define('CTF_MAILCHIMP_API_KEY', 'YOUR_API_KEY'); // Fallback only
+}
+if (!defined('CTF_MAILCHIMP_AUDIENCE_ID')) {
+    define('CTF_MAILCHIMP_AUDIENCE_ID', 'YOUR_AUDIENCE_ID'); // Fallback only
+}
+if (!defined('WP_PETITION_MAILCHIMP_API_KEY')) {
+    define('WP_PETITION_MAILCHIMP_API_KEY', CTF_MAILCHIMP_API_KEY);
+}
+if (!defined('WP_PETITION_MAILCHIMP_AUDIENCE_ID')) {
+    define('WP_PETITION_MAILCHIMP_AUDIENCE_ID', CTF_MAILCHIMP_AUDIENCE_ID);
+}
 
 // Plugin activation hook
 register_activation_hook(__FILE__, 'ctf_custom_plugin_activate');
 
 function ctf_custom_plugin_activate() {
     // Create logging table (function is now available)
-    if (function_exists('create_logging_table')) {
-        create_logging_table();
+    if (function_exists('ctf_create_logging_table')) {
+        ctf_create_logging_table();
     }
     
     // Register post types (functions are now available)
@@ -57,8 +70,8 @@ function ctf_custom_plugin_activate() {
     flush_rewrite_rules();
     
     // Log plugin activation (function is now available)
-    if (function_exists('log_info')) {
-        log_info('CTF Custom Plugin activated', 'plugin');
+    if (function_exists('ctf_log_info')) {
+        ctf_log_info('CTF Custom Plugin activated', 'plugin');
     }
 }
 
@@ -71,8 +84,8 @@ function ctf_check_rewrite_rules() {
         flush_rewrite_rules();
         
         // Only log if logging function exists
-        if (function_exists('log_info')) {
-            log_info('Rewrite rules manually flushed', 'plugin');
+        if (function_exists('ctf_log_info')) {
+            ctf_log_info('Rewrite rules manually flushed', 'plugin');
         }
         
         add_action('admin_notices', function() {

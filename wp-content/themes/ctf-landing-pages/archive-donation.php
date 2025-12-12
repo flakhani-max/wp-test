@@ -4,7 +4,7 @@
  * Displays all donations in a grid layout
  */
 
-get_header();
+get_header('custom');
 ?>
 
 <div class="donation-archive card">
@@ -54,7 +54,7 @@ get_header();
             <div class="no-donations">
                 <h2>No donation campaigns found</h2>
                 <p>There are currently no donation campaigns available. Check back soon for new opportunities to support our cause!</p>
-                <a href="/" class="btn btn-primary">Return to Home</a>
+                <a href="<?php echo esc_url(home_url('/')); ?>" class="btn btn-primary">Return to Home</a>
             </div>
         <?php endif; ?>
     </div>

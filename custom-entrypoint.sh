@@ -3,14 +3,14 @@ set -euo pipefail
 
 # ---------------------------------------------
 # Load .env files if they exist (for local development)
-# Note: We use docker-compose env_file which sets env vars directly,
-# so we don't need to source the files anymore
 # ---------------------------------------------
 if [ -f /var/www/html/.env ]; then
-  echo "📄 Environment variables loaded via docker-compose"
+  echo "📄 Loading environment from .env file..."
+  export $(grep -v '^#' /var/www/html/.env | xargs)
 fi
 if [ -f /var/www/html/.env.secrets ]; then
-  echo "📄 Production secrets available"
+  echo "📄 Loading production secrets..."
+  export $(grep -v '^#' /var/www/html/.env.secrets | xargs)
 fi
 
 # ---------------------------------------------
@@ -200,15 +200,24 @@ else
   fi
 fi
 
-# WP Offload Media is configured via must-use plugin (wp-content/mu-plugins/wp-offload-media-config.php)
-echo "✓ WP Offload Media configuration handled by must-use plugin"
+# WP Offload Media Pro is configured via must-use plugins:
+# - wp-content/mu-plugins/wp-offload-media-config.php (bucket settings)
+# - wp-content/mu-plugins/wp-offload-media-pro-license.php (Pro license)
+echo "✓ WP Offload Media configuration handled by must-use plugins"
 
-# WP Offload Media Lite is pre-installed in Docker image, just activate it
+# Deactivate and remove Lite version if it exists (to avoid conflicts with Pro)
 if wp plugin is-installed amazon-s3-and-cloudfront --path="$DOCROOT" --allow-root; then
-  wp plugin activate amazon-s3-and-cloudfront --path="$DOCROOT" --allow-root || true
-  echo "✓ WP Offload Media Lite activated"
+  echo "Removing WP Offload Media Lite (conflicts with Pro)..."
+  wp plugin deactivate amazon-s3-and-cloudfront --path="$DOCROOT" --allow-root 2>/dev/null || true
+  wp plugin delete amazon-s3-and-cloudfront --path="$DOCROOT" --allow-root 2>/dev/null || true
+fi
+
+# Activate WP Offload Media Pro
+if wp plugin is-installed amazon-s3-and-cloudfront-pro --path="$DOCROOT" --allow-root; then
+  wp plugin activate amazon-s3-and-cloudfront-pro --path="$DOCROOT" --allow-root || true
+  echo "✓ WP Offload Media Pro activated"
 else
-  echo "⚠️ WP Offload Media Lite not found (should be pre-installed in image)"
+  echo "⚠️ WP Offload Media Pro not found (should be pre-installed in image)"
 fi
 
 # Activate CTF Custom Plugin
@@ -351,3 +360,4 @@ echo "======================================"
 
 # Keep Apache in foreground
 wait "$pid"
+

@@ -48,7 +48,7 @@ $province_labels = array(
 <article class="newsroom-card <?php echo esc_attr($context); ?>">
     <?php if ($newsroom_image || has_post_thumbnail()) : ?>
         <div class="card-image">
-            <a href="<?php echo esc_url( wp_make_link_relative( get_permalink() ) ); ?>">
+            <a href="<?php the_permalink(); ?>">
                 <?php if ($newsroom_image) : ?>
                     <img src="<?php echo esc_url($newsroom_image); ?>" 
                          alt="<?php echo esc_attr($newsroom_title); ?>" />
@@ -61,7 +61,7 @@ $province_labels = array(
     
     <div class="card-content">
         <h3>
-            <a href="<?php echo esc_url( wp_make_link_relative( get_permalink() ) ); ?>">
+            <a href="<?php the_permalink(); ?>">
                 <?php echo esc_html($newsroom_title); ?>
             </a>
         </h3>
@@ -104,7 +104,7 @@ $province_labels = array(
             </div>
         <?php endif; ?>
         
-        <a href="<?php echo esc_url( wp_make_link_relative( get_permalink() ) ); ?>" class="btn btn-primary card-cta">
+        <a href="<?php the_permalink(); ?>" class="btn btn-primary card-cta">
             Read More
         </a>
     </div>

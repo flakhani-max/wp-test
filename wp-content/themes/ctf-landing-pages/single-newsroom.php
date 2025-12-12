@@ -11,7 +11,7 @@ $content = [
     'body' => get_the_content(),
 ];
 
-get_header();
+get_header('custom');
 ?>
 
 
@@ -43,4 +43,4 @@ get_header();
     </div>
 </div>
 
-<?php get_footer(); ?>
+<?php get_footer('custom'); ?>

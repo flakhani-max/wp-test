@@ -31,15 +31,15 @@ COPY wp-content/plugins/ctf-custom-plugin /var/www/html/wp-content/plugins/ctf-c
 WORKDIR /var/www/html/wp-content/plugins/ctf-custom-plugin
 RUN composer install --no-dev --optimize-autoloader
 
-# Pre-install WP Offload Media Lite (so we don't download on every container start)
+# WP Offload Media Pro is copied from local directory (not downloaded)
+# To update: download from DeliciousBrains and extract to wp-content/plugins/amazon-s3-and-cloudfront-pro/
 WORKDIR /var/www/html/wp-content/plugins
-RUN curl -L -o amazon-s3-and-cloudfront.zip https://downloads.wordpress.org/plugin/amazon-s3-and-cloudfront.3.2.11.zip \
-    && unzip -q amazon-s3-and-cloudfront.zip \
-    && rm amazon-s3-and-cloudfront.zip \
-    && chown -R www-data:www-data amazon-s3-and-cloudfront
+COPY wp-content/plugins/amazon-s3-and-cloudfront-pro /var/www/html/wp-content/plugins/amazon-s3-and-cloudfront-pro
+RUN chown -R www-data:www-data amazon-s3-and-cloudfront-pro
 
 # Pre-install ACF Pro using build argument for the license key
 ARG ACF_PRO_KEY
+# Note: WP Offload Media Pro is NOT installed during build - it's configured at runtime in custom-entrypoint.sh
 RUN if [ -n "$ACF_PRO_KEY" ]; then \
         echo "Downloading ACF Pro during build..."; \
         curl -L -o acf-pro.zip "https://connect.advancedcustomfields.com/v2/plugins/download?p=pro&k=${ACF_PRO_KEY}" \

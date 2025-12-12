@@ -165,28 +165,7 @@ EOF
 
 echo "✅ Data sanitized"
 
-echo "Step 6: Syncing media files from GCS..."
-
-# Get bucket name from Secret Manager
-GCS_BUCKET=$(gcloud secrets versions access latest --secret=GCS_BUCKET_NAME --project=$PROJECT_ID 2>/dev/null || echo "taxpayer-media-bucket")
-
-# Create local uploads directory if it doesn't exist
-mkdir -p ./wp-content/uploads
-
-echo "Downloading media from gs://${GCS_BUCKET}/ ..."
-if gsutil -m rsync -r -d gs://${GCS_BUCKET}/ ./wp-content/uploads/; then
-  echo "✅ Media files synced to ./wp-content/uploads/"
-  
-  # Count files
-  FILE_COUNT=$(find ./wp-content/uploads -type f | wc -l | tr -d ' ')
-  echo "   Downloaded ${FILE_COUNT} files"
-else
-  echo "⚠️  Warning: Could not sync media files from GCS"
-  echo "   Check bucket permissions or manually run:"
-  echo "   gsutil -m rsync -r gs://${GCS_BUCKET}/ ./wp-content/uploads/"
-fi
-
-echo "Step 7: Cleanup..."
+echo "Step 6: Cleanup..."
 docker stop cloud-sql-proxy-temp 2>/dev/null || true
 docker rm cloud-sql-proxy-temp 2>/dev/null || true
 docker network rm wp-sync-network 2>/dev/null || true
@@ -194,12 +173,10 @@ rm production_dump.sql
 
 echo ""
 echo "======================================"
-echo "✅ Success! Local environment ready"
+echo "✅ Success! Local DB is ready"
 echo "======================================"
 echo ""
-echo "Your local setup now has:"
-echo "  ✅ Production database (sanitized)"
-echo "  ✅ Media files from GCS"
+echo "Your local database now has production data (sanitized)"
 echo ""
 echo "Start WordPress:"
 echo "  docker-compose up"
@@ -209,7 +186,5 @@ echo "Admin login: admin / admin123"
 echo ""
 echo "⚠️  Remember: This is a LOCAL COPY"
 echo "    Changes here do NOT affect production!"
-echo ""
-echo "📁 Media files location: ./wp-content/uploads/"
 
 
