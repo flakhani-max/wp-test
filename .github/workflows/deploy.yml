@@ -289,6 +289,8 @@ jobs:
             --service-account "${RUNTIME_SA_EMAIL}" \
             --set-env-vars "${ENV_VARS}" \
             --add-cloudsql-instances "${CLOUD_SQL_CONNECTION_NAME}" \
+            --clear-volumes \
+            --clear-volume-mounts \
             --memory 1Gi \
             --cpu 1 \
             --timeout 300 \
